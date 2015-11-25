@@ -1,2 +1,2 @@
-Normal User - A non admin users, i.e. someone who only uploads and classifies images.
+Normal User - A non admin users, someone who only uploads and classifies images, eg. a volunteer on the program.
 CSV file - A comma separated variable file. A easily parse-able file structured as variables separated by commas.
