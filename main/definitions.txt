@@ -1,0 +1,1 @@
+Normal User - A non admin users, i.e. someone who only uploads and classifies images.
