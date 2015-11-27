@@ -1,7 +1,7 @@
 .CSV format - Comma separated values. a file format where the individual data are separated with commas.
 Dashboard - A web page or part of a web page that collects and presents information to a user based on specific criteria.
 Deliverable - A physical or non-physical object presented to the customer as part of the project.
-Duo- Durham University Online. The online blackboard learning system for durham university.
+DUO- Durham University Online. The online blackboard learning system for durham university.
 Domain (of a software project) - Other systems and software providing similar functionallity to the project.
 Functional Requirements - Things that the project system must do.
 Gannt chart - A timeline showing the planned start and end dates for work on each separate task involved in the project.
