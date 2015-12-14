@@ -66,7 +66,6 @@ def aggregate_classifications(photo_ID,connection):
                 n=0
                 numSpecies=0
                 for s in speciesTally:
-                    print(s)
                     if s not in blankOptions:
                         numSpecies+=1
                         print(numSpecies)
