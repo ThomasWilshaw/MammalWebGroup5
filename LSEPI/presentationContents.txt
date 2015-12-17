@@ -1,0 +1,59 @@
+Things to include
+------------------
+Overview
+
+Consequences
+-Immediate
+--
+
+-Long term
+--Public opinion on information privacy
+--Legislative changes
+--
+
+Related incidents around the world
+
+
+Structuring choices 
+--------------------
+Nouns (Whistleblower, traitor, dissident, hero, patriot)
+Easy to split up
+Directly answers question
+Maybe poor structure?
+Some more than others
+
+//
+
+LSEP
+Easier to incorporate overview
+Not enough sections
+Maybe not enough to talk about
+Probably better structured
+W:Possible 5th- Related incidents, world overview (information privacy vs national security)
+
+Order? P(L||S)(W||E)
+
+P - Freddie
+Intro/what happened
+Unprofessional to break contracts? Worth it?
+Should employees have access to so much sensitive information
+
+L - Will
+Breaches of constitution
+Changes to legislation since incident
+Are security/privacy laws good? Just?
+Differences in international laws
+
+S - Quentin
+Changes in public opinion/awareness of surveillance
+Is surveillance a positive impact on society?
+
+W - Tom Wi
+Related incidents
+LSEPI of surveillance around the world (recentish/historical?)
+Some links in intersting links part of LSEPI on DUO
+
+E - Tom Wh
+Summary of points
+Discussion of hero/traitor/dissident etc
+Is surveillance a positive impact on society? Maybe here instead
