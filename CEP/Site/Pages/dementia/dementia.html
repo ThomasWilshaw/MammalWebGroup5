@@ -1,0 +1,168 @@
+<head>
+	<!--Couldn't see a title, made this up-->
+	<title>
+		RT Projects - Creativity for Mental Wellbeing
+	</title>
+	<link rel="stylesheet" href="../../Semantic-UI-CSS/semantic.css">
+    <link rel="stylesheet" href="../general/general.css">
+    <link rel="stylesheet" href="dementia.css">
+    
+    <style>
+        @font-face {
+            font-family: 'bastardregular';
+            src: url('../../font/bastard-webfont.eot');
+            src: url('../../font/bastard-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('../../font/bastard-webfont.woff2') format('woff2'),
+                 url('../../font/bastard-webfont.woff') format('woff'),
+                 url('../../font/bastard-webfont.ttf') format('truetype'),
+                 url('../../font/bastard-webfont.svg#bastardregular') format('svg');
+            font-weight: normal;
+            font-style: normal;
+
+        }
+        
+        html *{
+            font-family: 'bastardregular'; !important;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../general/rt.js"></script>
+    <script>
+            
+            function loadText (){
+                txt_read('test.txt', "test");
+            }
+            window.onload = loadText;
+    </script>
+    
+</head>
+<!--Put this in stylesheet at some point-->
+<body style="background-image:url(../../Images/common/background_tile.jpg)">
+	<div class="ui three column center aligned grid">
+		<!--If this is good, reuse this row as top tab-->
+		<div class="five column row" id="blah">
+			<div class="four wide column">
+                <a href="../../Pages/index.html">
+                    <img src="../../Images/common/logo.png" alt="RT Projects">
+                </a>
+			</div>
+			<div class="three wide column">
+				<a href="../index.html">
+					<img id="home" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/home.png" alt="Home">
+				</a>
+			</div>
+			<div class="three wide column">
+				<a href="../about/about.html">
+					<img id="about" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/tab-about.png" alt="About Us">
+				</a>
+			</div>
+			<div class="three wide column">
+				<a href="../ourWork/ourWork.html">
+					<img id="ourWork" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/tab-work.png" alt="Our Work">
+				</a>
+			</div>
+			<div class="three wide column">
+				<a href="../contactUs/contactUs.html">
+					<img id="contact" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/tab-contact.png" alt="Contact Us">
+				</a>
+			</div>
+		</div>
+		<div class="three column row">
+			<div class="four wide left floated column">
+				<img src="../../Images/common/address.png" alt="Our address">
+				<br>
+				<img src="../../Images/common/ourstudio.png" alt="Our studio">
+				<br>
+				<p style="text-align:left;font-size:20px;">Our 'Open Art Surgery' is a fully equipped, multi-functional space, incorporating a print room, photographic studio, computer suite, and artist's studio in which almost any artistic activity can take place. FIND OUT MORE..... <!--And put all this into a text file and read with php most likely--></p>
+				<br>
+				<div class="image-wrapper">
+					<img class="ui fluid image" src="../../Images/common/news-background.png">
+					<div id="image-wrapper-home-news-text">
+						<h3 style="font-size:40px;">NEWS</h3>
+						<p>
+							A big thank you to Bryony Potter and Sara Punshon for making this website possible
+						<br>
+						<br>
+							This all needs to go in an easily accessible text file so it can be updated regularly. Should also be at an angle?
+						</p>
+					</div>
+				</div>
+				<br>
+				<a href="https://mydonate.bt.com/donation/donate.html?charity=rtprojects">
+                    <img src="../../Images/common/donate.png" alt="Help us grow by donating!">
+                </a>
+			</div>
+			<div class="eight wide center aligned column">
+				<!--This may need to be an image, using such a non standard font isn't great-->
+				<h1 class="ui header" style="color:#7a1212;font-size:8vw; font-family:'bastardregular'">Dementia</h1>
+                <div class="image-wrapper">
+                    <img id="main-header-image" class="ui fluid image" src="../../Images/dementia/dementia_main.jpg">
+                </div>
+				<div class="image-wrapper">
+					<img class="ui fluid image" src="../../Images/common/mainsplodge.png" style="opacity:0.65">
+					<!--If we want to put text into files for them to be able to change later, leave this blank and read file with php/javascript then just change innerhtml-->
+					<div id="image-wrapper-home-main-text">
+						<p>
+							RT Projects is a small, passionate charity.
+						<br>
+							We believe that creativity is fundamental to a fulfilled life.
+						<br>
+							We use creative activities to achieve our aims. We develop and
+							deliver projects that focus on mental wellbeing.
+						<br>
+							We enable people to find and nurture dormant creative interests and hidden talents within themselves.
+						<br>
+						<br>
+							We often here stories of amazing people overcoming exceptional barriers.
+							These people all have one thing in common: "emotional resilience". We believe this can be learned.
+						<br>
+							Our goal is to help people to develop coping strategies and embark upon
+							a personal journey towards emotional resilience.
+						</p>
+						<div class="image-wrapper">
+							<img class="ui fluid image" id="main-sub-image" src="../../Images/dementia/dementia_1.jpg">
+							<div id="image-wrapper-home-blackboard-text">
+							</div>
+						</div>
+					</div>
+				</div>
+				<h3>Thanks to Free Virtual Servers for hosting our site for free</h3>
+			</div>
+			<div class="four wide right aligned column">
+				<div class="row">
+					<a href="../wellbeing/wellbeing.html">
+						<img id="wellbeing" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/sidetab-wellbeing.png" alt="Wellbeing">
+					</a>
+				</div>
+				<div class="row">
+					<a href="../dementia/dementia.html">
+						<img id="dementia" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/sidetab-dementia.png" alt="dementia">
+					</a>
+				</div>
+				<div class="row">
+					<a href="../mensShed/mensShed.html">
+						<img id="mensShed" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/sidetab-shed.png" alt="Men's Shed">
+					</a>
+				</div>
+				<div class="row">
+					<a href="../learningDisability/learningDisability.html">
+						<img id="learningDisability" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/sidetab-learning.png" alt="Learning disability">
+					</a>
+				</div>
+				<div class="row">
+					<a href="../workshops/workshops.html">
+						<img id="workshops" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/sidetab-workshops.png" alt="Workshops">
+					</a>
+				</div>
+                <div class="ui hidden divider"></div>
+                <div class="row">
+					<a href="https://www.facebook.com/RTProjects/">
+						<img id="facebook" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/facebook.png" alt="Facebook">
+					</a>
+				</div>
+				<h3>&#xA9; rtprojects 2016</h3>
+			</div>
+		</div>
+        
+    </div>   
+</body>

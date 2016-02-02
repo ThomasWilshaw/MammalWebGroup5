@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <title>RT Admin</title>
+	<link rel="stylesheet" href="../../Semantic-UI-CSS/semantic.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $('.ui.search.dropdown').dropdown();
+        });
+    </script>
+    
+    <body>
+		<nav class="ui fixed menu inverted navbar">
+			<a href="" class="brand item">RT Admin page</a>
+			<a href="main.html" class="active item">Edit Text</a>
+		</nav>
+        
+        <div class="ui page grid">
+            <div class="row"></div>
+			<div class="row">
+				<div class="column">
+					<div class="ui message main">
+						<h1 class="ui header">Edit pages</h1>
+						<p>
+                        Select the page then section of text you want to edit.
+                        <br>
+                        Check results before loggin out.
+                        </p>
+					</div>
+				</div>
+			</div>
+            <div class="row">
+                <select class="ui search dropdown">
+                    <option value="">Gender</option>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+        </div>
+    </body>
+</html>
