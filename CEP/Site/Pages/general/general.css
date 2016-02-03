@@ -144,6 +144,7 @@ html *{
 }
 
 #blackboard-header{
+  padding-left:0.5vw;
   font-size: 2vw;
   font-family:'chalkdustregular';
 }
