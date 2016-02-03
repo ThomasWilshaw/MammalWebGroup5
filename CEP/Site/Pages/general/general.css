@@ -29,9 +29,22 @@ img {
     font-style: normal;
 
 }
+
+@font-face {
+    font-family: 'chalkdustregular';
+    src: url('../../font/chalk/chalkdust-webfont.eot');
+    src: url('../../font/chalk/chalkdust-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../font/chalk/chalkdust-webfont.woff2') format('woff2'),
+         url('../../font/chalk/chalkdust-webfont.woff') format('woff'),
+         url('../../font/chalk/chalkdust-webfont.ttf') format('truetype'),
+         url('../../font/chalk/chalkdust-webfont.svg#chalkdustregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
         
 html *{
-    font-family: 'bastardregular'; !important;
+    font-family: 'bastardregular';/*  !important; */
 }
 
 #image-wrapper-home-main-text{
@@ -83,6 +96,7 @@ html *{
     padding-left:0.5vw;
     line-height:120%;
     font-size:0.9vw;
+    font-family:'chalkdustregular';
     /* overflow-wrap: break-word; */
     /* word-wrap: break-word; */
 }
@@ -103,10 +117,12 @@ html *{
   -ms-transform: rotate(-4deg); /* IE 9 */
   -webkit-transform: rotate(-4deg); /* Safari */
   transform: rotate(-4deg);
+  font-family:'chalkdustregular';
 }
 
 #blackboard-header{
   font-size: 2vw;
+  font-family:'chalkdustregular';
 }
 
 #facebook{
