@@ -17,6 +17,40 @@ img {
 	-webkit-transform: scale(1.4, 1.4);
 }
 
+.element::-webkit-scrollbar {
+    width: 0 !important 
+}
+
+@font-face {
+    font-family: 'bastardregular';
+    src: url('../../font/bastard-webfont.eot');
+    src: url('../../font/bastard-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../font/bastard-webfont.woff2') format('woff2'),
+         url('../../font/bastard-webfont.woff') format('woff'),
+         url('../../font/bastard-webfont.ttf') format('truetype'),
+         url('../../font/bastard-webfont.svg#bastardregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'chalkdustregular';
+    src: url('../../font/chalk/chalkdust-webfont.eot');
+    src: url('../../font/chalk/chalkdust-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../font/chalk/chalkdust-webfont.woff2') format('woff2'),
+         url('../../font/chalk/chalkdust-webfont.woff') format('woff'),
+         url('../../font/chalk/chalkdust-webfont.ttf') format('truetype'),
+         url('../../font/chalk/chalkdust-webfont.svg#chalkdustregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+        
+html *{
+    font-family: 'bastardregular';/*  !important; */
+}
+
 #image-wrapper-home-main-text{
   position:absolute;
   left:0;
@@ -57,6 +91,25 @@ img {
   -ms-transform: rotate(-3deg); /* IE 9 */
   -webkit-transform: rotate(-3deg); /* Safari */
   transform: rotate(-3deg);
+  overflow:hidden;
+  
+}
+
+#news-text{
+    width:17vw;
+    height:17vw;
+    overflow:hidden;
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+  
 }
 
 #blackboard-text{
@@ -66,6 +119,7 @@ img {
     padding-left:0.5vw;
     line-height:120%;
     font-size:0.9vw;
+    font-family:'chalkdustregular';
     /* overflow-wrap: break-word; */
     /* word-wrap: break-word; */
 }
@@ -86,10 +140,12 @@ img {
   -ms-transform: rotate(-4deg); /* IE 9 */
   -webkit-transform: rotate(-4deg); /* Safari */
   transform: rotate(-4deg);
+  font-family:'chalkdustregular';
 }
 
 #blackboard-header{
   font-size: 2vw;
+  font-family:'chalkdustregular';
 }
 
 #facebook{
