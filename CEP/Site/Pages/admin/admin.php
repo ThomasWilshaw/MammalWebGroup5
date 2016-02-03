@@ -43,15 +43,20 @@ if($_SESSION['loggedin'] != 1){
             <div class="row">
                 <select class="ui search dropdown" id="select1" onChange="selectSection()">
                     <option value="0">Section</option>
-                    <option value="1">News</option>
-                    <option value="2">What's On</option>
+                    <option value="1">Homepage - News</option>
+                    <option value="2">Homepage - What's On</option>
+					<option value="3">Wellbeing - News</option>
+					<option value="4">Dementia - News</option>
+					<option value="5">Men's Shed - News</option>
+					<option value="6">Learning Disability - News</option>
+					<option value="7">Workshops - News</option>
                 </select>
             </div>
 			<div class = "row">
 				<form class="ui form" id = "form1" style = "visibility:hidden">
 					<div class="field">
 						<label id = "label1">Text</label>
-						<textarea id = "textbox1"> Hello </textarea>
+						<textarea id = "textbox1"> Error </textarea>
 					</div>
 					<button class = "ui button" type = "button" onClick ="submitChanges()">Submit</button>
 				</form>
@@ -67,13 +72,33 @@ if($_SESSION['loggedin'] != 1){
 				$("#form1").css('visibility', 'visible');//show the text box	
 					
 				if(section==1){
-					var sectionName="News";
+					var sectionName="Homepage News";
 					var fileLocation="../../Pages/dynamicText/homePage/news.txt";
 					}
 					
 				if(section==2){
 					var sectionName="What's On";
 					var fileLocation="../../Pages/dynamicText/homePage/whatsOn.txt";
+				}
+				if(section==3){
+					var sectionName="Wellbeing News";
+					var fileLocation="../../Pages/dynamicText/wellbeing/news.txt";
+				}
+				if(section==4){
+					var sectionName="Dementia News";
+					var fileLocation="../../Pages/dynamicText/dementia/news.txt";
+				}
+				if(section==5){
+					var sectionName="Men's Shed News";
+					var fileLocation="../../Pages/dynamicText/mensShed/news.txt";
+				}
+				if(section==6){
+					var sectionName="Learning Disability News";
+					var fileLocation="../../Pages/dynamicText/learningDisability/news.txt";
+				}
+				if(section==7){
+					var sectionName="Workshops News";
+					var fileLocation="../../Pages/dynamicText/workshops/news.txt";
 				}
 				
 				$("#label1").replaceWith(
@@ -99,17 +124,30 @@ if($_SESSION['loggedin'] != 1){
 					,"json");	
 			}
 		}
-		function submitChanges(){//submits the changes made to the text to the file
+		function submitChanges(){//submits the changes made to the text to the file.
 			var section=$("#select1").val();//the section selected for edit
 			var textData=$("#textbox1").val();//the text to put in this section
-			
+				//Uses rt.js for txt_write function.
 				if(section==1){//if news on selected
                     txt_write("../../Pages/dynamicText/homePage/news.txt",textData);
-                    //console.log("a");
 				}
 				if(section==2){//if whatsOn selected
                     txt_write("../../Pages/dynamicText/homePage/whatsOn.txt",textData);	
-                    //console.log("b");
+				}
+				if(section==3){//if wellbeing selected
+                    txt_write("../../Pages/dynamicText/wellbeing/news.txt",textData);
+				}
+				if(section==4){//if dementia selected
+                    txt_write("../../Pages/dynamicText/dementia/news.txt",textData);
+				}
+				if(section==5){//if mensShed on selected
+                    txt_write("../../Pages/dynamicText/mensShed/news.txt",textData);
+				}
+				if(section==6){//if learningDisability selected
+                    txt_write("../../Pages/dynamicText/learningDisability/news.txt",textData);
+				}
+				if(section==7){//if workshops selected
+                    txt_write("../../Pages/dynamicText/workshops/news.txt",textData);
 				}
             //console.log("Changes submitted");
 			//console.log(textData);
