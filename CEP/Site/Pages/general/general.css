@@ -17,6 +17,10 @@ img {
 	-webkit-transform: scale(1.4, 1.4);
 }
 
+.element::-webkit-scrollbar {
+    width: 0 !important 
+}
+
 @font-face {
     font-family: 'bastardregular';
     src: url('../../font/bastard-webfont.eot');
@@ -87,6 +91,25 @@ html *{
   -ms-transform: rotate(-3deg); /* IE 9 */
   -webkit-transform: rotate(-3deg); /* Safari */
   transform: rotate(-3deg);
+  overflow:hidden;
+  
+}
+
+#news-text{
+    width:17vw;
+    height:17vw;
+    overflow:hidden;
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+  
 }
 
 #blackboard-text{
