@@ -1,3 +1,14 @@
+<?php
+session_name("rtProjectsAdmin");
+session_start();
+
+if($_SESSION['loggedin'] != 1){
+    header("Location: index.php");
+    die();
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 	<!-- Admin page for RT Projects, allowing editing of "What's on" and "News" text sections on homepage-->
@@ -9,7 +20,10 @@
     <body>
 		<nav class="ui fixed menu inverted navbar">
 			<a href="../../pages/index.html?test=true" class="brand item">RT Homepage</a>
-			<a href="admin.html" class="active item">Admin page</a>
+			<a href="admin.php" class="active item">Admin page</a>
+            <div class="right menu">
+                <a href="logout.php" class="item">Log Out</a>
+            </div>
 		</nav>
         
         <div class="ui left aligned page grid">
@@ -88,15 +102,19 @@
 		function submitChanges(){//submits the changes made to the text to the file
 			var section=$("#select1").val();//the section selected for edit
 			var textData=$("#textbox1").val();//the text to put in this section
-			console.log("Changes submitted");
-			console.log(textData);
-			window.alert("Changes submitted.");
+			
 				if(section==1){//if news on selected
-				txt_write("../../Pages/dynamicText/homePage/news.txt",textData);
+                    txt_write("../../Pages/dynamicText/homePage/news.txt",textData);
+                    //console.log("a");
 				}
 				if(section==2){//if whatsOn selected
-				txt_write("../../Pages/dynamicText/homePage/whatsOn.txt",textData);	
+                    txt_write("../../Pages/dynamicText/homePage/whatsOn.txt",textData);	
+                    //console.log("b");
 				}
+            //console.log("Changes submitted");
+			//console.log(textData);
+			window.alert("Changes submitted.");
+            location.reload();
 			}		
 		</script>	
     </body>
