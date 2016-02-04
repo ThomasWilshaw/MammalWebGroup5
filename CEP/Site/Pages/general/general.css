@@ -53,8 +53,8 @@ html *{
 
 #image-wrapper-home-main-text{
   position:absolute;
-  left:0;
-  top:140;
+  left:0px;
+  top:140px;
   /*padding: 90px;*/
   padding-top:0vw;
   padding-left:5vw;
