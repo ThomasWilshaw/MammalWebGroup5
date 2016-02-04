@@ -33,37 +33,38 @@ def aggregate_classifications(photo_ID,connection):
         support=speciesTally[species]/numClass
         
         blanks=(numClass-nonBlanks)/numClass
-        
-        if blanks==1:
-            evenness=-1
-        elif support==1:
-            evenness=0
+
+        if blanks==1.0:
+            evenness=-1.0
+        elif support==1.0:
+            evenness=0.0
         else:
             pTot=0
             for s in speciesTally:
                 if s!=86 and s!=87:
                     p=speciesTally[s]/(nonBlanks)
-                    pTot+=p*math.log(p)
-            print("p: ",pTot)
+                    pTot-=p*math.log(p)
+            evenness=pTot/math.log(len(values))
                     
     else:
         #Would need to add an unclassified option to database
         #Kinda nice to have all fields here to more easily see everything that needs doing
         species=-1
-        evenness=-1
+        evenness=-1.0
         blanks=-1
         support=-1
     #Test print
-    #print(species,numClass,nonBlanks)
+    if(evenness>0 and evenness<1):
+        print(species,numClass,nonBlanks,evenness)
     
         
-    sql="INSERT INTO nameofaggregateclasstablehere (%s,%s,%s,etc)"
+    sql="INSERT INTO nameofaggregateclasstablehere ('field','names','here') VALUES (%s,%s,%s,etc)"
     #c.execute(sql,(values (sepcies, evenness etc) here))
     #c.commit()
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalwebdump',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-for id in range(2000):
-    print("ID: ",id)
+for id in range(20000):
+    print(id)
     aggregate_classifications(id,connection)
 
 connection.close()
