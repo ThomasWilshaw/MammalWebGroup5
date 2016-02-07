@@ -1,6 +1,12 @@
-TEST TEST TEST TEST TEST TEST
-<<<<<<< HEAD
-=======
--FUN FUN
--Sad is fun
->>>>>>> 1c603138503bc135209ed93a8c9680bffff2dbaf
+A big thank you to everyone
+who has helped to create
+this website. In particular 
+Bryony Potter,  Sara Punshon,
+Mahmoud Shalabi, Tom White, 
+Will Taylor, Thomas Wilshaw, 
+Freddie Keen and Quentin Lam.
+
+We are delighted with the 
+result. We hope all visitors to 
+this site enjoy the experience 
+and find it of some use.

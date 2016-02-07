@@ -62,7 +62,7 @@ html *{
   margin: 0px;
   text-align:left;
   color:#390f0f;
-  font-size: 1.3vw;
+  font-size: 1.7vw;
 }
 
 #main-header-image{
@@ -91,19 +91,21 @@ html *{
   -ms-transform: rotate(-3deg); /* IE 9 */
   -webkit-transform: rotate(-3deg); /* Safari */
   transform: rotate(-3deg);
-  overflow:hidden;
+  word-wrap:break-all;
+  /* overflow:hidden; */
   
 }
 
 #news-text{
     width:17vw;
     height:17vw;
-    overflow:hidden;
+    white-space: pre-line;
+    /* overflow:hidden; */
     -ms-word-break: break-all;
     word-break: break-all;
 
     /* Non standard for webkit */
-    word-break: break-word;
+    /* word-break: break-all; */
 
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
