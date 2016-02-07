@@ -2,5 +2,5 @@ TEST TEST TEST TEST TEST TEST
 <<<<<<< HEAD
 =======
 -FUN FUN
--Sad
+-Sad is fun
 >>>>>>> 1c603138503bc135209ed93a8c9680bffff2dbaf
