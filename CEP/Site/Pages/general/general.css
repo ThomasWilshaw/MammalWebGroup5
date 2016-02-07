@@ -17,8 +17,8 @@ img {
 	-webkit-transform: scale(1.4, 1.4);
 }
 
-.element::-webkit-scrollbar {
-    width: 0 !important 
+#news-text::-webkit-scrollbar {
+    display: none;
 }
 
 @font-face {
@@ -48,7 +48,7 @@ img {
 }
         
 html *{
-    font-family: 'bastardregular';/*  !important; */
+    font-family: 'bastardregular';
 }
 
 #image-wrapper-home-main-text{
@@ -80,7 +80,7 @@ html *{
 #image-wrapper-home-news-text{
   position:absolute;
   left:10px;
-  top:20px;
+  top:10px;
   padding-left: 15px;
   padding-right: 25px;
   padding-top: 10px;
@@ -92,25 +92,23 @@ html *{
   -webkit-transform: rotate(-3deg); /* Safari */
   transform: rotate(-3deg);
   word-wrap:break-all;
-  /* overflow:hidden; */
+  overflow-x: hidden;
+  overflow-y: hidden;
   
+}
+
+#news-wrapper{
+    width:20vw;
+    height:20vw;
+    overflow:hidden !important;
 }
 
 #news-text{
     width:17vw;
     height:17vw;
     white-space: pre-line;
-    /* overflow:hidden; */
-    -ms-word-break: break-all;
-    word-break: break-all;
-
-    /* Non standard for webkit */
-    /* word-break: break-all; */
-
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
   
 }
 
@@ -122,8 +120,6 @@ html *{
     line-height:120%;
     font-size:0.9vw;
     font-family:'chalkdustregular';
-    /* overflow-wrap: break-word; */
-    /* word-wrap: break-word; */
 }
 
 #image-wrapper-home-blackboard-text{
@@ -134,7 +130,6 @@ html *{
   padding-bottom: 5vw;
   padding-left: 3.7vw;
   padding-right: 6vw;
-  /*padding: 100px;*/
   margin: 0px;
   text-align:left;
   color:white;
