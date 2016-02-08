@@ -119,8 +119,8 @@ html *{
 }
 
 #news-text{
-    width:17vw;
-    height:17vw;
+    width:20vw;
+    height:20vw;
     white-space: pre-line;
     overflow-x: hidden;
     overflow-y: hidden;
