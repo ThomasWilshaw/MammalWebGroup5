@@ -46,6 +46,19 @@ img {
     font-style: normal;
 
 }
+
+@font-face {
+    font-family: 'Handwritingg';
+    src:url('../../font/Handwritingg/Handwritingg.ttf.woff') format('woff'),
+        url('../../font/Handwritingg/Handwritingg.ttf.svg#Handwritingg') format('svg'),
+        url('../../font/Handwritingg/Handwritingg.ttf.eot'),
+        url('../../font/Handwritingg/Handwritingg.ttf.eot?#iefix') format('embedded-opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
         
 html *{
     font-family: 'bastardregular';
@@ -96,6 +109,8 @@ html *{
   overflow-y: hidden;
   
 }
+
+
 
 #news-wrapper{
     width:20vw;
