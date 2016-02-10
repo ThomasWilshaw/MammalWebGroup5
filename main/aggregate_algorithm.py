@@ -2,7 +2,6 @@ import pymysql
 import math
 
 #TODO: Get blank classification number(s) from database (options) rather than using hard coded value(s) (86+87)
-#      Calculate evenness, numerator is done need to get S
 
 def aggregate_classifications(photo_ID,connection):
     c=connection.cursor()
@@ -58,13 +57,19 @@ def aggregate_classifications(photo_ID,connection):
         print(species,numClass,nonBlanks,evenness)
     
         
-    sql="INSERT INTO nameofaggregateclasstablehere ('field','names','here') VALUES (%s,%s,%s,etc)"
-    #c.execute(sql,(values (sepcies, evenness etc) here))
-    #c.commit()
+    sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}')".format(photo_ID,species,evenness,blanks,support)
+    c.execute(sql)
+    connection.commit()
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalwebdump',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-for id in range(20000):
-    print(id)
+with connection.cursor() as cursor:
+    sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
+    cursor.execute(sql)
+    maxID=cursor.fetchone()['photo_id']
+print(maxID)
+for id in range(maxID):
+    if id%1000==0:
+        print(id)
     aggregate_classifications(id,connection)
 
 connection.close()
