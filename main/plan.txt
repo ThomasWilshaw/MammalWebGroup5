@@ -1,0 +1,43 @@
+Plan
+(Scale 1-5, 1 important)
+
+Table of photos for non scientists:
+	-Dashboard:
+		-Slideshow
+		-Timeline
+		-Graphs (chord diagram?)
+		-Map
+	-Search by(2):
+		-Species
+		-Date/time
+		-habitat
+		-site
+		-Favourate
+		-etc.
+		
+		
+Search for scientists:
+	-Shows results and download button(1)
+	-For both searches downloadable csv file
+	-Search by (A)(1):
+		-animal (species) (MULTIPLE)
+		-user(s) (MULTIPLE)
+		-gender
+		-age
+		-time period (down to seconds if possible)
+		-site (preferably being able to define an arbitrary geographical area, or at least by sites defined in the database) (MULTIPLE)
+		-sequence
+		-habitat type (MULTIPLE)
+		-presence of humans
+		-blank images
+		-number of classifications
+		-whether the algorithm has produced a consensus classification or if the photo needs to be manually checked
+	-Search by (B) (1):
+		-combination of arbitrary geographical area (NEED OT BE ABLE TO ADD MULTIPLE LOCATIONS)
+		-users
+		-time period during which photos were taken
+		-species of animals spotted at the site (MULTIPLE SPECIES)
+		-number of photos submitted
+		-number of sequences submitted
+		-habitat types (MULTIPLE HABBITATS)
+		-presence of humans
