@@ -1,0 +1,16 @@
+#navbar-main{
+	background-color: #cc0000;
+}
+
+.margin-shape{
+	background-color: blue;
+}
+
+.form-col{
+	background-color: green;
+}
+
+#footer{
+	position: fixed;
+	bottom: 0;
+}
