@@ -52,12 +52,16 @@ def aggregate_classifications(photo_ID,connection):
         evenness=-1.0
         blanks=-1
         support=-1
-    #Test print
-    if(evenness>0 and evenness<1):
-        print(species,numClass,nonBlanks,evenness)
     
-        
-    sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}')".format(photo_ID,species,evenness,blanks,support)
+    #Check if aggregate already exists, if not insert, otherwise update
+    sql="SELECT * FROM aggregate WHERE photo_id="+str(photo_ID)
+    c.execute(sql)
+    
+    if c.fetchone()==None:
+        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}');".format(photo_ID,numClass,species,evenness,blanks,support)
+    else:
+        sql="UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{}' WHERE photo_id="+str(photo_ID).format(photo_ID,numClass,species,evenness,blanks,support)
+
     c.execute(sql)
     connection.commit()
 
@@ -66,8 +70,8 @@ with connection.cursor() as cursor:
     sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
     cursor.execute(sql)
     maxID=cursor.fetchone()['photo_id']
-print(maxID)
-for id in range(maxID):
+
+for id in range(10):
     if id%1000==0:
         print(id)
     aggregate_classifications(id,connection)
