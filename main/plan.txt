@@ -41,3 +41,10 @@ Search for scientists:
 		-number of sequences submitted
 		-habitat types (MULTIPLE HABBITATS)
 		-presence of humans
+		
+		
+Taks:
+	-Layout/page design (Freddie, Quentin)
+	-Get searches working (Will)
+	-Get dynamic drop downs working (Tom White)
+	-Look into csv export (Tom Wilshaw)
