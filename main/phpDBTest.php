@@ -43,7 +43,7 @@
 
 		echo "<br><br><h2>Good results:</h2><br>";
 
-		echo "<table>";
+		echo "<table border='1'>";
 		echo "<tr><td>Photo ID</td><td>Species</td></tr>";
 
 		if($even->num_rows>0){
@@ -60,6 +60,8 @@
 
 		echo "</table>";
 
+		searchBetweenDates($connection,date("2015-04-11 23:10:01"),date("Y-m-d H:i:s"));
+
 		$connection->close();
 
 		function loadSpeciesMap($connection){
@@ -71,6 +73,23 @@
 				$speciesmap[$row["option_id"]]=$row["option_name"];
 			}
 			return $speciesmap;
+		}
+
+		function searchBetweenDates($connection,$d1,$d2){
+			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2."'";
+			$datequery=$connection->query($sql);
+
+			echo "<h2>Photo IDs from between dates ".$d1." and ".$d2." (current time) maybe want to get filename/some other field in future?";
+			echo "<table>";
+			echo "<tr><td>Photo ID</td></tr>";
+			if($datequery->num_rows>0){
+			while($row=$datequery->fetch_assoc()){
+				echo"<tr>";
+				echo "<td>".$row["photo_id"]."</td>";
+				echo"</tr>";
+			}
+			echo "</table>";
+		}
 		}
 		?>
 	</table>
