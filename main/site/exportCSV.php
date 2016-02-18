@@ -51,6 +51,8 @@
 	header("Content-Type: application/vnd.ms-excel");
 	header("Content-disposition: attachment; filename=export.csv");
     print "$header\n$data";
+	
+	$connection->close();
 
 	
 	function getCategories($connection){//returns attributes of a table as an array
