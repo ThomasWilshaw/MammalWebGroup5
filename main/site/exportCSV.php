@@ -2,21 +2,18 @@
 	//sql details
 	$servername="localhost";
 	$username="root";
-	$password="";
-	$dbname="mammalweb1";
+	$password="toot";
+	$dbname="mammalwebdump";
 	
 	//establish connection
 	$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
-    
-   /*  $select = "SELECT * FROM species";
 
-    $export =$connection->query($select); */
-
-    $fields = getCategories($export);
+    $fields = getCategories($connection);
+    $header="";
 
     for ( $i = 0; $i < sizeof($fields); $i++ )
     {
-        $header .= $fields[i] . ",";
+        $header .= $fields[$i] . ",";
     }
 
     while( $row = mysqli_fetch_row( $export ) )
