@@ -6,6 +6,7 @@
 <head>
 	<title>PHP DROPDOWN MENU POPULATION FROM TABLES</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 
 <body>
@@ -36,6 +37,7 @@
 		
 		$speciesValues=populateCategory($connection,"species");
 		
+		echo '<form id="inputs">';
 		echo'<div class="form-group">';
 		echo'  <label for="speciesSelect">Select species:</label>';
 		echo'  <select class="form-control" id="speciesSelect">';
@@ -73,6 +75,9 @@
 			echo'<option>'.$person_idValue.'</option>';
 		echo'  </select>';
 		echo'</div>';
+
+		echo '<button type="button" id="sendFormButton">Search</button>';
+		echo '</form>';
 		
 		$connection->close();//closes connection when you're done with it
 		
@@ -118,5 +123,10 @@
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
+		<script>
+			$("#sendFormButton").click(function(){
+				console.log($("#inputs").serialize());
+			})
+		</script>
 </body>
 </html>
