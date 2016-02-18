@@ -7,16 +7,19 @@
 	
 	//establish connection
 	$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+	
+	$sql="SHOW COLUMNS FROM `animal`;";
+	$reults=$connection->query($sql);
+	$fields =  mysqli_fetch_fields($results);
 
-    $fields = getCategories($connection);
+  /*   $fields = getCategories($connection); */
     $header="";
 
-    for ( $i = 0; $i < sizeof($fields); $i++ )
-    {
-        $header .= $fields[$i] . ",";
-    }
+    foreach($fields as $val){
+		header .= $val->name . ",";
+	}
 
-    while( $row = mysqli_fetch_row( $export ) )
+    while( $row = mysqli_fetch_row( $results ) )
     {
         $line = '';
         foreach( $row as $value )
