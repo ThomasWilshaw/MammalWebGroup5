@@ -1,29 +1,25 @@
 <?php
-    $username = "root";
-    $password = "toot";
+	//sql details
+	$servername="localhost";
+	$username="root";
+	$password="";
+	$dbname="mammalweb1";
+	
+	//establish connection
+	$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
     
-    $conn = mysql_connect("localhost", $username, $password);
-    
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }else{
-        echo "Connected successfully";
-    }
-    
-    mssql_select_db('mammalweb1', $conn);
-    
-    $select = "SELECT * FROM species";
+   /*  $select = "SELECT * FROM species";
 
-    $export = mysql_query ( $select ) or die ( "Sql error : " . mysql_error( ) );
+    $export =$connection->query($select); */
 
-    $fields = mysql_num_fields ( $export );
+    $fields = getCategories($export);
 
-    for ( $i = 0; $i < $fields; $i++ )
+    for ( $i = 0; $i < sizeof($fields); $i++ )
     {
-        $header .= mysql_field_name( $export , $i ) . ",";
+        $header .= $fields[i] . ",";
     }
 
-    while( $row = mysql_fetch_row( $export ) )
+    while( $row = mysqli_fetch_row( $export ) )
     {
         $line = '';
         foreach( $row as $value )
@@ -56,4 +52,16 @@
 	header("Content-disposition: attachment; filename=export.csv");
     print "$header\n$data";
 
+	
+	function getCategories($connection){//returns attributes of a table as an array
+		//creating and sending query
+		$sql="SHOW COLUMNS FROM `animal`";  //replace "animal" with any other table part of the database initialised in the dbname variable.
+		$categoryQuery=$connection->query($sql);
+		//using query results
+		$categoryArray=array();
+		while($attribute=$categoryQuery->fetch_assoc()){
+			array_push($categoryArray,$attribute['Field']);
+		}
+		return $categoryArray;
+	}
 ?>
