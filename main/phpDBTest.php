@@ -5,6 +5,9 @@
 <body>
 	<a href="#">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
+
+	//At the moment, three searches are hard coded into the page. Once we know the input format from the search form, change to only output a single table that includes all the fields being searched for.
+
 		$servername="localhost";
 		$username="root";
 		$password="toot";
@@ -19,6 +22,8 @@
 		$uneventhreshold=0.75;
 		$sql="SELECT * FROM aggregate WHERE evenness>".$uneventhreshold.";";
 		$uneven=$connection->query($sql);
+
+		//TABLE 1 - High unevenness results from aggregate
 
 		echo "<h2>High unevenness results:</h2><br>";
 
@@ -37,7 +42,8 @@
 		}
 		echo "</table>";
 
-		//Selects the photo ids for useful photos
+		//TABLE 2 - Results from aggregate which are not unanimous or useless, but also ARE within the unevenness threshold
+
 		$sql="SELECT * FROM aggregate WHERE evenness>=0 AND evenness<".$uneventhreshold.";";
 		$even=$connection->query($sql);
 
@@ -60,6 +66,8 @@
 
 		echo "</table>";
 
+		//TABLE 3 - Results from photo that were uploaded between april 11 15 and the current date
+		
 		searchBetweenDates($connection,date("2015-04-11 23:10:01"),date("Y-m-d H:i:s"));
 
 		$connection->close();
