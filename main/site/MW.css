@@ -4,10 +4,13 @@
 
 .margin-shape{
 	background-color: blue;
+	height: 900px;
 }
 
 .form-col{
 	background-color: green;
+	height: 900px;
+	padding-top: 20px;
 }
 
 #footer{
