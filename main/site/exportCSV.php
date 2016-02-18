@@ -8,17 +8,18 @@
 	//establish connection
 	$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
 	
-	$sql="SHOW COLUMNS FROM `animal`;";
-	$reults=$connection->query($sql);
+	//The results of this sql query will be output to a csv file
+	$sql="SELECT photo_id FROM `animal`;";
+	$results=$connection->query($sql);
 	$fields =  mysqli_fetch_fields($results);
-
-  /*   $fields = getCategories($connection); */
+	
 	$header="";
 
 	foreach($fields as $val){
-		header .= $val->name . ",";
+		$header .= $val->name . ",";
 	}
 
+	$data="";
 	while( $row = mysqli_fetch_row( $results ) )
 	{
 		$line = '';
