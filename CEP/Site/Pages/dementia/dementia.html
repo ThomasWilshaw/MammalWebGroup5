@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!--Couldn't see a title, made this up-->
 	<title>
 		RT Projects - Dementia
 	</title>
@@ -20,11 +19,10 @@
     </script>
     
 </head>
-<!--Put this in stylesheet at some point-->
 <body style="background-image:url(../../Images/common/background_tile.jpg)">
 	<div class="ui three column center aligned grid">
-		<!--If this is good, reuse this row as top tab-->
 		<div class="five column row" id="blah">
+			<!--row across the top of the page including rt icon and icons for home, about us, our work, contact us-->
 			<div class="four wide column">
                 <a href="../index.html">
                     <img src="../../Images/common/logo.png" alt="RT Projects">
@@ -51,9 +49,12 @@
 				</a>
 			</div>
 		</div>
-		<div class="three column row">
-			<div class="four wide left floated column">
+		<div class="three column row"><!--the whole page except the row accross the top-->
+			<div class="four wide left floated column"><!--the left most column-->
 				<img src="../../Images/common/address.png" alt="Our address">
+				<a href = "../ourStudio/ourStudio.html">
+					<img id="ourStudio" onmouseover="scale(this)" onmouseout="undoScale(this)" src="../../Images/common/studioTape.png" alt="Our studio">
+				</a>
 				<div class="image-wrapper">
 					<img class="ui fluid image" src="../../Images/common/info2.png">
 					<div id="image-wrapper-home-news-text">
