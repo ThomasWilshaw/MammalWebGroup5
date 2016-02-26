@@ -1,5 +1,6 @@
 #navbar-main{
 	background-color: #cc0000;
+	text-align: right;
 }
 
 .margin-shape{
@@ -16,4 +17,11 @@
 #footer{
 	position: fixed;
 	bottom: 0;
+}
+
+#logo{
+	color: white;
+	float: left;
+	position: relative;
+	height: 50%;
 }
