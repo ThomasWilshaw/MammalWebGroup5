@@ -15,25 +15,27 @@
 		//sql details
 		$servername="localhost";
 		$username="root";
-		$password="toot";
-		$dbname="mammalwebdump";
+		$password="";
+		$dbname="mammalweb1";
 		
 		//establish connection
 		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
 
-		$dropdownCategories=getCategories($connection);//An array. uses the function below to get an array of the categories in the table
+		$dropdownCategories=getCategories($connection);
+		//An array. uses the function below to get an array of the categories in the table
+		
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);
 		
 		//visible part of page:
 		echo "<h2>Dropdown:</h2><br/>";
 		
-		//the dropdowns themselves:
-		//NOTE, the dropdown for each attribute here is hardcoded
-		//but this is not necessary.
-		//since the function getCategories can return an array of attributes in a table
-		//it would be easy enough to then generate a dropdown for each attribute, outputting similar
-		//stuff to the repeated echoing below
+		/*the dropdowns themselves:
+		NOTE, the dropdown for each attribute here is hardcoded
+		but this is not necessary.
+		since the function getCategories can return an array of attributes in a table
+		it would be easy enough to then generate a dropdown for each attribute, outputting similar
+		stuff to the repeated echoing below */
 		
 		$speciesValues=populateCategory($connection,"species");
 		
@@ -42,7 +44,7 @@
 		echo'  <label for="speciesSelect">Select species:</label>';
 		echo'  <select class="form-control" id="speciesSelect">';
 		foreach($speciesValues as $speciesValue)
-			echo'<option>'.$speciesMap[$speciesValue].'</option>';
+			echo'<option>'.strip_tags($speciesMap[$speciesValue]).'</option>';
 		echo'  </select>';
 		echo'</div>';
 		
@@ -52,7 +54,7 @@
 		echo'  <label for="genderSelect">Select gender:</label>';
 		echo'  <select class="form-control" id="genderSelect">';
 		foreach($speciesValues as $genderValue)
-			echo'<option>'.$speciesMap[$genderValue].'</option>';
+			echo'<option>'.strip_tags($speciesMap[$genderValue]).'</option>';
 		echo'  </select>';
 		echo'</div>';
 		
@@ -62,7 +64,7 @@
 		echo'  <label for="ageSelect">Select age:</label>';
 		echo'  <select class="form-control" id="ageSelect">';
 		foreach($ageValues as $ageValue)
-			echo'<option>'.$speciesMap[$ageValue].'</option>';
+			echo'<option>'.strip_tags($speciesMap[$ageValue]).'</option>';
 		echo'  </select>';
 		echo'</div>';
 		
@@ -72,20 +74,21 @@
 		echo'  <label for="person_idSelect">Select person_id:</label>';
 		echo'  <select class="form-control" id="person_idSelect">';
 		foreach($person_idValues as $person_idValue)
-			echo'<option>'.$person_idValue.'</option>';
+			echo'<option>'.strip_tags($person_idValue).'</option>';
 		echo'  </select>';
 		echo'</div>';
 
-		echo '<button type="submit" class="btn btn-default" id="sendFormButton">Search</button>';
+		echo '<button class="btn btn-default" id="sendFormButton" onClick="submitDropdowns()">Search</button>';
 		echo '</form>';
 		
 		$connection->close();//closes connection when you're done with it
 		
-		// Two custom functions: 
-		//getCategories: returns all the attributes in a table as an array
-		//populateCategory: returns an array of all unique values for a given category in the database, as an array
-		//loadSpeciesMap: from will's code - using the options table to convert integer values stored in tables to the relevant string
-		//		e.g. 2 might represent a species of "bear"
+		/* Two custom functions: 
+		getCategories: returns all the attributes in a table as an array
+		populateCategory: returns an array of all unique values for a given category in the database, as an array
+		loadSpeciesMap: from will's code - using the options table to convert integer values stored in tables to 
+		the relevant string
+				e.g. 2 might represent a species of "bear" */
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		function getCategories($connection){//returns attributes of a table as an array
 			//creating and sending query
@@ -125,9 +128,9 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
 		<script>
-			$("#sendFormButton").click(function(){
-				console.log($("#inputs").serialize());
-			})
+		function submitDropdowns(){
+			console.log("button pressed");
+		}
 		</script>
 </body>
 </html>
