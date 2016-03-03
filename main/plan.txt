@@ -2,7 +2,7 @@ Plan
 
 Non scientists:
     -Dashboard
-	-Search by(2):
+	-Search images by(2):
 		-Species
 		-Date/time
 		-habitat
@@ -54,5 +54,5 @@ Taks (When you start working on one put your name by it):
      hand and verify the scripts output matches. The more the better but not masses.
     -Add flag to display image or not (set false if fully classified).
     -Turn dropdown into SQL queries  - Tom White
-    -Create basic pages and link together
+    -Create basic pages and link together - Tom Wilshaw
     -DOCUMENT THE FUCK OUT OF IT ALL

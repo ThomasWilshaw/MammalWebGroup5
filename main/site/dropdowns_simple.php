@@ -37,7 +37,7 @@
 		
 		$speciesValues=populateCategory($connection,"species");
 		
-		echo '<form id="inputs">';
+		echo '<form id="inputs" role="form">';
 		echo'<div class="form-group">';
 		echo'  <label for="speciesSelect">Select species:</label>';
 		echo'  <select class="form-control" id="speciesSelect">';
@@ -76,7 +76,7 @@
 		echo'  </select>';
 		echo'</div>';
 
-		echo '<button type="button" id="sendFormButton">Search</button>';
+		echo '<button type="submit" class="btn btn-default" id="sendFormButton">Search</button>';
 		echo '</form>';
 		
 		$connection->close();//closes connection when you're done with it
@@ -84,7 +84,8 @@
 		// Two custom functions: 
 		//getCategories: returns all the attributes in a table as an array
 		//populateCategory: returns an array of all unique values for a given category in the database, as an array
-		//loadSpeciesMap: from will's code - using the options table to convert integer values stored in tables to the relevant string e.g. 2 might represent a species of "bear"
+		//loadSpeciesMap: from will's code - using the options table to convert integer values stored in tables to the relevant string
+		//		e.g. 2 might represent a species of "bear"
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		function getCategories($connection){//returns attributes of a table as an array
 			//creating and sending query
