@@ -10,10 +10,14 @@ def aggregate_classifications(photo_ID,connection):
     result=c.fetchall()
     
     speciesTally=dict()
+    ageTally=dict()
+    genderTally=dict()
     numClass=0
     nonBlanks=0
     for row in result:
         rowS=row['species']
+        rowA=row['age']
+        rowG=row['gender']
         numClass+=1
         if rowS!=86 and rowS!=87:
             nonBlanks+=1
@@ -22,7 +26,21 @@ def aggregate_classifications(photo_ID,connection):
             speciesTally[rowS]=speciesTally[rowS]+1
         else:
             speciesTally[rowS]=1
+
+        if  rowA in ageTally:
+            ageTally[rowS]=ageTally[rowS]+1
+        else:
+            ageTally[rowS]=1
+
+        if  rowG in genderTally:
+            genderTally[rowS]=genderTally[rowS]+1
+        else:
+            genderTally[rowS]=1
+
     if numClass>0:
+        #Gender and age handled vey basically, just select the mode
+        age=ageTally.keys()[ageTally.values().index(max(ageTally.values()))]
+        gender=genderTally.keys()[genderTally.values().index(max(genderTally.values()))]
         values=list(speciesTally.values())
         keys=list(speciesTally.keys())
         
@@ -51,7 +69,9 @@ def aggregate_classifications(photo_ID,connection):
         evenness=-1.0
         blanks=-1
         support=-1
-
+        age=-1
+        gender=-1
+        
     #Calculate flag
     #Values TODO: put in options table
     #   -1=error
@@ -88,9 +108,9 @@ def aggregate_classifications(photo_ID,connection):
     currentAggregate=c.fetchone()
     
     if currentAggregate==None:
-        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}','{}');".format(photo_ID,numClass,species,evenness,blanks,support,flag)
+        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}','{}', '{}', '{}');".format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
     else:
-        sql=("UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{},flag={}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag)
+        sql=("UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{}',flag='{}',age='{}',gender='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
 
     c.execute(sql)
     connection.commit()
