@@ -27,7 +27,7 @@
 		$speciesMap=loadSpeciesMap($connection);
 		
 		//visible part of page:
-		echo "<h2>Dropdown:</h2><br/>";
+		echo "<h1>Search Images:</h1><br/>";
 		
 		/*the dropdowns themselves:
 		NOTE, the dropdown for each attribute here is hardcoded
@@ -38,10 +38,10 @@
 		
 		$speciesValues=populateCategory($connection,"species");
 		
-		echo '<form id="inputs" role="form" action="dropdowns_march.php" method="post">';
+		echo '<form id="inputs" role="form" action="image_display.php" method="post">';
 		
 		echo'  <label for="speciesSelect">Select species:</label>';
-		echo'  <select name="species" class="form-control" id="speciesSelect" form="inputs">';
+		echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs">';
 		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $speciesValue)
 		{
@@ -74,10 +74,10 @@
 		}
 		echo'  </select>';
 		
-		$person_idValues=populateCategory($connection,"person_id");
+		$person_idValues=populateCategoryPhoto($connection,"person_id");
 		
 		echo'  <label for="person_idSelect">Select person_id:</label>';
-		echo'  <select name="person_id" class="form-control" id="person_idSelect" form="inputs">';
+		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs">';
 		echo'<option value="any">Any</option>';
 		foreach($person_idValues as $person_idValue)
 		{
@@ -85,13 +85,17 @@
 			echo'<option value="'.$person_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
-
-		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';
+		
+		echo' <label for="contains_human">Humans Present:</label>';
+		echo '<select name ="contains_human" class="form-control" id="contains_humanSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
+		echo'<option value="1">Yes</option>';
+		echo'<option value="0">No</option>';
+		echo'</select>';
+		
+		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
 		echo '</form>';
 		
-		if(isset($_REQUEST)){
-			arrayToQuery($_REQUEST,$speciesMap);
-		}
 		
 		$connection->close();//closes connection when you're done with it
 		
@@ -105,11 +109,6 @@
 		the relevant string
 				e.g. 2 might represent a species of "bear" 
 				
-		arrayToQuery: takes in an associative array storing what to search for each attribute, and returns a
-		string containing an SQL query. 
-				e.g. for input: ['species'->'bear','gender'->'male' ]
-				returns the string:
-				SELECT * FROM 'animal' WHERE species = bear AND gender = male
 		*/
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		function getCategories($connection){//returns attributes of a table as an array
@@ -137,6 +136,19 @@
 			return $categoryArray;			
 		}
 		///////////////////////////////////////////////////////////////////////////////////////////////////
+			function populateCategoryPhoto($connection,$category){//returns an array of possible values for an attribute that appear in the photo table
+			//creating and sending query
+			$sql="SELECT DISTINCT ".$category." FROM `photo`"; 
+			//replace "animal" with any other table part of the database initialised in the dbname variable.
+			$categoryQuery=$connection->query($sql);
+			//using query results
+			$categoryArray=array();
+			while($attribute=$categoryQuery->fetch_assoc()){
+				array_push($categoryArray,$attribute[$category]);
+			}
+			return $categoryArray;			
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
 		function loadSpeciesMap($connection){
 			$sql="SELECT option_id,option_name FROM options";  
 			$speciesquery=$connection->query($sql);
@@ -149,51 +161,6 @@
 			return $speciesmap;
 		}
 		
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//n.b. this function currently can use the species map to convert things that are
-		//values from the options table rather than the animal table
-		function arrayToQuery($inputArray,$speciesMap){
-			$query="SELECT * FROM 'animal'";
-			$counter=0;
-			
-			foreach($inputArray as $key => $value){
-
-				$rawValue = array_search($value,$speciesMap);
-				//raw value is the value in the animal table
-				//corresponding to the value in the options table		
-				
-				if(empty($rawValue)){
-					$rawValue=$value;
-				}
-				//if there's no information in the species map about this variable
-				
-				if($rawValue=="any"){
-					$rawValue="";
-				}
-				//values such as "any" that shouldn't influence the query
-				
-				
-				if(!empty($rawValue))
-				{
-					if($counter==0){
-						$query=$query." WHERE ".$key." = ".$rawValue;
-					}
-					
-					else{
-						$query=$query." AND ".$key." = ".$rawValue;
-					}
-					
-					$counter=$counter+1;
-				}
-			}
-			$query=$query.";";
-			
-			//testing
-			echo $query;
-			//
-			
-			return $query;	
-		}
 		
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
