@@ -2,7 +2,7 @@ Plan
 
 Non scientists:
     -Dashboard
-	-Search by(2):
+	-Search images by(2):
 		-Species
 		-Date/time
 		-habitat
