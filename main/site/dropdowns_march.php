@@ -157,25 +157,38 @@
 		//so badger becomes 10
 		//to change this, delete the rawValue variable and change all occurences of rawValue to value
 		function arrayToQuery($inputArray,$speciesMap){
-			$query="SELECT * FROM 'animal' WHERE";
+			$query="SELECT * FROM 'animal'";
 			$counter=0;
 			
 			foreach($inputArray as $key => $value){
 
 				$rawValue = array_search($value,$speciesMap);
 				//raw value is the value in the animal table
-				//corresponding to the value in the options table
+				//corresponding to the value in the options table		
 				
-				if($counter==0){
-				$query=$query." ".$key." = ".$rawValue;
+				if(empty($rawValue)){
+					$rawValue=$value;
 				}
+				//if there's no information in the species map about this variable
 				
-				else{
-				$query=$query." AND ".$key." = ".$rawValue;
+				if($rawValue=="any"){
+					$rawValue="";
 				}
+				//values such as "any" that shouldn't influence the query
 				
-				$counter=$counter+1;
 				
+				if(!empty($rawValue))
+				{
+					if($counter==0){
+						$query=$query." WHERE ".$key." = ".$rawValue;
+					}
+					
+					else{
+						$query=$query." AND ".$key." = ".$rawValue;
+					}
+					
+					$counter=$counter+1;
+				}
 			}
 			$query=$query.";";
 			
