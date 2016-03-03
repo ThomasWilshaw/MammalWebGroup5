@@ -39,10 +39,11 @@
 		
 		$speciesValues=populateCategory($connection,"species");
 		
-		echo '<form id="inputs" role="form">';
+		echo '<form id="inputs" role="form" action="submitDropdowns()">';
 		echo'<div class="form-group">';
 		echo'  <label for="speciesSelect">Select species:</label>';
 		echo'  <select class="form-control" id="speciesSelect">';
+		echo'<option>Any</option>';
 		foreach($speciesValues as $speciesValue)
 			echo'<option>'.strip_tags($speciesMap[$speciesValue]).'</option>';
 		echo'  </select>';
@@ -78,17 +79,27 @@
 		echo'  </select>';
 		echo'</div>';
 
-		echo '<button class="btn btn-default" id="sendFormButton" onClick="submitDropdowns()">Search</button>';
+		echo '<button type="submit" class="btn btn-default" value="Submit">Search</button> ';
 		echo '</form>';
 		
 		$connection->close();//closes connection when you're done with it
 		
-		/* Two custom functions: 
+		/* Four custom functions: 
+		
 		getCategories: returns all the attributes in a table as an array
+		
 		populateCategory: returns an array of all unique values for a given category in the database, as an array
+		
 		loadSpeciesMap: from will's code - using the options table to convert integer values stored in tables to 
 		the relevant string
-				e.g. 2 might represent a species of "bear" */
+				e.g. 2 might represent a species of "bear" 
+				
+		arrayToQuery: takes in an associative array storing what to search for each attribute, and returns a
+		string containing an SQL query. 
+				e.g. for input: ['species'->'bear','gender'->'male' ]
+				returns the string:
+				SELECT * FROM 'animal' WHERE species = bear AND gender = male
+		*/
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		function getCategories($connection){//returns attributes of a table as an array
 			//creating and sending query
@@ -104,7 +115,8 @@
 		////////////////////////////////////////////////////////////////////////////////////////////////////	
 		function populateCategory($connection,$category){//returns an array of possible values for an attribute that appear in the database
 			//creating and sending query
-			$sql="SELECT DISTINCT ".$category." FROM `animal`";  //replace "animal" with any other table part of the database initialised in the dbname variable.
+			$sql="SELECT DISTINCT ".$category." FROM `animal`"; 
+			//replace "animal" with any other table part of the database initialised in the dbname variable.
 			$categoryQuery=$connection->query($sql);
 			//using query results
 			$categoryArray=array();
@@ -113,7 +125,7 @@
 			}
 			return $categoryArray;			
 		}
-		///////////////////////////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////////////////////////
 		function loadSpeciesMap($connection){
 			$sql="SELECT option_id,option_name FROM options";  
 			$speciesquery=$connection->query($sql);
@@ -125,11 +137,44 @@
 			$speciesmap[0]="Undefined";
 			return $speciesmap;
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		function arrayToQuery($inputArray,$speciesMap){
+			$query="SELECT * FROM 'animal' WHERE";
+			$counter=0;
+			foreach($inputArray as $key => $value){
+				
+				$rawKey= array_search($key,$speciesMap);
+				
+				if($counter==0){
+				$query=$query." ".$key." = ".$value;
+				}
+				
+				else{
+				$query=$query." AND ".$key." = ".$value;
+				}
+				
+				$counter=$counter+1;
+				
+			$query=$query.";";
+			}
+			
+			//testing
+			echo $query;
+			//
+			
+			return $query;	
+		}
+		
+		//testing
+		arrayToQuery(['bear','gender'],$speciesMap);
+		//
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
 		<script>
 		function submitDropdowns(){
 			console.log("button pressed");
+			return false;
 		}
 		</script>
 </body>
