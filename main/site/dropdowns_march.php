@@ -1,6 +1,5 @@
 <!DOCTYPE html>
- <!--  PHP DIRECTLY ADAPTED FROM WILL'S PHP FILE  -->
-  <!-- FOR POPULATING DROPDOWN MENUS WITH THINGS FROM DATABASE -->
+ <!--  PHP with functions to populate dropdowns and generate sql queries  -->
 <html>
 
 <head>
@@ -47,7 +46,7 @@
 		foreach($speciesValues as $speciesValue)
 		{
 			$thisField=strip_tags($speciesMap[$speciesValue]);
-			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+			echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
 		
@@ -59,7 +58,7 @@
 		foreach($speciesValues as $genderValue)
 		{
 			$thisField=strip_tags($speciesMap[$genderValue]);
-			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+			echo'<option value="'.$genderValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
 		
@@ -71,7 +70,7 @@
 		foreach($ageValues as $ageValue)
 		{
 			$thisField=strip_tags($speciesMap[$ageValue]);
-			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+			echo'<option value="'.$ageValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
 		
@@ -83,7 +82,7 @@
 		foreach($person_idValues as $person_idValue)
 		{
 			$thisField=strip_tags($person_idValue);
-			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+			echo'<option value="'.$person_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
 
@@ -151,11 +150,8 @@
 		}
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//n.b. this function currently assumes the values in the array are as in the options table
-		//e.g. "Badger" rather than "10"
-		//and converts to the relevant value in the animals table
-		//so badger becomes 10
-		//to change this, delete the rawValue variable and change all occurences of rawValue to value
+		//n.b. this function currently can use the species map to convert things that are
+		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
 			$query="SELECT * FROM 'animal'";
 			$counter=0;
