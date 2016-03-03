@@ -1,25 +1,21 @@
 Plan
-(Scale 1-5, 1 important)
 
-Table of photos for non scientists:
-	-Dashboard:
-		-Slideshow
-		-Timeline
-		-Graphs (chord diagram?)
-		-Map
+Non scientists:
+    -Dashboard
 	-Search by(2):
 		-Species
 		-Date/time
 		-habitat
 		-site
 		-Favourate
-		-etc.
+		-etc. (see email from Penn and initial project pdf)
 		
 		
-Search for scientists:
+Scientists:
+    -Dashboard
 	-Shows results and download button(1)
 	-For both searches downloadable csv file
-	-Search by (A)(1):
+	-Search by Animal)(1):
 		-animal (species) (MULTIPLE)
 		-user(s) (MULTIPLE)
 		-gender
@@ -32,7 +28,7 @@ Search for scientists:
 		-blank images
 		-number of classifications
 		-whether the algorithm has produced a consensus classification or if the photo needs to be manually checked
-	-Search by (B) (1):
+	-Search by Location (1):
 		-combination of arbitrary geographical area (NEED OT BE ABLE TO ADD MULTIPLE LOCATIONS)
 		-users
 		-time period during which photos were taken
@@ -41,10 +37,22 @@ Search for scientists:
 		-number of sequences submitted
 		-habitat types (MULTIPLE HABBITATS)
 		-presence of humans
+
+-Dashboard:
+    -Could be a tab on both Scientist and user pages?
+    -Slideshow
+    -Timeline (Uploads and classifications)
+    -Stats (Not sure of what yey but make some up)
+    -Graphs (chord diagram?)
+    -Map
 		
 		
-Taks:
-	-Layout/page design (Freddie, Quentin)
-	-Get searches working (Will)
-	-Get dynamic drop downs working (Tom White)
-	-Look into csv export (Tom Wilshaw)
+Taks (When you start working on one put your name by it):
+	-Add uneveness as search criteria
+    -Turn PHP scripts into functions for easier re-use
+    -Make some tests for the output of the algorithm. Calculate some images by 
+     hand and verify the scripts output matches. The more the better but not masses.
+    -Add flag to display image or not (set false if fully classified).
+    -Turn dropdown into SQL queries  - Tom White
+    -Create basic pages and link together
+    -DOCUMENT THE FUCK OUT OF IT ALL

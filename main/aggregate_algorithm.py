@@ -10,10 +10,14 @@ def aggregate_classifications(photo_ID,connection):
     result=c.fetchall()
     
     speciesTally=dict()
+    ageTally=dict()
+    genderTally=dict()
     numClass=0
     nonBlanks=0
     for row in result:
         rowS=row['species']
+        rowA=row['age']
+        rowG=row['gender']
         numClass+=1
         if rowS!=86 and rowS!=87:
             nonBlanks+=1
@@ -22,7 +26,21 @@ def aggregate_classifications(photo_ID,connection):
             speciesTally[rowS]=speciesTally[rowS]+1
         else:
             speciesTally[rowS]=1
+
+        if  rowA in ageTally:
+            ageTally[rowS]=ageTally[rowS]+1
+        else:
+            ageTally[rowS]=1
+
+        if  rowG in genderTally:
+            genderTally[rowS]=genderTally[rowS]+1
+        else:
+            genderTally[rowS]=1
+
     if numClass>0:
+        #Gender and age handled vey basically, just select the mode
+        age=ageTally.keys()[ageTally.values().index(max(ageTally.values()))]
+        gender=genderTally.keys()[genderTally.values().index(max(genderTally.values()))]
         values=list(speciesTally.values())
         keys=list(speciesTally.keys())
         
@@ -44,7 +62,6 @@ def aggregate_classifications(photo_ID,connection):
                     p=speciesTally[s]/(nonBlanks)
                     pTot-=p*math.log(p)
             evenness=pTot/math.log(len(values))
-                    
     else:
         #Would need to add an unclassified option to database
         #Kinda nice to have all fields here to more easily see everything that needs doing
@@ -52,7 +69,38 @@ def aggregate_classifications(photo_ID,connection):
         evenness=-1.0
         blanks=-1
         support=-1
+        age=-1
+        gender=-1
+        
+    #Calculate flag
+    #Values TODO: put in options table
+    #   -1=error
+    #   0=incomplete
+    #   1=blank
+    #   2=consensus
+    #   3=complete
+
+    #If this doesn't get set, should be an error
+    flag=-1
     
+    #Ten blanks=blank
+    if numClass-nonBlanks>=10:
+        flag=1
+    #5 Blanks, no other results=blank
+    elif numClass-nonBlanks>=5 and len(speciesTally)==1:
+        flag=1
+    #Ten matching classifications=consensus
+    else:
+        if species!=-1:
+            if speciesTally[species]>=10:
+                flag=2
+        #No consensus but lots of classifications=complete
+        elif numClass>=25:
+            flag=3
+        #Otherwise not done=incomplete
+        else:
+            flag=0
+
     #Check if aggregate already exists, if not insert, otherwise update
     sql="SELECT * FROM aggregate WHERE photo_id="+str(photo_ID)
     c.execute(sql)
@@ -60,9 +108,9 @@ def aggregate_classifications(photo_ID,connection):
     currentAggregate=c.fetchone()
     
     if currentAggregate==None:
-        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}');".format(photo_ID,numClass,species,evenness,blanks,support)
+        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}','{}', '{}', '{}');".format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
     else:
-        sql=("UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support)
+        sql=("UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{}',flag='{}',age='{}',gender='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
 
     c.execute(sql)
     connection.commit()
