@@ -39,48 +39,60 @@
 		
 		$speciesValues=populateCategory($connection,"species");
 		
-		echo '<form id="inputs" role="form" action="submitDropdowns()">';
-		echo'<div class="form-group">';
+		echo '<form id="inputs" role="form" action="dropdowns_march.php" method="post">';
+		
 		echo'  <label for="speciesSelect">Select species:</label>';
-		echo'  <select class="form-control" id="speciesSelect">';
-		echo'<option>Any</option>';
+		echo'  <select name="species" class="form-control" id="speciesSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $speciesValue)
-			echo'<option>'.strip_tags($speciesMap[$speciesValue]).'</option>';
+		{
+			$thisField=strip_tags($speciesMap[$speciesValue]);
+			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+		}
 		echo'  </select>';
-		echo'</div>';
 		
 		$speciesValues=populateCategory($connection,"gender");
 		
-		echo'<div class="form-group">';
 		echo'  <label for="genderSelect">Select gender:</label>';
-		echo'  <select class="form-control" id="genderSelect">';
+		echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $genderValue)
-			echo'<option>'.strip_tags($speciesMap[$genderValue]).'</option>';
+		{
+			$thisField=strip_tags($speciesMap[$genderValue]);
+			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+		}
 		echo'  </select>';
-		echo'</div>';
 		
 		$ageValues=populateCategory($connection,"age");
 		
-		echo'<div class="form-group">';
 		echo'  <label for="ageSelect">Select age:</label>';
-		echo'  <select class="form-control" id="ageSelect">';
+		echo'  <select name="age" class="form-control" id="ageSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
 		foreach($ageValues as $ageValue)
-			echo'<option>'.strip_tags($speciesMap[$ageValue]).'</option>';
+		{
+			$thisField=strip_tags($speciesMap[$ageValue]);
+			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+		}
 		echo'  </select>';
-		echo'</div>';
 		
 		$person_idValues=populateCategory($connection,"person_id");
 		
-		echo'<div class="form-group">';
 		echo'  <label for="person_idSelect">Select person_id:</label>';
-		echo'  <select class="form-control" id="person_idSelect">';
+		echo'  <select name="person_id" class="form-control" id="person_idSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
 		foreach($person_idValues as $person_idValue)
-			echo'<option>'.strip_tags($person_idValue).'</option>';
+		{
+			$thisField=strip_tags($person_idValue);
+			echo'<option value="'.$thisField.'">'.$thisField.'</option>';
+		}
 		echo'  </select>';
-		echo'</div>';
 
-		echo '<button type="submit" class="btn btn-default" value="Submit">Search</button> ';
+		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';
 		echo '</form>';
+		
+		if(isset($_REQUEST)){
+			arrayToQuery($_REQUEST,$speciesMap);
+		}
 		
 		$connection->close();//closes connection when you're done with it
 		
@@ -137,26 +149,35 @@
 			$speciesmap[0]="Undefined";
 			return $speciesmap;
 		}
+		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//n.b. this function currently assumes the values in the array are as in the options table
+		//e.g. "Badger" rather than "10"
+		//and converts to the relevant value in the animals table
+		//so badger becomes 10
+		//to change this, delete the rawValue variable and change all occurences of rawValue to value
 		function arrayToQuery($inputArray,$speciesMap){
 			$query="SELECT * FROM 'animal' WHERE";
 			$counter=0;
+			
 			foreach($inputArray as $key => $value){
-				
-				$rawKey= array_search($key,$speciesMap);
+
+				$rawValue = array_search($value,$speciesMap);
+				//raw value is the value in the animal table
+				//corresponding to the value in the options table
 				
 				if($counter==0){
-				$query=$query." ".$key." = ".$value;
+				$query=$query." ".$key." = ".$rawValue;
 				}
 				
 				else{
-				$query=$query." AND ".$key." = ".$value;
+				$query=$query." AND ".$key." = ".$rawValue;
 				}
 				
 				$counter=$counter+1;
 				
-			$query=$query.";";
 			}
+			$query=$query.";";
 			
 			//testing
 			echo $query;
@@ -165,17 +186,10 @@
 			return $query;	
 		}
 		
-		//testing
-		arrayToQuery(['bear','gender'],$speciesMap);
-		//
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
 		<script>
-		function submitDropdowns(){
-			console.log("button pressed");
-			return false;
-		}
 		</script>
 </body>
 </html>
