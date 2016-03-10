@@ -1,8 +1,11 @@
 <html>
 <head>
 	<title>Php x SQL</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+
 	<a href="dropdowns_march.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
@@ -23,27 +26,38 @@
 		}
 		
 		$sqlResults=$connection->query($sql);
-		var_dump($_REQUEST);
-		var_dump($sqlResults);
+	//	var_dump($_REQUEST);
+	//	var_dump($sqlResults);
 
 		//TABLE 1 - output results
 
 		echo "<h1>Query Results:</h1><br/>";
-
+		echo '<p> Table showing images meeting the filter criteria: </p>';
 		/*This is an easy way to structure the output table, have some string combination thing for
 		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
-		echo "<table>";
-		echo "<tr><td>Photo ID</td></tr>";
+		echo '<table class="table table-hover">';
+		echo '<thead>';
+		echo "<tr>";
+		echo '<th>Photo ID</th>';
+		echo '<th>Photo Site</th>';
+		echo '<th>ID of uploader</th>';
+		echo '<th>Preview</th>';
+		echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
 		if($sqlResults->num_rows>0){
 			while($row=$sqlResults->fetch_assoc()){
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
+				echo "<td>".$row["site_id"]."</td>";
+				echo "<td>".$row["upload_id"]."</td>";
 				echo "</tr>";
 			}
 		}
 		else{
 			echo "<tr><td>No images found</td></tr>";
 		}
+		echo '</tbody>';
 		echo "</table>";
 
 		
@@ -247,7 +261,7 @@
 			$query=$query.";";
 			
 			//testing
-			echo $query;
+			//echo $query;
 			//
 			
 			return $query;	
