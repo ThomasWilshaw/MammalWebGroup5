@@ -169,7 +169,14 @@
 								$query=$query." AND ";
 								}
 							$counter=$counter+1;
-							$query=$query." taken BETWEEN ".$_REQUEST['time1_form='].' AND '.$_REQUEST['time2_form='];
+							
+							$modifiedStartTime=$_REQUEST['time1_form='];
+							$modifiedEndTime=$_REQUEST['time2_form='];
+							//start and end time must be modified to take the "T" out of the middle of the string
+							//to make it work with the sql format for date and time
+							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
+							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
+							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
 						
 						
 						}
