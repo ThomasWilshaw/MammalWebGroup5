@@ -72,6 +72,7 @@
 			
 			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
+			$handledGroup1Mapped=['species','gender','age'];
 			
 			$handledGroup2=['time1_form=','time2_form='];
 			//the group of variables to be handled in the time section
@@ -90,10 +91,15 @@
 				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
 					
 					if(!(is_array($value))){
-						$rawValue = array_search($value,$speciesMap);
-						//raw value is the value in the animal table
-						//corresponding to the value in the options table		
 						
+						if(in_array($key,$handledGroup1Mapped)){
+							$rawValue = array_search($value,$speciesMap);
+							//raw value is the value in the animal table
+							//corresponding to the value in the options table	
+						}
+						else{
+							$rawValue=$value;
+						}
 						if(empty($rawValue)){
 							$rawValue=$value;
 						}
@@ -103,9 +109,9 @@
 							$rawValue="";
 						}
 						//values such as "any" that shouldn't influence the query
+
 						
-						
-						if((!empty($rawValue)) AND (!($rawValue=="any")))
+						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
 							if($counter==0){
 								$query=$query." WHERE ".$key." = ".$rawValue;
