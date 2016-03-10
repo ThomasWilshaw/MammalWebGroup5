@@ -70,7 +70,7 @@
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
-			$handledGroup1=['species','gender','age','person_id','contains_human'];
+			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			
 			$handledGroup2=['time1_form=','time2_form='];

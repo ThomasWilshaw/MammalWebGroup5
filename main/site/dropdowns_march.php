@@ -86,6 +86,32 @@
 		}
 		echo'  </select>';
 		
+		$site_idValues=populateCategoryPhoto($connection,"site_id");
+		
+		echo'  <label for="site_idSelect">Select Site:</label>';
+		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
+		foreach($site_idValues as $site_idValue)
+		{
+			$thisField=strip_tags($site_idValue);
+			echo'<option value="'.$site_idValue.'">'.$thisField.'</option>';
+		}
+		echo'  </select>';
+		
+		$sequence_idValues=populateCategoryPhoto($connection,"sequence_id");
+		
+		echo'  <label for="sequence_idSelect">Select sequence:</label>';
+		echo'  <select multiple name="sequence_id[]" class="form-control" id="sequence_idSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
+		foreach($sequence_idValues as $sequence_idValue)
+		{
+			$thisField=strip_tags($sequence_idValue);
+			echo'<option value="'.$sequence_idValue.'">'.$thisField.'</option>';
+		}
+		echo'  </select>';
+		
+	
+		
 		echo' <label for="contains_human">Humans Present:</label>';
 		echo '<select name ="contains_human" class="form-control" id="contains_humanSelect" form="inputs">';
 		echo'<option value="any">Any</option>';
