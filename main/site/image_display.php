@@ -101,7 +101,7 @@
 						//values such as "any" that shouldn't influence the query
 						
 						
-						if(!empty($rawValue))
+						if((!empty($rawValue)) AND (!($rawValue=="any")))
 						{
 							if($counter==0){
 								$query=$query." WHERE ".$key." = ".$rawValue;
@@ -116,31 +116,34 @@
 					}
 					
 					else{
-						if($counter==0){
-								$query=$query." WHERE ".$key." = ";
-							}
-							
-						else{
-								$query=$query." AND ".$key." = ";
-							}
-						$counter=$counter+1;
-						$innerCounter=0;
-						foreach($value as $arrayItem){
-							if($arrayItem=="any"){
-								$arrayItem="";
-							}
-							if(!empty($arrayItem))
-							{
-								if($innerCounter==0){
-									$query=$query.$arrayItem;
+						if(!in_array("any",$value)){
+							//if the "any" option is selected, this overrides other options
+							if($counter==0){
+									$query=$query." WHERE ".$key." = ";
 								}
 								
-								else{
-									$query=$query." OR ".$arrayItem;
+							else{
+									$query=$query." AND ".$key." = ";
 								}
-								$innerCounter+=1;
-							}	
-								
+							$counter=$counter+1;
+							$innerCounter=0;
+							foreach($value as $arrayItem){
+								if($arrayItem=="any"){
+									$arrayItem="";
+								}
+								if(!empty($arrayItem))
+								{
+									if($innerCounter==0){
+										$query=$query.$arrayItem;
+									}
+									
+									else{
+										$query=$query." OR ".$arrayItem;
+									}
+									$innerCounter+=1;
+								}	
+									
+							}
 						}
 							
 					}
