@@ -5,7 +5,8 @@ import math
 
 def aggregate_classifications(photo_ID,connection):
     c=connection.cursor()
-    sql="SELECT * FROM animal where photo_id="+str(photo_ID)
+
+    sql="SELECT * FROM animal WHERE photo_id="+str(photo_ID)
     c.execute(sql)
     result=c.fetchall()
     
@@ -39,8 +40,22 @@ def aggregate_classifications(photo_ID,connection):
 
     if numClass>0:
         #Gender and age handled vey basically, just select the mode
-        age=ageTally.keys()[ageTally.values().index(max(ageTally.values()))]
-        gender=genderTally.keys()[genderTally.values().index(max(genderTally.values()))]
+        if len(ageTally)>0:
+            ageValues=list(ageTally.values())
+            ageKeys=list(ageTally.values())
+
+            age=ageKeys[ageValues.index(max(ageValues))]
+        else:
+            age=0
+
+        if len(genderTally)>0:
+            genderValues=list(genderTally.values())
+            genderKeys=list(genderTally.values())
+
+            gender=genderKeys[genderValues.index(max(genderValues))]
+        else:
+            gender=0
+
         values=list(speciesTally.values())
         keys=list(speciesTally.keys())
         
@@ -71,7 +86,7 @@ def aggregate_classifications(photo_ID,connection):
         support=-1
         age=-1
         gender=-1
-        
+
     #Calculate flag
     #Values TODO: put in options table
     #   -1=error
@@ -80,26 +95,35 @@ def aggregate_classifications(photo_ID,connection):
     #   2=consensus
     #   3=complete
 
+    #Get flag option_ids from options
+    sql="SELECT * FROM options WHERE struc='flag'"
+    c.execute(sql)
+    flagResult=c.fetchall()
+    flags=dict()
+    for row in flagResult:
+        flags[row['option_name']]=row['option_id']
+    print(flags)
+
     #If this doesn't get set, should be an error
     flag=-1
     
     #Ten blanks=blank
     if numClass-nonBlanks>=10:
-        flag=1
+        flag=flags['blank']
     #5 Blanks, no other results=blank
     elif numClass-nonBlanks>=5 and len(speciesTally)==1:
-        flag=1
+        flag=flags['blank']
     #Ten matching classifications=consensus
     else:
         if species!=-1:
             if speciesTally[species]>=10:
-                flag=2
+                flag=flags['consensus']
         #No consensus but lots of classifications=complete
         elif numClass>=25:
-            flag=3
+            flag=flags['complete']
         #Otherwise not done=incomplete
         else:
-            flag=0
+            flag=flags['incomplete']
 
     #Check if aggregate already exists, if not insert, otherwise update
     sql="SELECT * FROM aggregate WHERE photo_id="+str(photo_ID)
@@ -110,12 +134,12 @@ def aggregate_classifications(photo_ID,connection):
     if currentAggregate==None:
         sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}','{}', '{}', '{}');".format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
     else:
-        sql=("UPDATE aggregate SET photo_id='{}',numClass='{}',species='{}',evenness='{}',blanks='{}',support='{}',flag='{}',age='{}',gender='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
+        sql=("UPDATE aggregate SET photo_id='{}',num_class='{}',species='{}',evenness='{}',blanks='{}',support='{}',flag='{}',age='{}',gender='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
 
     c.execute(sql)
     connection.commit()
 
-connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalwebdump',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalweb2',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 with connection.cursor() as cursor:
     sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
     cursor.execute(sql)
