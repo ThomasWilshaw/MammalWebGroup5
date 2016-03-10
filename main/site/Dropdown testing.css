@@ -1,34 +1,20 @@
-.navbar{
-	margin-bottom: 0px;
-}
-
-.margin-shape{
-	background-color: blue;
-	height: 900px;
-}
-
-.form-col{
-	background-color: white;
-	height: 900px;
-	padding-top: 20px;
-}
-
-#footer{
-	position: fixed;
-	bottom: 0;
-}
-
-#logo{
-	color: white;
-	float: left;
-	position: relative;
-	height: 50%;
+body {
+  font: normal 14px/100% "Andale Mono", AndaleMono, monospace;
+  color: #fff;
+  padding: 50px;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #374954;
 }
 
 .dropdown {
   position: absolute;
   top:50%;
   transform: translateY(-50%);
+}
+
+a {
+  color: #fff;
 }
 
 .dropdown dd,
