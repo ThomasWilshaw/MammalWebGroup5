@@ -121,14 +121,12 @@
 		echo'<option value="0">No</option>';
 		echo'</select>';
 		
-		echo' <label for="flag">Image status:</label>';
-		echo '<select name="flag" class="form-control" id="flagSelect" form="inputs">';
-		echo'<option value="any">Any</option>';
-		echo'<option value=168>Incomplete classification</option>';
-		echo'<option value=166>Consensus classification</option>';
-		echo'<option value=165>Blank classification</option>';
-		echo'<option value=167>Unsure classification- needs attention</option>';
-		echo'</select>';
+		echo' <label >Include:</label><br/>';
+		echo'<input type="checkbox" name="flag[]" value=168 form="inputs">Incomplete classification</option><br/>';
+		echo'<input type="checkbox" name="flag[]" value=166 form="inputs">Classified with certainty</option><br/>';
+		echo'<input type="checkbox" name="flag[]" value=165 form="inputs">Classified as blank</option><br/>';
+		echo'<input type="checkbox" name="flag[]" value=167 form="inputs">Unsure classification- needs attention</option><br/>';
+		echo'<br/>';
 		
 		echo'<label for="num_class1">Number of classifications. Between:</label>';
 		echo '<input name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
