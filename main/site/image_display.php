@@ -66,69 +66,114 @@
 		function arrayToQuery($inputArray,$speciesMap){
 						
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
+			
 			$counter=0;
+			//counter detects when you are at the start of creating the sql query (for writing select where etc)
+			
+			$handledGroup1=['species','gender','age','person_id','contains_human'];
+			//the group of variables to be handled togethor by the main body of the sql creation code below
+			
+			$handledGroup2=['time1_form=','time2_form='];
+			//the group of variables to be handled in the time section
+			
+			$timeVariablesRecieved=0;
+			//used to count the number of time variables recieved,
+			//since two must be recieved before the time part of the query can be constructed
+			//(before and after)
 			
 			foreach($inputArray as $key => $value){
 				
-				if(!(is_array($value))){
-					$rawValue = array_search($value,$speciesMap);
-					//raw value is the value in the animal table
-					//corresponding to the value in the options table		
+				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
 					
-					if(empty($rawValue)){
-						$rawValue=$value;
-					}
-					//if there's no information in the species map about this variable
-					
-					if($rawValue=="any"){
-						$rawValue="";
-					}
-					//values such as "any" that shouldn't influence the query
-					
-					
-					if(!empty($rawValue))
-					{
-						if($counter==0){
-							$query=$query." WHERE ".$key." = ".$rawValue;
-						}
+					if(!(is_array($value))){
+						$rawValue = array_search($value,$speciesMap);
+						//raw value is the value in the animal table
+						//corresponding to the value in the options table		
 						
-						else{
-							$query=$query." AND ".$key." = ".$rawValue;
+						if(empty($rawValue)){
+							$rawValue=$value;
 						}
+						//if there's no information in the species map about this variable
 						
-					}
-				}
-				
-				else{
-					if($counter==0){
-							$query=$query." WHERE ".$key." = ";
+						if($rawValue=="any"){
+							$rawValue="";
 						}
+						//values such as "any" that shouldn't influence the query
 						
-					else{
-							$query=$query." AND ".$key." = ";
-						}
-					$innerCounter=0;
-					foreach($value as $arrayItem){
-						if($arrayItem=="any"){
-							$arrayItem="";
-						}
-						if(!empty($arrayItem))
+						
+						if(!empty($rawValue))
 						{
-							if($innerCounter==0){
-								$query=$query.$arrayItem;
+							if($counter==0){
+								$query=$query." WHERE ".$key." = ".$rawValue;
 							}
 							
 							else{
-								$query=$query." OR ".$arrayItem;
+								$query=$query." AND ".$key." = ".$rawValue;
 							}
-							$innerCounter+=1;
-						}	
+							
+						}
+					}
+					
+					else{
+						if($counter==0){
+								$query=$query." WHERE ".$key." = ";
+							}
+							
+						else{
+								$query=$query." AND ".$key." = ";
+							}
+						$innerCounter=0;
+						foreach($value as $arrayItem){
+							if($arrayItem=="any"){
+								$arrayItem="";
+							}
+							if(!empty($arrayItem))
+							{
+								if($innerCounter==0){
+									$query=$query.$arrayItem;
+								}
+								
+								else{
+									$query=$query." OR ".$arrayItem;
+								}
+								$innerCounter+=1;
+							}	
+								
+						}
 							
 					}
-						
+					
 				}
-				$counter=$counter+1;
+			
+				else{//handling for special variables such as time variables
+					
+					//if the variable is time1 or time2
+					if(in_array($key,$handledGroup2)){
+					
+						$timeVariablesRecieved+=1;
+						
+						if($timeVariablesRecieved==2){//must have 
+						//before and after time before the time part of the
+						//query can be constructed
+						
+							if($counter==0){
+								$query=$query." WHERE ".$key." = ".$rawValue;
+								}
+										
+							else{
+								$query=$query." AND ".$key." = ".$rawValue;
+								}
+						
+							$query=$query." taken BETWEEN ".$_REQUEST['time1_form='].' AND '.$_REQUEST['time2_form='];
+						
+						
+						}
+					}
+				}
+				
+				$counter=$counter+1;	
 			}
+			
 			$query=$query.";";
 			
 			//testing
