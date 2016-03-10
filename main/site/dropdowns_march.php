@@ -93,7 +93,7 @@
 		echo'<option value="0">No</option>';
 		echo'</select>';
 		
-		echo'Search between times:';
+		echo' <label for="time1">Search between times:</label>';
 		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs">';
 		echo'</input>';
 		

@@ -148,8 +148,8 @@
 				else{//handling for special variables such as time variables
 					
 					//if the variable is time1 or time2
-					if(in_array($key,$handledGroup2)){
-					
+					if(in_array($key,$handledGroup2) AND (!empty($value))){
+						
 						$timeVariablesRecieved+=1;
 						
 						if($timeVariablesRecieved==2){//must have 
@@ -157,11 +157,11 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ".$key." = ".$rawValue;
+								$query=$query." WHERE ";
 								}
 										
 							else{
-								$query=$query." AND ".$key." = ".$rawValue;
+								$query=$query." AND ";
 								}
 						
 							$query=$query." taken BETWEEN ".$_REQUEST['time1_form='].' AND '.$_REQUEST['time2_form='];
