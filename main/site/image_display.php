@@ -111,6 +111,7 @@
 								$query=$query." AND ".$key." = ".$rawValue;
 							}
 							
+							$counter=$counter+1;
 						}
 					}
 					
@@ -122,6 +123,7 @@
 						else{
 								$query=$query." AND ".$key." = ";
 							}
+						$counter=$counter+1;
 						$innerCounter=0;
 						foreach($value as $arrayItem){
 							if($arrayItem=="any"){
@@ -163,15 +165,14 @@
 							else{
 								$query=$query." AND ";
 								}
-						
+							$counter=$counter+1;
 							$query=$query." taken BETWEEN ".$_REQUEST['time1_form='].' AND '.$_REQUEST['time2_form='];
 						
 						
 						}
 					}
 				}
-				
-				$counter=$counter+1;	
+					
 			}
 			
 			$query=$query.";";
