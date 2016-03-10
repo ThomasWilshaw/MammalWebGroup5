@@ -36,7 +36,7 @@
 		it would be easy enough to then generate a dropdown for each attribute, outputting similar
 		stuff to the repeated echoing below */
 		
-		$speciesValues=populateCategory($connection,"species");
+		$speciesValues=populateCategory($connection,"species","animal");
 		
 		echo '<form id="inputs" role="form" action="image_display.php" method="post">';
 		
@@ -46,11 +46,13 @@
 		foreach($speciesValues as $speciesValue)
 		{
 			$thisField=strip_tags($speciesMap[$speciesValue]);
+			if(!($thisField=="Like")){
 			echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
+			}
 		}
 		echo'  </select>';
 		
-		$speciesValues=populateCategory($connection,"gender");
+		$speciesValues=populateCategory($connection,"gender","animal");
 		
 		echo'  <label for="genderSelect">Select gender:</label>';
 		echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs">';
@@ -62,7 +64,7 @@
 		}
 		echo'  </select>';
 		
-		$ageValues=populateCategory($connection,"age");
+		$ageValues=populateCategory($connection,"age","animal");
 		
 		echo'  <label for="ageSelect">Select age:</label>';
 		echo'  <select name="age" class="form-control" id="ageSelect" form="inputs">';
@@ -74,7 +76,7 @@
 		}
 		echo'  </select>';
 		
-		$person_idValues=populateCategoryPhoto($connection,"person_id");
+		$person_idValues=populateCategory($connection,"person_id","photo");
 		
 		echo'  <label for="person_idSelect">Select person_id:</label>';
 		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs">';
@@ -86,7 +88,7 @@
 		}
 		echo'  </select>';
 		
-		$site_idValues=populateCategoryPhoto($connection,"site_id");
+		$site_idValues=populateCategory($connection,"site_id","photo");
 		
 		echo'  <label for="site_idSelect">Select Site:</label>';
 		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs">';
@@ -98,7 +100,7 @@
 		}
 		echo'  </select>';
 		
-		$sequence_idValues=populateCategoryPhoto($connection,"sequence_id");
+		$sequence_idValues=populateCategory($connection,"sequence_id","photo");
 		
 		echo'  <label for="sequence_idSelect">Select sequence:</label>';
 		echo'  <select multiple name="sequence_id[]" class="form-control" id="sequence_idSelect" form="inputs">';
@@ -156,32 +158,24 @@
 			return $categoryArray;
 		}
 		////////////////////////////////////////////////////////////////////////////////////////////////////	
-		function populateCategory($connection,$category){//returns an array of possible values for an attribute that appear in the database
+		function populateCategory($connection,$category,$tableName){
+			//returns an array of possible values for an attribute that appear in the database
+			//in the named table
 			//creating and sending query
-			$sql="SELECT DISTINCT ".$category." FROM `animal`"; 
+			$sql="SELECT DISTINCT ".$category." FROM `".$tableName."`"; 
 			//replace "animal" with any other table part of the database initialised in the dbname variable.
 			$categoryQuery=$connection->query($sql);
 			//using query results
 			$categoryArray=array();
 			while($attribute=$categoryQuery->fetch_assoc()){
-				array_push($categoryArray,$attribute[$category]);
+				if(trim($attribute[$category])!=""){
+					array_push($categoryArray,$attribute[$category]);
+				}
 			}
 			return $categoryArray;			
 		}
 		///////////////////////////////////////////////////////////////////////////////////////////////////
-			function populateCategoryPhoto($connection,$category){//returns an array of possible values for an attribute that appear in the photo table
-			//creating and sending query
-			$sql="SELECT DISTINCT ".$category." FROM `photo`"; 
-			//replace "animal" with any other table part of the database initialised in the dbname variable.
-			$categoryQuery=$connection->query($sql);
-			//using query results
-			$categoryArray=array();
-			while($attribute=$categoryQuery->fetch_assoc()){
-				array_push($categoryArray,$attribute[$category]);
-			}
-			return $categoryArray;			
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////
+		
 		function loadSpeciesMap($connection){
 			$sql="SELECT option_id,option_name FROM options";  
 			$speciesquery=$connection->query($sql);

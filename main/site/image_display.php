@@ -76,6 +76,10 @@
 			$handledGroup2=['time1_form=','time2_form='];
 			//the group of variables to be handled in the time section
 			
+			$handledGroup3=['blank','classified'];
+			//the group of variables to be handled in the thid section
+			//this section deals with the 'flag' attribute in the table
+			
 			$timeVariablesRecieved=0;
 			//used to count the number of time variables recieved,
 			//since two must be recieved before the time part of the query can be constructed
@@ -180,6 +184,19 @@
 						
 						
 						}
+					}
+					
+					
+					
+					//if the variable is in the third behaviour group
+					//relating to the flag attribute
+					if(in_array($key,$handledGroup3) AND (!empty($value))){
+						
+						
+						
+						
+						
+						
 					}
 				}
 					
