@@ -29,8 +29,8 @@
 		}
 		
 		$sqlResults=$connection->query($sql);
-	//	var_dump($_REQUEST);
-	//	var_dump($sqlResults);
+		var_dump($_REQUEST);
+		var_dump($sqlResults);
 
 		//TABLE 1 - output results
 
@@ -53,8 +53,8 @@
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
 				echo "<td>".$row["site_id"]."</td>";
-				echo "<td>".$row["upload_id"]."</td>";
-				echo '<td><a href="http://www.mammalweb.org//biodivimages/person_'.$row["upload_id"].'/site_'.$row["site_id"].'/'.$row['filename'].'"> View Image </a></td>';
+				echo "<td>".$row["person_id"]."</td>";
+				echo '<td><a href="http://www.mammalweb.org//biodivimages/person_'.$row["person_id"].'/site_'.$row["site_id"].'/'.$row['filename'].'"> View Image </a></td>';
 				echo "</tr>";
 			}
 		}
@@ -265,7 +265,7 @@
 			$query=$query.";";
 			
 			//testing
-			//echo $query;
+			echo $query;
 			//
 			
 			return $query;	
