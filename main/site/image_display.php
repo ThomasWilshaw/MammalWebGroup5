@@ -31,6 +31,7 @@
 		$sqlResults=$connection->query($sql);
 		var_dump($_REQUEST);
 		var_dump($sqlResults);
+        echo $sql;
 
 		//TABLE 1 - output results
 
@@ -48,7 +49,7 @@
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
-		if($sqlResults->num_rows>0){
+		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){
 			while($row=$sqlResults->fetch_assoc()){
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
