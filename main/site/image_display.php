@@ -51,7 +51,7 @@
 				echo "<td>".$row["photo_id"]."</td>";
 				echo "<td>".$row["site_id"]."</td>";
 				echo "<td>".$row["upload_id"]."</td>";
-				echo '<td><a href="http://www.mammalweb.org//biodivimages/person_"'.$row["upload_id"].'"/site_'.$row["site_id"].'/'.$row['filename'].'"> View Image </a></td>';
+				echo '<td><a href="http://www.mammalweb.org//biodivimages/person_'.$row["upload_id"].'/site_'.$row["site_id"].'/'.$row['filename'].'"> View Image </a></td>';
 				echo "</tr>";
 			}
 		}
