@@ -11,7 +11,7 @@
 		$servername="localhost";
 		$username="root";
 		$password="";
-		$dbname="mammalweb1";
+		$dbname="mammalweb2";
 
 		$connection=new mysqli($servername,$username,$password,$dbname);
 
@@ -70,7 +70,7 @@
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
-			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id'];
+			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id','flag'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			$handledGroup1Mapped=['species','gender','age'];
 			
@@ -81,10 +81,16 @@
 			//the group of variables to be handled in the thid section
 			//this section deals with the 'flag' attribute in the table
 			
+			$handledGroup4=['num_class1','num_class2'];
+			//the number of classifications, searches for an attribute between these two variables
+			
 			$timeVariablesRecieved=0;
 			//used to count the number of time variables recieved,
 			//since two must be recieved before the time part of the query can be constructed
 			//(before and after)
+			
+			$num_classVariablesRecieved=0;
+			//used to count the number of classification variables recieved
 			
 			foreach($inputArray as $key => $value){
 				
@@ -199,6 +205,36 @@
 					if(in_array($key,$handledGroup3) AND (!empty($value))){
 						
 						
+						
+						
+						
+						
+					}
+					
+					
+					//if the variable is in the fourth behaviour group
+					//relating to the num class num_class1<x<num_class2
+					if(in_array($key,$handledGroup4) AND (!empty($value))){
+						
+						$num_classVariablesRecieved+=1;
+						
+						if($num_classVariablesRecieved==2){//must have 
+						//before and after time before the time part of the
+						//query can be constructed
+						
+							if($counter==0){
+								$query=$query." WHERE ";
+								}
+										
+							else{
+								$query=$query." AND ";
+								}
+							$counter=$counter+1;
+							
+							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
+						
+						
+						}
 						
 						
 						

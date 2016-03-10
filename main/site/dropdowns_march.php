@@ -15,7 +15,7 @@
 		$servername="localhost";
 		$username="root";
 		$password="";
-		$dbname="mammalweb1";
+		$dbname="mammalweb2";
 		
 		//establish connection
 		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
@@ -90,7 +90,7 @@
 		
 		$site_idValues=populateCategory($connection,"site_id","photo");
 		
-		echo'  <label for="site_idSelect">Select Site:</label>';
+		echo'  <label for="site_idSelect">Select Site id:</label>';
 		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs">';
 		echo'<option value="any">Any</option>';
 		foreach($site_idValues as $site_idValue)
@@ -120,6 +120,20 @@
 		echo'<option value="1">Yes</option>';
 		echo'<option value="0">No</option>';
 		echo'</select>';
+		
+		echo' <label for="flag">Image status:</label>';
+		echo '<select name="flag" class="form-control" id="flagSelect" form="inputs">';
+		echo'<option value="any">Any</option>';
+		echo'<option value=168>Incomplete classification</option>';
+		echo'<option value=166>Consensus classification</option>';
+		echo'<option value=165>Blank classification</option>';
+		echo'<option value=167>Unsure classification- needs attention</option>';
+		echo'</select>';
+		
+		echo'<label for="num_class1">Number of classifications. Between:</label>';
+		echo '<input name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
+		echo'<label for="num_class2">and</label>';
+		echo '<input name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
 		
 		echo' <label for="time1">Search between times:</label>';
 		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
