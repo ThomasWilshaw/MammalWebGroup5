@@ -94,10 +94,10 @@
 		echo'</select>';
 		
 		echo' <label for="time1">Search between times:</label>';
-		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs">';
+		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
 		echo'</input>';
 		
-		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs">';
+		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
 		echo'</input>';
 		
 		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
