@@ -3,10 +3,11 @@
 	<title>Php x SQL</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-	<a href="dropdowns_march.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
+	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
 	//At the moment, three searches are hard coded into the page. Once we know the input format from the search form, change to only output a single table that includes all the fields being searched for.
@@ -48,11 +49,12 @@
 		echo '<tbody>';
 		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 			while($row=$sqlResults->fetch_assoc()){
+                $imagePath = "http://www.mammalweb.org//biodivimages/person_" . $row["person_id"] . "/site_" . $row["site_id"] . "/" . $row['filename'];
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
 				echo "<td>".$row["site_id"]."</td>";
 				echo "<td>".$row["person_id"]."</td>";
-				echo '<td><a href="http://www.mammalweb.org//biodivimages/person_'.$row["person_id"].'/site_'.$row["site_id"].'/'.$row['filename'].'"> View Image </a></td>';
+                echo "<td><a href=\"javascript:;\" src=$imagePath" . " onclick=\"popUp(this)\"" . "> View Image </a></td>";
 				echo "</tr>";
 			}
 		}
@@ -302,5 +304,36 @@
 		
 		?>
 	</table>
+    
+    <!-- Creates the bootstrap modal where the image will appear -->
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+          </div>
+          <div class="modal-body">
+            <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" onclick="fullScreen()">Full Screen</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+        function popUp(param){
+            console.log("hello");
+            $('#imagepreview').attr('src', param.getAttribute('src')); // here asign the image to the modal when the user click the enlarge link
+            $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+        }
+        
+        function fullScreen(){
+            window.location = $('#imagepreview').attr('src');
+        }
+    </script>
 </body>
 </html>
