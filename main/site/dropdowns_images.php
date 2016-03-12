@@ -18,8 +18,10 @@
 		$password="";
 		$dbname="mammalweb2";
 		
+		include('config.php');
+		
 		//establish connection
-		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
 		$dropdownCategories=getCategories($connection);
 		//An array. uses the function below to get an array of the categories in the table

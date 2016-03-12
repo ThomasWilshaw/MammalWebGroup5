@@ -19,7 +19,10 @@
 		set_time_limit(120);
 		//sets a 2 minute timeout 
 		
-		$connection=new mysqli($servername,$username,$password,$dbname);
+		include('config.php');
+		
+		//establish connection
+		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
 
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);		

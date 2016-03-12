@@ -5,8 +5,10 @@
 	$password="toot";
 	$dbname="mammalwebdump";
 	
-	//establish connection
-	$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+	include('config.php');
+		
+    //establish connection
+        $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 	
 	//The results of this sql query will be output to a csv file
 	$sql="SELECT photo_id FROM `animal`;";

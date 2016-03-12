@@ -18,8 +18,10 @@
 		$password="toot";
 		$dbname="mammalwebdump";
 		
+		include('config.php');
+		
 		//establish connection
-		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
 		$dropdownCategories=getCategories($connection);//An array. uses the function below to get an array of the categories in the table
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
