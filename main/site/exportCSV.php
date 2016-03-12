@@ -1,9 +1,4 @@
 <?php
-	//sql details
-	$servername="localhost";
-	$username="root";
-	$password="toot";
-	$dbname="mammalwebdump";
 	
 	include('config.php');
 		

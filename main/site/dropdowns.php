@@ -11,11 +11,6 @@
 <body>
 
 	<?php 
-		//sql details
-		/* $servername="localhost";
-		$username="root";
-		$password="";
-		$dbname="mammalweb1"; */
         
         include('config.php');
 		
