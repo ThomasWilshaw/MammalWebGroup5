@@ -48,7 +48,7 @@
 		
 		echo '<form id="inputs" role="form" action="image_display.php" method="post">';
 		
-		echo'  <label for="speciesSelect">Select species:</label>';
+		echo'  <label for="speciesSelect">Specific species:</label>';
 		echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $speciesValue)
@@ -67,7 +67,7 @@
 		$speciesValues=populateCategory($connection,"gender","animal");
 		
 		echo'<div class="form-group">';
-		echo'  <label for="genderSelect">Select gender:</label>';
+		echo'  <label for="genderSelect">Specific gender:</label>';
 		echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $genderValue)
@@ -85,7 +85,7 @@
 		$ageValues=populateCategory($connection,"age","animal");
 		
 		echo'<div class="form-group">';
-		echo'  <label for="ageSelect">Select age:</label>';
+		echo'  <label for="ageSelect">Spsecific age category:</label>';
 		echo'  <select name="age" class="form-control" id="ageSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($ageValues as $ageValue)
@@ -109,7 +109,7 @@
 		$person_idValues=populateCategory($connection,"person_id","photo");
 		
 		echo'<div class="form-group">';
-		echo'  <label for="person_idSelect">Select person_id:</label>';
+		echo'  <label for="person_idSelect">Spsecific person_id:</label>';
 		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($person_idValues as $person_idValue)
@@ -128,7 +128,7 @@
 		$site_idValues=populateCategory($connection,"site_id","photo");
 		
 		echo'<div class="form-group">';
-		echo'  <label for="site_idSelect">Select Site id:</label>';
+		echo'  <label for="site_idSelect">Specific Site id:</label>';
 		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($site_idValues as $site_idValue)
@@ -146,7 +146,7 @@
 		$sequence_idValues=populateCategory($connection,"sequence_id","photo");
 		
 		echo'<div class="form-group">';
-		echo'  <label for="sequence_idSelect">Select sequence:</label>';
+		echo'  <label for="sequence_idSelect">Spsecific sequence:</label>';
 		echo'  <select multiple name="sequence_id[]" class="form-control" id="sequence_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($sequence_idValues as $sequence_idValue)
@@ -176,13 +176,31 @@
 		echo'<div class="col-sm-4">';
 		
 		echo'<div class="form-group">';
-		echo' <label for="flag[]" >Include:</label><br/>';
+		echo' <label for="flag[]" >Specific status:</label><br/>';
 		echo'<input type="checkbox" name="flag[]" value=168 form="inputs">Incomplete classification</input><br/>';
 		echo'<input type="checkbox" name="flag[]" value=166 form="inputs">Classified with certainty</input><br/>';
 		echo'<input type="checkbox" name="flag[]" value=165 form="inputs">Classified as blank</input><br/>';
 		echo'<input type="checkbox" name="flag[]" value=167 form="inputs">Unsure classification- needs attention</option><br/>';
 		echo'<br/>';
 		echo'</div>';
+		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
+	
+		$habitat_idValues=populateCategory($connection,"habitat_id","site");
+		
+		echo'<div class="form-group">';
+		echo'  <label for="site_idSelect">Specific habitats:</label>';
+		echo'  <select multiple name="habitat_id[]" class="form-control" id="habitat_idSelect" form="inputs" size=5>';
+		echo'<option value="any">Any</option>';
+		foreach($habitat_idValues as $habitat_idValue)
+		{
+			$thisField=strip_tags($speciesMap[$habitat_idValue]);
+			echo'<option value="'.$habitat_idValue.'">'.$thisField.'</option>';
+		}
+		echo'  </select>';
+		echo'</div>';		
 		
 		echo'</div>';
 		echo'</div>';
@@ -195,10 +213,9 @@
 		echo'</div>';
 		
 		echo'<div class="form-group">';
-		echo' <label for="time1">Search between times:</label>';
+		echo' <label for="time1">Between specific times:</label>';
 		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
 		echo'</input>';
-		
 		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
 		echo'</input>';
 		echo'</div>';

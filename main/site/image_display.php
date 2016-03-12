@@ -29,14 +29,13 @@
 		}
 		
 		$sqlResults=$connection->query($sql);
-		var_dump($_REQUEST);
-		var_dump($sqlResults);
-        echo $sql;
+		//var_dump($_REQUEST);
+		//var_dump($sqlResults);
 
 		//TABLE 1 - output results
 
 		echo "<h1>Query Results:</h1><br/>";
-		echo '<p> Table showing images meeting the filter criteria: </p>';
+		echo '<p> Table showing images meeting the filter criteria. Use the "back" button to revise the filter. </p>';
 		/*This is an easy way to structure the output table, have some string combination thing for
 		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
 		echo '<table class="table table-hover">';
@@ -49,7 +48,7 @@
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
-		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){
+		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 			while($row=$sqlResults->fetch_assoc()){
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
@@ -83,13 +82,23 @@
 		//n.b. this function currently can use the species map to convert things that are
 		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
-						
+			
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
+			
+			if(isset($_REQUEST['habitat_id'])){
+				if($_REQUEST['habitat_id'][0]!="any"){
+					$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
+					
+				}
+			}
+			//if a habitat filter is also set, the base SQL query needs to be extended, above
+			//could always do this for all cases, but best not to as it creates a larger table to query.
+			
 			
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
-			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id','flag'];
+			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id','flag','habitat_id'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			$handledGroup1Mapped=['species','gender','age'];
 			
@@ -266,7 +275,7 @@
 			$query=$query.";";
 			
 			//testing
-			echo $query;
+			//echo $query;
 			//
 			
 			return $query;	
