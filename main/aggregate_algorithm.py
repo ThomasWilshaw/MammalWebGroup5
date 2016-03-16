@@ -1,10 +1,16 @@
 import pymysql
 import math
 
-#TODO: Get blank classification number(s) from database (options) rather than using hard coded value(s) (86+87)
-
 def aggregate_classifications(photo_ID,connection):
     c=connection.cursor()
+
+    #Get blank option ids which can be ignored for a lot of things
+    sql="SELECT option_id FROM options where struc='noanimal'"
+    c.execute(sql)
+    blankResults=c.fetchall()
+    blankOptions=[]
+    for row in blankResults:
+        blankOptions.append(row['option_id'])
 
     sql="SELECT * FROM animal WHERE photo_id="+str(photo_ID)
     c.execute(sql)
@@ -20,7 +26,7 @@ def aggregate_classifications(photo_ID,connection):
         rowA=row['age']
         rowG=row['gender']
         numClass+=1
-        if rowS!=86 and rowS!=87:
+        if rowS not in blankOptions:
             nonBlanks+=1
         
         if  rowS in speciesTally:
@@ -29,20 +35,20 @@ def aggregate_classifications(photo_ID,connection):
             speciesTally[rowS]=1
 
         if  rowA in ageTally:
-            ageTally[rowS]=ageTally[rowS]+1
+            ageTally[rowA]=ageTally[rowA]+1
         else:
-            ageTally[rowS]=1
+            ageTally[rowA]=1
 
         if  rowG in genderTally:
-            genderTally[rowS]=genderTally[rowS]+1
+            genderTally[rowG]=genderTally[rowG]+1
         else:
-            genderTally[rowS]=1
+            genderTally[rowG]=1
 
     if numClass>0:
         #Gender and age handled vey basically, just select the mode
         if len(ageTally)>0:
             ageValues=list(ageTally.values())
-            ageKeys=list(ageTally.values())
+            ageKeys=list(ageTally.keys())
 
             age=ageKeys[ageValues.index(max(ageValues))]
         else:
@@ -50,7 +56,7 @@ def aggregate_classifications(photo_ID,connection):
 
         if len(genderTally)>0:
             genderValues=list(genderTally.values())
-            genderKeys=list(genderTally.values())
+            genderKeys=list(genderTally.keys())
 
             gender=genderKeys[genderValues.index(max(genderValues))]
         else:
@@ -73,7 +79,7 @@ def aggregate_classifications(photo_ID,connection):
         else:
             pTot=0
             for s in speciesTally:
-                if s!=86 and s!=87:
+                if s not in blankOptions:
                     p=speciesTally[s]/(nonBlanks)
                     pTot-=p*math.log(p)
             evenness=pTot/math.log(len(values))
@@ -102,7 +108,6 @@ def aggregate_classifications(photo_ID,connection):
     flags=dict()
     for row in flagResult:
         flags[row['option_name']]=row['option_id']
-    print(flags)
 
     #If this doesn't get set, should be an error
     flag=-1
@@ -143,15 +148,15 @@ connection = pymysql.connect(host='localhost',user='root',password='toot',db='ma
 
 #---------------RUN IMPLEMENTATION ON ALL PHOTOS---------------
 
-# with connection.cursor() as cursor:
-#     sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
-#     cursor.execute(sql)
-#     maxID=cursor.fetchone()['photo_id']
+with connection.cursor() as cursor:
+    sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
+    cursor.execute(sql)
+    maxID=cursor.fetchone()['photo_id']
 
-# for id in range(maxID):
-#     if id%100==0:
-#         print(id)
-#     aggregate_classifications(id,connection)
+for id in range(maxID):
+    if id%100==0:
+        print(id)
+    aggregate_classifications(id,connection)
 #---------------------------------------------------------------
 
 #-----------Check aggregates against goldstandard set-----------
