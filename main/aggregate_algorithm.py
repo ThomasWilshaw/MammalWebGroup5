@@ -140,14 +140,58 @@ def aggregate_classifications(photo_ID,connection):
     connection.commit()
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalweb2',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-with connection.cursor() as cursor:
-    sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
-    cursor.execute(sql)
-    maxID=cursor.fetchone()['photo_id']
 
-for id in range(maxID):
-    if id%100==0:
-        print(id)
-    aggregate_classifications(id,connection)
+#---------------RUN IMPLEMENTATION ON ALL PHOTOS---------------
 
+# with connection.cursor() as cursor:
+#     sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
+#     cursor.execute(sql)
+#     maxID=cursor.fetchone()['photo_id']
+
+# for id in range(maxID):
+#     if id%100==0:
+#         print(id)
+#     aggregate_classifications(id,connection)
+#---------------------------------------------------------------
+
+#-----------Check aggregates against goldstandard set-----------
+with connection.cursor() as c:
+    #Get options matching 'like' struc, we want to ignore these as they are not proper classifications
+    sql="SELECT option_id FROM options WHERE struc='like'"
+    c.execute(sql)
+    ignoreResult=c.fetchall()
+    ignore=[]
+    for row in ignoreResult:
+        ignore.append(row['option_id'])
+
+    #Join aggregate table with classifications from gold standard
+    sql= "SELECT * from aggregate ag, animal a WHERE a.photo_id=ag.photo_id AND a.person_id=311"
+    c.execute(sql)
+    result=c.fetchall()
+    speciesmatches=0
+    gendermatches=0
+    agematches=0
+    total=0
+    completetotal=0
+    completematches=0
+    #If classification is not useless (a 'like' classification), check if aggregate matches gold standard classification
+    for row in result:
+        if row['a.species'] not in ignore:
+            total+=1
+            if row['flag']==167 or row['flag']==166:
+                completetotal+=1
+            if row['a.species']==row['species']:
+                speciesmatches+=1
+                if row['flag']==167 or row['flag']==166:
+                    completematches+=1
+            if row['a.gender']==row['gender']:
+                gendermatches+=1
+            if row['a.age']==row['age']:
+                agematches+=1
+
+    print("Agreement of aggregate species with gold standard = " +str((speciesmatches/total)*100)+"%")
+    print("Agreement of aggregate gender with gold standard = " +str((gendermatches/total)*100)+"%")
+    print("Agreement of aggregate age with gold standard = " +str((agematches/total)*100)+"%")
+    print("Agreement of aggregate species with gold standard where aggregates are complete/consensus = " +str((completematches/completetotal)*100)+"%")
+#----------------------------------------------------------------
 connection.close()
