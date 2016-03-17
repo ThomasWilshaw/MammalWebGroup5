@@ -6,17 +6,17 @@
 
 	<?php 
     
+
     //this php function generates a json file which can then be used by the barchart for the dashboard
 		//sql details
     
     
-		$servername="localhost";
-		$username="root";
-		$password="";
-		$dbname="mammal";
+		include('config.php');
 		
 		//establish connection
-		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
+		
+
 
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);
@@ -82,8 +82,9 @@
         $data = array();
         $data["name"]="Animal";
         $data["children"]=$differentanimal;// forms the array with all animals with children of different sites with children of their photoid
-        print_r(json_encode($data));
-        
+        $fp = fopen('classified.json', 'w');
+        fwrite($fp, json_encode($data));
+        fclose($fp);
     
     
     
