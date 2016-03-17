@@ -1,16 +1,20 @@
 import pymysql
 import math
 
-def aggregate_classifications(photo_ID,connection):
+def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
     c=connection.cursor()
 
-    #Get blank option ids which can be ignored for a lot of things
-    sql="SELECT option_id FROM options where struc='noanimal'"
-    c.execute(sql)
-    blankResults=c.fetchall()
+    #Get blank option ids which can be ignored for a lot of things, if not already passed into function
     blankOptions=[]
-    for row in blankResults:
-        blankOptions.append(row['option_id'])
+    if preBlank:
+        blankOptions=preBlank
+    else:
+        sql="SELECT option_id FROM options where struc='noanimal'"
+        c.execute(sql)
+        blankResults=c.fetchall()
+        
+        for row in blankResults:
+            blankOptions.append(row['option_id'])
 
     sql="SELECT * FROM animal WHERE photo_id="+str(photo_ID)
     c.execute(sql)
@@ -93,13 +97,16 @@ def aggregate_classifications(photo_ID,connection):
         age=-1
         gender=-1
 
-    #Get flag option_ids from options
-    sql="SELECT * FROM options WHERE struc='flag'"
-    c.execute(sql)
-    flagResult=c.fetchall()
-    flags=dict()
-    for row in flagResult:
-        flags[row['option_name']]=row['option_id']
+    #Get flag option_ids from options if not already provided
+    if preFlag:
+        flags=preFlag
+    else:
+        sql="SELECT * FROM options WHERE struc='flag'"
+        c.execute(sql)
+        flagResult=c.fetchall()
+        flags=dict()
+        for row in flagResult:
+            flags[row['option_name']]=row['option_id']
 
     #If this doesn't get set, should be an error
     flag=-1
@@ -146,14 +153,30 @@ connection = pymysql.connect(host='localhost',user='root',password='toot',db='ma
 #---------------RUN IMPLEMENTATION ON ALL PHOTOS---------------
 
 with connection.cursor() as cursor:
+    #Get number of photos to classify
     sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
     cursor.execute(sql)
     maxID=cursor.fetchone()['photo_id']
 
-for id in range(maxID):
+    #Pre search for blank options
+    blankOptions=[]
+    sql="SELECT option_id FROM options where struc='noanimal'"
+    cursor.execute(sql)
+    blankResults=cursor.fetchall()    
+    for row in blankResults:
+        blankOptions.append(row['option_id'])
+
+    #Pre search for flag options
+    sql="SELECT * FROM options WHERE struc='flag'"
+    cursor.execute(sql)
+    flagResult=cursor.fetchall()
+    flags=dict()
+    for row in flagResult:
+        flags[row['option_name']]=row['option_id']
+for id in range(5):
     if id%100==0:
         print(id)
-    aggregate_classifications(id,connection)
+    aggregate_classifications(id,connection,blankOptions,flags)
 #---------------------------------------------------------------
 
 #-----------Check aggregates against goldstandard set-----------
