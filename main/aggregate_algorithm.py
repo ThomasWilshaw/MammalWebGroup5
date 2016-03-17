@@ -173,7 +173,7 @@ with connection.cursor() as cursor:
     flags=dict()
     for row in flagResult:
         flags[row['option_name']]=row['option_id']
-for id in range(5):
+for id in range(maxID):
     if id%100==0:
         print(id)
     aggregate_classifications(id,connection,blankOptions,flags)
