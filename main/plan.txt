@@ -49,10 +49,19 @@ Scientists:
 		
 Taks (When you start working on one put your name by it):
 	-Add uneveness as search criteria
-    -Turn PHP scripts into functions for easier re-use
-    -Make some tests for the output of the algorithm. Calculate some images by 
-     hand and verify the scripts output matches. The more the better but not masses.
-    -Add flag to display image or not (set false if fully classified).
     -Turn dropdown into SQL queries  - Tom White
     -Create basic pages and link together - Tom Wilshaw
     -DOCUMENT THE FUCK OUT OF IT ALL
+    
+    
+    
+More stuff:
+    MAp of all sites -Tom White
+    map sites used in returned results -Tom white
+    timeline of uploads - will
+    sample graphs -quentin
+    finish site and user dropdowns
+    pull together - Tom Wilshaw
+    bug fix/check - all
+    -DOCUMENT THE FUCK OUT OF IT ALL
+    
