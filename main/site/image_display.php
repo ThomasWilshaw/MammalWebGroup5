@@ -10,7 +10,10 @@
 	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
-	//At the moment, three searches are hard coded into the page. Once we know the input format from the search form, change to only output a single table that includes all the fields being searched for.
+	/*At the moment, three searches are hard coded into the page. Once we know 
+    *the input format from the search form, change to only output a single table 
+    *that includes all the fields being searched for.
+    */
 
 		set_time_limit(120);
 		//sets a 2 minute timeout 
