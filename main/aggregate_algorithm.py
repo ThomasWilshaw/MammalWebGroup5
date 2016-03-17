@@ -93,14 +93,6 @@ def aggregate_classifications(photo_ID,connection):
         age=-1
         gender=-1
 
-    #Calculate flag
-    #Values TODO: put in options table
-    #   -1=error
-    #   0=incomplete
-    #   1=blank
-    #   2=consensus
-    #   3=complete
-
     #Get flag option_ids from options
     sql="SELECT * FROM options WHERE struc='flag'"
     c.execute(sql)
@@ -118,11 +110,16 @@ def aggregate_classifications(photo_ID,connection):
     #5 Blanks, no other results=blank
     elif numClass-nonBlanks>=5 and len(speciesTally)==1:
         flag=flags['blank']
-    #Ten matching classifications=consensus
     else:
+        #If species has been set and neither blank classification above has occured, must be either consensus, complete or incomplete
+        ##If no species has been set, no flag should be set
         if species!=-1:
+            #Ten matching classifications=consensus
             if speciesTally[species]>=10:
                 flag=flags['consensus']
+            #Valid species but not enough classificaitons=incomplete
+            else:
+                flag=flags['incomplete']
         #No consensus but lots of classifications=complete
         elif numClass>=25:
             flag=flags['complete']
