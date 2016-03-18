@@ -10,7 +10,6 @@
     //this php function generates a json file which can then be used by the barchart for the dashboard
 		//sql details
         $person_id = $_POST["person_id"];
-
 		include('config.php');
 		
 		//establish connection
@@ -38,15 +37,16 @@
         $differentanimal = array();
         $animalCount = 0;
         $photoidforperson = getPersonClassified($connection, $person_id);
+
         $totalClassifications = getNumberOfClassifications($connection, $person_id);
         for ($animalNumber=0; $animalNumber<=$maxAnimal; $animalNumber++){
             // loops through each type of species
             $classifiedArray = getOneAnimalFromArray($connection, $animalNumber, $photoidforperson);
-            $correctClassifications = $correctClassifications + sizeof($classifiedArray);
-            
             // retrieve photoids which are flagged as classified and has been classified by this person
             if (count($classifiedArray)>0){//make sure there is at least one classification
+
                 $animalSites = getArrayOfSites($connection, $classifiedArray);
+                $correctClassifications = $correctClassifications + sizeof($animalSites);
                 //using the photoid retrieved above, we use this to go into the main database and find corresponding siteid and turn it into an array with key as photoid and value as siteid
                 $animalC = array();
                 $animalChildren = array();
@@ -56,6 +56,7 @@
                     if (in_array($siteNumber, $animalSites)){
                         $arrayPhotoID = array_keys($animalSites);
                         $arraySites = array_values($animalSites);
+
                         $animalInThisSiteChildren = array();
                         $numberInThisSite = 0;
                         $sizeInSite = 0;
@@ -138,15 +139,27 @@
     
     
         function getArrayOfSites($connection, $array){//returns an array of sites with keys corresponding to photo_id
-            $sql = "SELECT photo_id, site_id FROM Photo;";
+            $querystring = "";
+
+            for ($i=0; $i<sizeof($array);$i++){
+                if ($i==0){
+                    $querystring.="(";
+                }
+                $querystring.="photo_id=";
+                $querystring.=strval($array[$i]);
+                if ($i==sizeof($array)-1){
+                    $querystring.=")";
+                }
+                else{
+                    $querystring.=" OR ";
+                }
+            }
+            $sql = "SELECT photo_id, site_id FROM Photo WHERE ";
+            $sql.=$querystring;
             $result = $connection->query($sql);
             $animalSite = array();
             while($row=$result->fetch_assoc()){
-                $photoID = $row["photo_id"];
-                if (array_key_exists($photoID, $array)){
-                    $animalSite[$photoID]=$row["site_id"]; 
-                }
-
+                $animalSite[$row["photo_id"]]=$row["site_id"];
             }
             return $animalSite;
         }
