@@ -10,8 +10,7 @@
     //this php function generates a json file which can then be used by the barchart for the dashboard
 		//sql details
         $person_id = $_POST["person_id"];
-        //$person_id = 397;
-    
+
 		include('config.php');
 		
 		//establish connection
@@ -39,7 +38,7 @@
         $differentanimal = array();
         $animalCount = 0;
         $photoidforperson = getPersonClassified($connection, $person_id);
-        $totalClassifications = sizeof($photoidforperson);
+        $totalClassifications = getNumberOfClassifications($connection, $person_id);
         for ($animalNumber=0; $animalNumber<=$maxAnimal; $animalNumber++){
             // loops through each type of species
             $classifiedArray = getOneAnimalFromArray($connection, $animalNumber, $photoidforperson);
@@ -117,7 +116,7 @@
     
         // returns an array with key as siteid and value as sitename
         function loadSitesMap($connection){
-            $sql = "SELECT site_id, site_name FROM Site";
+            $sql = "SELECT site_id, site_name FROM Site;";
             $sitesquery=$connection->query($sql);
             $sitesmap = array();
             while($row=$sitesquery->fetch_assoc()){
@@ -126,16 +125,15 @@
             return $sitesmap;
         }
 		
-        function getClassifiedAnimals($connection, $evenness, $animalid, $userid){//returns an array of photoid above an evenness and classified as this animal
-            $sql = "SELECT photo_id,species FROM aggregate WHERE evenness<= AND ".$evenness.";";// selects photos where its above a threshold evenness
-            $photoidquery = $connection->query($sql);
-            $photoidmap = array();
-			while($row=$photoidquery->fetch_assoc()){
-                if (intval($animalid)==intval($row["species"])){
-                    $photoidmap[$row["photo_id"]]=$row["photo_id"];
-                }
+        function getNumberOfClassifications($connection, $personid){
+            // returns the total number of classifications from this person
+            $sql = "SELECT photo_id FROM Animal WHERE person_id=".$personid.";";
+            $photosfromoneperson = $connection->query($sql);
+            $count = 0;
+            while($row=$photosfromoneperson->fetch_assoc()){
+                $count = $count + 1;
             }
-            return $photoidmap;
+            return $count;
         }
     
     

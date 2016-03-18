@@ -45,7 +45,7 @@ rect.background {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #FFF;
+  stroke: #555;
 }
 
 </style>
@@ -58,13 +58,14 @@ rect.background {
 
 var margin = {top: 30, right: 120, bottom: 0, left: 300},
     width = 960 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 400 - margin.top - margin.bottom;
 
 var x = d3.scale.linear()
     .range([0, width]);
 
 var barHeight = 20;
 
+//var morethanone = 
 var color = d3.scale.ordinal()
     .range(["steelblue", "#ccc"]);
 
