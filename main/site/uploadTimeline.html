@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="d3-timeline.js"></script>
+
+  <style type="text/css">
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+    .axis text {
+      font-family: sans-serif;
+      font-size: 10px;
+    }
+
+    .timeline-label {
+      font-family: sans-serif;
+      font-size: 12px;
+    }
+
+    #timeline2 .axis {
+      transform: translate(0px,40px);
+      -ms-transform: translate(0px,40px); /* IE 9 */
+      -webkit-transform: translate(0px,40px); /* Safari and Chrome */
+      -o-transform: translate(0px,40px); /* Opera */
+      -moz-transform: translate(0px,40px); /* Firefox */
+    }
+    
+    .coloredDiv {
+      height:20px; width:20px; float:left;
+    }
+  </style>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      //Need to have an ending time for last node otherwise it crashes (trying to make infinite timeline maybe?)
+      //TODO: PHP, Get times from upload table in database, get number of photos in each upload from photo table
+      var labelTestData = [
+        {times: [{"starting_time": 1355752800000},{"starting_time": 1355755000000}, {"starting_time": 1355767900000, "ending_time": 1355774400000}]}
+        
+      ];
+      var width = 500;
+
+      function timelineHover() {
+        var chart = d3.timeline()
+          .width(width*2)
+          .margin({left:70, right:30, top:0, bottom:0})
+          .display("circle")
+          .hover(function (d, i, datum) {
+          // d is the current rendering object
+          // i is the index during d3 rendering
+          // datum is the id object
+            var div = $('#hoverRes');
+            var colors = chart.colors();
+            div.find('.coloredDiv').css('background-color', colors(i))
+            div.find('#name').text(datum.times.starting_time);
+          })
+          .click(function (d, i, datum) {
+            alert(datum.times[i]["starting_time"]);
+          })
+          .scroll(function (x, scale) {
+            $("#scrolled_date").text(x);
+          });
+
+        var svg = d3.select("#timeline").append("svg").attr("width", width)
+          .datum(labelTestData).call(chart);
+      }
+      timelineHover();
+    }
+  </script>
+</head>
+<body>
+    <h3>Your uploads:</h3>
+    <div id="timeline"></div>
+    <div id="hoverRes">
+      <div class="coloredDiv"></div>
+      <div id="name"></div>
+      <div id="scrolled_date"></div>
+    </div>
+  </div>
+</body>
+</html>
