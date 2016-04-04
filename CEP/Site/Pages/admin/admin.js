@@ -9,13 +9,13 @@ function selectSection(){//displays box to edit a section, when a section is sel
         var frameElement = document.getElementById("frame");//get iframe element
             
         if(section==1){
-            frameElement.contentWindow.location.href = "../index.html";//load preview
+            frameElement.contentWindow.location.href = "../../index.html";//load preview
             var sectionName="Homepage News";
             var fileLocation="../../Pages/dynamicText/homePage/news.txt";
             }
             
         if(section==2){
-            frameElement.contentWindow.location.href = "../index.html";
+            frameElement.contentWindow.location.href = "../../index.html";
             var sectionName="What's On";
             var fileLocation="../../Pages/dynamicText/homePage/whatsOn.txt";
         }

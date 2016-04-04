@@ -10,16 +10,32 @@
 </head>
 <body>
 
-<!--Navbar element -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=".">Mamal Web</a>
+    </div>
 
-	<div class="container-fluid">
-		<div class="row"> <!--Row for navbar -->
-			<div class="col-md-12" id="navbar-main">
-				<button type="button" class="btn btn-default navbar-btn">Sign in</button>
-                <h2>Scientist Home</h2>
-			</div>
-		</div>
-	</div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="scientistDashboard.html">Dashboard</a></li>
+        <li><a href="scientistSearch.html">Search</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
 <!--Main element -->
 
@@ -30,15 +46,10 @@
 				stuff
 			</div>
 		
-			<div class="col-md-3 col-xs-12 form-col">
-			<!-- form-left-col -->
-				<a href="scientistSearch.html">Search</a>
+			<div class="col-md-6 col-xs-12 form-col">
+			<!-- form-middle-col -->
+				User details profile picture, etc.
 
-			</div>
-			
-			<div class="col-md-3 col-xs-12 form-col">
-			<!-- form-right-col -->
-				<a href="dashboard.html">Dashboard</a>
 			</div>
 		
 			<div class="col-md-3 col-xs-0 margin-shape">

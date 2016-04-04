@@ -35,17 +35,15 @@ img {
 }
 
 @font-face {
-    font-family: 'chalkdustregular';
-    src: url('../../font/chalk/chalkdust-webfont.eot');
-    src: url('../../font/chalk/chalkdust-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../font/chalk/chalkdust-webfont.woff2') format('woff2'),
-         url('../../font/chalk/chalkdust-webfont.woff') format('woff'),
-         url('../../font/chalk/chalkdust-webfont.ttf') format('truetype'),
-         url('../../font/chalk/chalkdust-webfont.svg#chalkdustregular') format('svg');
+    font-family: 'Chalkduster';
+    src:url('../../font/Chalkduster/Chalkduster.ttf.woff') format('woff'),
+        url('../../font/Chalkduster/Chalkduster.ttf.svg#Chalkduster') format('svg'),
+        url('../../font/Chalkduster/Chalkduster.ttf.eot'),
+        url('../../font/Chalkduster/Chalkduster.ttf.eot?#iefix') format('embedded-opentype'); 
     font-weight: normal;
     font-style: normal;
-
 }
+
 
 @font-face {
     font-family: 'Handwritingg';
@@ -114,13 +112,13 @@ html *{
 
 #news-wrapper{
     width:20vw;
-    height:20vw;
+    height:25vw;
     overflow:hidden !important;
 }
 
 #news-text{
     width:20vw;
-    height:20vw;
+    height:25vw;
     white-space: pre-line;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -133,8 +131,8 @@ html *{
     overflow:hidden;
     padding-left:0.5vw;
     line-height:120%;
-    font-size:0.9vw;
-    font-family:'chalkdustregular';
+    font-size:1.0vw;
+    font-family:'Chalkduster';
 }
 
 #image-wrapper-home-blackboard-text{
@@ -152,14 +150,14 @@ html *{
   -ms-transform: rotate(-4deg); /* IE 9 */
   -webkit-transform: rotate(-4deg); /* Safari */
   transform: rotate(-4deg);
-  font-family:'chalkdustregular';
+  font-family:'Chalkduster';
 }
 
 
 #blackboard-header{
   padding-left:0.5vw;
-  font-size: 2vw;
-  font-family:'chalkdustregular';
+  font-size: 3vw;
+  font-family:'Chalkduster';
 }
 
 #facebook{

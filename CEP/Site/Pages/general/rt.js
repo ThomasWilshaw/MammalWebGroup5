@@ -6,7 +6,7 @@ function txt_read(pathString, divName){
 			
 function txt_read_home(pathString, divName){
                 var paths = {path : pathString};
-				$("#"+divName).load("./general/read.php", $.param(paths));
+				$("#"+divName).load("Pages/general/read.php", $.param(paths));
                 console.log("text read");
 			}
 			

@@ -4,21 +4,19 @@
 
 <head>
 	<title>PHP DROPDOWN MENU POPULATION FROM TABLES</title>
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 </head>
 
 <body>
 
 	<?php 
-		//sql details
-		$servername="localhost";
-		$username="root";
-		$password="";
-		$dbname="mammalweb1";
+		
+		include('config.php');
 		
 		//establish connection
-		$connection=new mysqli($servername,$username,$password,$dbname);//establishes the sql connection
+		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
 		$dropdownCategories=getCategories($connection);
 		//An array. uses the function below to get an array of the categories in the table
@@ -36,12 +34,19 @@
 		it would be easy enough to then generate a dropdown for each attribute, outputting similar
 		stuff to the repeated echoing below */
 		
+		
+		echo '<div class="container">';
+		
 		$speciesValues=populateCategory($connection,"species","animal");
+		
+		echo'<div class="row">';
+		
+		echo'<div class="col-sm-4">';
 		
 		echo '<form id="inputs" role="form" action="image_display.php" method="post">';
 		
-		echo'  <label for="speciesSelect">Select species:</label>';
-		echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs">';
+		echo'  <label for="speciesSelect">Specific species:</label>';
+		echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $speciesValue)
 		{
@@ -52,10 +57,15 @@
 		}
 		echo'  </select>';
 		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
+		
 		$speciesValues=populateCategory($connection,"gender","animal");
 		
-		echo'  <label for="genderSelect">Select gender:</label>';
-		echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="genderSelect">Specific gender:</label>';
+		echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($speciesValues as $genderValue)
 		{
@@ -63,11 +73,17 @@
 			echo'<option value="'.$genderValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
+		echo'</div>';
+		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
 		
 		$ageValues=populateCategory($connection,"age","animal");
 		
-		echo'  <label for="ageSelect">Select age:</label>';
-		echo'  <select name="age" class="form-control" id="ageSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="ageSelect">Spsecific age category:</label>';
+		echo'  <select name="age" class="form-control" id="ageSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($ageValues as $ageValue)
 		{
@@ -75,11 +91,23 @@
 			echo'<option value="'.$ageValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
+		echo'</div>';
+		
+		echo'</div>';
+		echo'</div>';
+		
+		echo'<div class="row">';
+		echo'<br/>';
+		echo'</div>';
+		
+		echo'<div class="row">';
+		echo'<div class="col-sm-4">';
 		
 		$person_idValues=populateCategory($connection,"person_id","photo");
 		
-		echo'  <label for="person_idSelect">Select person_id:</label>';
-		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="person_idSelect">Spsecific person_id:</label>';
+		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($person_idValues as $person_idValue)
 		{
@@ -87,11 +115,18 @@
 			echo'<option value="'.$person_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
+		echo'</div>';
+		
+		echo'</div>';
+		
+		
+		echo'<div class="col-sm-4">';
 		
 		$site_idValues=populateCategory($connection,"site_id","photo");
 		
-		echo'  <label for="site_idSelect">Select Site:</label>';
-		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="site_idSelect">Specific Site id:</label>';
+		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($site_idValues as $site_idValue)
 		{
@@ -99,11 +134,17 @@
 			echo'<option value="'.$site_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
+		echo'</div>';
+		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
 		
 		$sequence_idValues=populateCategory($connection,"sequence_id","photo");
 		
-		echo'  <label for="sequence_idSelect">Select sequence:</label>';
-		echo'  <select multiple name="sequence_id[]" class="form-control" id="sequence_idSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="sequence_idSelect">Spsecific sequence:</label>';
+		echo'  <select multiple name="sequence_id[]" class="form-control" id="sequence_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
 		foreach($sequence_idValues as $sequence_idValue)
 		{
@@ -111,26 +152,75 @@
 			echo'<option value="'.$sequence_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
+		echo'</div>';
 		
+		echo'</div>';
+		echo'</div>';
+		
+		echo'<div class="row">';
+		echo'<br/>';
+		echo'<div class="col-sm-4">';
+		
+		echo'<div class="form-group">';
+		echo' <label for="contains_human">Humans Present:</label><br/>';
+		echo'<input type="radio" name="contains_human" value=1 form="inputs">Yes</input><br/>';
+		echo'<input type="radio" name="contains_human" value=0 form="inputs">No</input><br/>';
+		echo'<input type="radio" name="contains_human" value="any" form="inputs">Any</input><br/>';
+		echo'</div>';
+		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
+		
+		echo'<div class="form-group">';
+		echo' <label for="flag[]" >Specific status:</label><br/>';
+		echo'<input type="checkbox" name="flag[]" value=168 form="inputs">Incomplete classification</input><br/>';
+		echo'<input type="checkbox" name="flag[]" value=166 form="inputs">Classified with certainty</input><br/>';
+		echo'<input type="checkbox" name="flag[]" value=165 form="inputs">Classified as blank</input><br/>';
+		echo'<input type="checkbox" name="flag[]" value=167 form="inputs">Unsure classification- needs attention</option><br/>';
+		echo'<br/>';
+		echo'</div>';
+		
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
 	
+		$habitat_idValues=populateCategory($connection,"habitat_id","site");
 		
-		echo' <label for="contains_human">Humans Present:</label>';
-		echo '<select name ="contains_human" class="form-control" id="contains_humanSelect" form="inputs">';
+		echo'<div class="form-group">';
+		echo'  <label for="site_idSelect">Specific habitats:</label>';
+		echo'  <select multiple name="habitat_id[]" class="form-control" id="habitat_idSelect" form="inputs" size=5>';
 		echo'<option value="any">Any</option>';
-		echo'<option value="1">Yes</option>';
-		echo'<option value="0">No</option>';
-		echo'</select>';
+		foreach($habitat_idValues as $habitat_idValue)
+		{
+			$thisField=strip_tags($speciesMap[$habitat_idValue]);
+			echo'<option value="'.$habitat_idValue.'">'.$thisField.'</option>';
+		}
+		echo'  </select>';
+		echo'</div>';		
 		
-		echo' <label for="time1">Search between times:</label>';
+		echo'</div>';
+		echo'</div>';
+		
+		echo'<div class="form-group">';
+		echo'<label for="num_class1">Number of classifications. Between:</label>';
+		echo '<input name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
+		echo'<label for="num_class2">and</label>';
+		echo '<input name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
+		echo'</div>';
+		
+		echo'<div class="form-group">';
+		echo' <label for="time1">Between specific times:</label>';
 		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
 		echo'</input>';
-		
 		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
 		echo'</input>';
+		echo'</div>';
 		
 		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
 		echo '</form>';
 		
+		echo '</div>';
 		
 		$connection->close();//closes connection when you're done with it
 		

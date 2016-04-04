@@ -21,7 +21,7 @@ if($_SESSION['loggedin'] != 1){
   
     <body>
 		<nav class="ui fixed menu inverted navbar">
-			<a href="../../pages/index.html?test=true" class="brand item">RT Homepage</a>
+			<a href="../../index.html?test=true" class="brand item">RT Homepage</a>
 			<a href="admin.php" class="active item">Admin page</a>
             <div class="right menu">
                 <a href="logout.php" class="item">Log Out</a>
