@@ -60,7 +60,6 @@
 			echo'no sites found';
 		}
 		$sql=$sql.";";
-		
 
 		//TABLE 1 - output results
 
@@ -82,11 +81,13 @@
 		$sqlResults=$connection->query($sql);
 		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 			while($row=$sqlResults->fetch_assoc()){
+					$lat=54.7753;
+					$long=-1.5849;
 					echo "<tr>";
 					echo "<td>".$row["site_id"]."</td>";
 					echo "<td>".$row["site_name"]."</td>";
 					echo "<td>".$row["person_id"]."</td>";
-					echo "<td>".$row["grid_ref"]."</td>";
+					echo "<td><a href=\"javascript:;\" src=\"\" onclick=\"popUp(".$lat.",".$long.")\"> ".$row["grid_ref"]." </a></td>";
 					echo "</tr>";
 			}
 		}
@@ -306,7 +307,6 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		?>
-	</table>
     
     <!-- Creates the bootstrap modal where the image will appear -->
     <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -314,13 +314,21 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+            <h4 class="modal-title" id="myModalLabel">Site location</h4>
           </div>
           <div class="modal-body">
-            <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+		  
+			<iframe id="imagepreview"
+		    width="600"
+		    height="450"
+			frameborder="0" style="border:0"
+			src="" 
+			allowfullscreen>
+			</iframe>
+		
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" onclick="fullScreen()">Full Screen</button>
+            <button id="fullScreenButton" type="button" class="btn btn-default" onclick="">Full Screen</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -328,15 +336,17 @@
     </div>
     
     <script>
-        function popUp(param){
-            console.log("hello");
-            $('#imagepreview').attr('src', param.getAttribute('src')); // here asign the image to the modal when the user click the enlarge link
+        function popUp(latitude,longitude){
+			var apiKey="AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo";//google maps api key (static browser key)
+			var embedURL ="https://www.google.com/maps/embed/v1/place?key="+apiKey+"&q="+latitude+","+longitude;
+			var visitURL="https://maps.google.com/?t=h&q="+latitude+","+longitude+"&ll="+latitude+","+longitude+"&z=8"
+            console.log("grid reference popup");
+            $('#imagepreview').attr('src', embedURL); // here asign the embed url for google maps
+			var visitFunction = "window.location='"+visitURL+"'";//the location the 'fullscreen button takes you to
+			$('#fullScreenButton').attr('onClick',visitFunction);// here assign the visit url for google maps
             $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
         }
         
-        function fullScreen(){
-            window.location = $('#imagepreview').attr('src');
-        }
     </script>
 </body>
 </html>
