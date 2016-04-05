@@ -1,7 +1,6 @@
 <?php
 
-	//$person_id = $_POST["person_id"];
-	$person_id=182;
+	$person_id = $_GET["person_id"];
 	include('config.php');
 	
 	//establish connection
@@ -20,5 +19,5 @@
 			$uploadArray[$row["upload_id"]]=$row["timestamp"];
 		}
 	}
-	echo $uploadArray;
+	echo json_encode($uploadArray);
 ?>
