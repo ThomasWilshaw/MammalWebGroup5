@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <head>
-  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="d3-timeline.js"></script>
 
   <style type="text/css">
@@ -21,14 +21,6 @@
     .timeline-label {
       font-family: sans-serif;
       font-size: 12px;
-    }
-
-    #timeline2 .axis {
-      transform: translate(0px,40px);
-      -ms-transform: translate(0px,40px); /* IE 9 */
-      -webkit-transform: translate(0px,40px); /* Safari and Chrome */
-      -o-transform: translate(0px,40px); /* Opera */
-      -moz-transform: translate(0px,40px); /* Firefox */
     }
     
     .coloredDiv {
@@ -87,7 +79,9 @@
           .beginning(uploadArray[0]["times"][0]["starting_time"])
           .showTimeAxisTick()
           //TODO: Add hovering/clicking bringing up more data ie number of photos in upload, where the upload was from etc
-          /*.hover(function (d, i, datum) {
+          //This is the example of hovering that did some stuff
+
+          .hover(function (d, i, datum) {
           // d is the current rendering object
           // i is the index during d3 rendering
           // datum is the id object
@@ -95,7 +89,7 @@
             var colors = chart.colors();
             div.find('.coloredDiv').css('background-color', colors(i))
             div.find('#name').text(datum.times.starting_time);
-          })*/
+          })
           var svg = d3.select("#timeline").append("svg").attr("width", width)
               .datum(uploadArray).call(chart);
         }
@@ -114,6 +108,5 @@
       <div id="name"></div>
       <div id="scrolled_date"></div>
     </div>
-  </div>
 </body>
 </html>
