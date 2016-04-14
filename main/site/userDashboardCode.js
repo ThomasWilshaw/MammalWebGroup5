@@ -12,9 +12,9 @@ window.onload = function() {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
          jQuery.each(uploadData,function(key,value){
-            var d=new Date(value);
+            var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"u"+uploads};
+            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":uploads,"num_photos":value["num_photos"]};
             uploads++;
          });
          console.log(uploadArray);
@@ -51,8 +51,8 @@ window.onload = function() {
       // datum is the id object
         var div = $('#hoverRes');
         var colors = chart.colors();
-        div.find('.coloredDiv').css('background-color', colors(i))
-        div.find('#name').text(d["id"]);
+        //div.find('.coloredDiv').css('background-color', colors(i))
+        div.find('#name').text("This was upload " + d["id"] + "  and included " + d["num_photos"] + " photos");
       });
       var svg = d3.select("#timeline").append("svg").attr("width", width)
           .datum(uploadArray).call(chart);

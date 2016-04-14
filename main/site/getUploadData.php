@@ -1,5 +1,5 @@
 <?php
-
+	
 	$person_id = $_GET["person_id"];
 	include('config.php');
 	
@@ -16,7 +16,14 @@
 	$uploadQuery=$connection->query($sql);
 	if($uploadQuery->num_rows>0){
 		while($row=$uploadQuery->fetch_assoc()){
-			$uploadArray[$row["upload_id"]]=$row["timestamp"];
+			$dataArray=array();
+
+			$sql="SELECT * FROM photo WHERE upload_id=".$row["upload_id"];
+			$uploadDataQuery=$connection->query($sql);
+
+			$dataArray["num_photos"]=$uploadDataQuery->num_rows;
+			$dataArray["timestamp"]=$row["timestamp"];
+			$uploadArray[$row["upload_id"]]=$dataArray;
 		}
 	}
 	echo json_encode($uploadArray);
