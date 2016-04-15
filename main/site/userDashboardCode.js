@@ -7,7 +7,7 @@ window.onload = function() {
     url: "getUploadData.php",
     type: "GET",
     //This should send the users ID
-    data: "person_id=195",
+    data: "person_id=182",
     success: function (response) {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
@@ -21,15 +21,16 @@ window.onload = function() {
          //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
          if(uploads>0){
             uploadArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
+            $("#details").text("You have " + uploads + " total uploads");
          }
-         timelineHover();
+         buildTimeline();
        }
     }
   });
   console.log()
   var width = 800;
 
-  function timelineHover() {
+  function buildTimeline() {
     if(uploadArray[0]["times"].length>0){
       var chart = d3.timeline()
       .width(width*3)
@@ -51,7 +52,7 @@ window.onload = function() {
         var div = $('#hoverRes');
         var colors = chart.colors();
         //div.find('.coloredDiv').css('background-color', colors(i))
-        div.find('#name').text("This was " + d["id"] + "  and included " + d["num_photos"] + " photos");
+        div.find('#hoverDetails').text("This was " + d["id"] + "  and included " + d["num_photos"] + " photos");
         console.log(d["id"]);
       })
       .mouseover(function(d,i,datum){
@@ -64,7 +65,7 @@ window.onload = function() {
           .datum(uploadArray).call(chart);
     }
     else{
-      document.getElementById("timeline").innerHTML = "No uploads (yet)";
+      $("#details").text("You don't have any uploads yet");
     }
   }
 }
