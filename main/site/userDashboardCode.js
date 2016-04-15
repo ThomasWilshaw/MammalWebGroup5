@@ -7,14 +7,14 @@ window.onload = function() {
     url: "getUploadData.php",
     type: "GET",
     //This should send the users ID
-    data: "person_id=182",
+    data: "person_id=195",
     success: function (response) {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
          jQuery.each(uploadData,function(key,value){
             var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":uploads,"num_photos":value["num_photos"]};
+            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"blue"};
             uploads++;
          });
          console.log(uploadArray);
@@ -44,7 +44,6 @@ window.onload = function() {
       .rotateTicks(20)
       .beginning(uploadArray[0]["times"][0]["starting_time"])
       .showTimeAxisTick()
-      //TODO: Add hovering/clicking bringing up more data ie number of photos in upload, where the upload was from etc
       .hover(function (d, i, datum) {
       // d is the current rendering object
       // i is the index during d3 rendering
@@ -52,7 +51,14 @@ window.onload = function() {
         var div = $('#hoverRes');
         var colors = chart.colors();
         //div.find('.coloredDiv').css('background-color', colors(i))
-        div.find('#name').text("This was upload " + d["id"] + "  and included " + d["num_photos"] + " photos");
+        div.find('#name').text("This was " + d["id"] + "  and included " + d["num_photos"] + " photos");
+        console.log(d["id"]);
+      })
+      .mouseover(function(d,i,datum){
+        d3.select("#"+d["id"]).style("fill", "red");
+      })
+      .mouseout(function(d,i,datum){
+        d3.select("#"+d["id"]).style("fill", "blue");
       });
       var svg = d3.select("#timeline").append("svg").attr("width", width)
           .datum(uploadArray).call(chart);
