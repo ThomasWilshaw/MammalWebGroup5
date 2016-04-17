@@ -7,14 +7,20 @@ window.onload = function() {
     url: "getUploadData.php",
     type: "GET",
     //This should send the users ID
-    data: "person_id=182",
+    data: "person_id=194",
     success: function (response) {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
+         var numUploads=0;
+          for(var i in uploadData){
+            if(uploadData.hasOwnProperty(i)){
+              numUploads+=1;
+            }
+          }
          jQuery.each(uploadData,function(key,value){
             var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"blue"};
+            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"#0033"+(35+Math.round(60*(uploads/numUploads)))};
             uploads++;
          });
          console.log(uploadArray);
@@ -59,7 +65,7 @@ window.onload = function() {
         d3.select("#"+d["id"]).style("fill", "red");
       })
       .mouseout(function(d,i,datum){
-        d3.select("#"+d["id"]).style("fill", "blue");
+        d3.select("#"+d["id"]).style("fill", d["color"]);
       });
       var svg = d3.select("#timeline").append("svg").attr("width", width)
           .datum(uploadArray).call(chart);
