@@ -20,7 +20,7 @@ window.onload = function() {
          jQuery.each(uploadData,function(key,value){
             var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"#0033"+(35+Math.round(60*(uploads/numUploads)))};
+            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
             uploads++;
          });
          console.log(uploadArray);
@@ -32,25 +32,29 @@ window.onload = function() {
          buildTimeline();
        }
     }
+  ,error: function(response){
+    $("details").text("An error occurred");
+  }
   });
   console.log()
-  var width = 800;
+  var width = 600;
 
   function buildTimeline() {
     if(uploadArray[0]["times"].length>0){
       var chart = d3.timeline()
-      .width(width*3)
+      .width(width*2)
       .margin({left:70, right:50, top:0, bottom:0})
       .display("circle")
       .tickFormat({
         format: d3.time.format("%b %Y"),
-        tickTime: d3.time.weeks,
-        tickInterval: 4,
+        tickTime: d3.time.month,
+        tickInterval: 1,
         tickSize: 10
       })
       .rotateTicks(20)
       .beginning(uploadArray[0]["times"][0]["starting_time"])
       .showTimeAxisTick()
+      .stack()
       .hover(function (d, i, datum) {
       // d is the current rendering object
       // i is the index during d3 rendering
@@ -58,7 +62,10 @@ window.onload = function() {
         var div = $('#hoverRes');
         var colors = chart.colors();
         //div.find('.coloredDiv').css('background-color', colors(i))
-        div.find('#hoverDetails').text("This was " + d["id"] + "  and included " + d["num_photos"] + " photos");
+        var dDay=new Date(d["starting_time"]).getDate();
+        var dMonth=new Date(d["starting_time"]).getMonth();
+        var dYear=new Date(d["starting_time"]).getFullYear();
+        div.find('#hoverDetails').text("This was " + d["id"] + ", uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos");
         console.log(d["id"]);
       })
       .mouseover(function(d,i,datum){
