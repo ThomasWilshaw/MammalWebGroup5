@@ -23,7 +23,6 @@ window.onload = function() {
             uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
             uploads++;
          });
-         console.log(uploadArray);
          //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
          if(uploads>0){
             uploadArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
@@ -66,7 +65,6 @@ window.onload = function() {
         var dMonth=new Date(d["starting_time"]).getMonth();
         var dYear=new Date(d["starting_time"]).getFullYear();
         div.find('#hoverDetails').text("This was " + d["id"] + ", uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos");
-        console.log(d["id"]);
       })
       .mouseover(function(d,i,datum){
         d3.select("#"+d["id"]).style("fill", "red");
@@ -81,4 +79,44 @@ window.onload = function() {
       $("#details").text("You don't have any uploads yet");
     }
   }
+
+  $.ajax({
+    url: "getFavouriteURLS.php",
+    type: "GET",
+    data: "person_id=194",
+    success: function (response) {
+      if (response != ''){
+        var urls=jQuery.parseJSON(response);
+        //For each photo, we create new html elements on te page that are inside the carousel
+        //First entry is different (active) and it's easier to do it outside the loop
+        $("#favouriteImageCarouselIndicators").append('<li data-target="#favouriteImageCarousel" data-slide-to="0" class="active"></li>');
+        $("#favouriteImageCarouselInner").append('<div class="item active"><img src="'+urls[0]+'" alt="favourite"></div>');
+        for(i in urls){
+          /*li data-target=\"#favouriteImageCarousel\" data-slide-to=\"" + i + "\"");*/
+          if(i>0){
+            $("#favouriteImageCarouselIndicators").append('<li data-target="#favouriteImageCarousel" data-slide-to="'+i+'"></li>');
+            $("#favouriteImageCarouselInner").append('<div class="item "><img src="'+urls[i]+'" alt="favourite"></div>');
+          }
+        }
+      }
+      $("#favouriteImageCarousel").carousel();
+
+      // Enable Carousel Indicators
+      $(".item").click(function(){
+          $("#favouriteImageCarousel").carousel(1);
+      });
+
+      // Enable Carousel Controls
+      $(".left").click(function(){
+          $("#favouriteImageCarousel").carousel("prev");
+      });
+
+      $(".right").click(function(){
+          $("#favouriteImageCarousel").carousel("next");
+      });
+    }
+  ,error: function(response){
+    $("details").text("An error occurred");
+  }
+  });  
 }
