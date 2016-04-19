@@ -1,4 +1,5 @@
 window.onload = function() {
+  var person_id=194;
   var uploadArray = [
     {times: []}
   ];
@@ -7,7 +8,7 @@ window.onload = function() {
     url: "getUploadData.php",
     type: "GET",
     //This should send the users ID
-    data: "person_id=194",
+    data: "person_id="+person_id,
     success: function (response) {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
@@ -83,9 +84,10 @@ window.onload = function() {
   $.ajax({
     url: "getFavouriteURLS.php",
     type: "GET",
-    data: "person_id=194",
+    data: "person_id="+person_id,
     success: function (response) {
-      if (response != ''){
+      if (response != 'no_likes'){
+        console.log(response);
         var urls=jQuery.parseJSON(response);
         //For each photo, we create new html elements on te page that are inside the carousel
         //First entry is different (active) and it's easier to do it outside the loop
@@ -98,25 +100,24 @@ window.onload = function() {
             $("#favouriteImageCarouselInner").append('<div class="item "><img src="'+urls[i]+'" alt="favourite"></div>');
           }
         }
-      }
-      $("#favouriteImageCarousel").carousel();
-
-      // Enable Carousel Indicators
-      $(".item").click(function(){
+        $("#favouriteImageCarousel").carousel();
+        $(".item").click(function(){
           $("#favouriteImageCarousel").carousel(1);
-      });
+        });
 
-      // Enable Carousel Controls
-      $(".left").click(function(){
-          $("#favouriteImageCarousel").carousel("prev");
-      });
+        // Enable Carousel Controls
+        $(".left").click(function(){
+            $("#favouriteImageCarousel").carousel("prev");
+        });
 
-      $(".right").click(function(){
-          $("#favouriteImageCarousel").carousel("next");
-      });
+        $(".right").click(function(){
+            $("#favouriteImageCarousel").carousel("next");
+        });
+      }
+      else{
+        $("#favouriteImageCarousel").removeClass("carousel slide");
+        $("#favouriteImageCarousel").html("<p>You don't have any favourited photos yet- click the thumbs up on a photo whilst spotting to save it for later.</p>");
+      }
     }
-  ,error: function(response){
-    $("details").text("An error occurred");
-  }
   });  
 }
