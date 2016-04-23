@@ -6,7 +6,7 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+	
 	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
@@ -81,14 +81,27 @@
 		$sqlResults=$connection->query($sql);
 		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 			while($row=$sqlResults->fetch_assoc()){
-					$lat=54.7753;
-					$long=-1.5849;
-					echo "<tr>";
-					echo "<td>".$row["site_id"]."</td>";
-					echo "<td>".$row["site_name"]."</td>";
-					echo "<td>".$row["person_id"]."</td>";
-					echo "<td><a href=\"javascript:;\" src=\"\" onclick=\"popUp(".$lat.",".$long.")\"> ".$row["grid_ref"]." </a></td>";
-					echo "</tr>";
+					$lat=$row["latitude"];
+					$long=$row["longitude"];
+					//if there is no data on this row for lat/long
+					if(!isset($lat)){
+											echo $lat;
+						echo "<tr>";
+						echo "<td>".$row["site_id"]."</td>";
+						echo "<td>".$row["site_name"]."</td>";
+						echo "<td>".$row["person_id"]."</td>";
+						echo "<td>No Data</td>";
+						echo "</tr>";						
+					}
+					else{
+					//if there is data on this row for lat/long
+						echo "<tr>";
+						echo "<td>".$row["site_id"]."</td>";
+						echo "<td>".$row["site_name"]."</td>";
+						echo "<td>".$row["person_id"]."</td>";
+						echo "<td><a href=\"javascript:;\" src=\"\" onclick=\"popUp(".$lat.",".$long.")\"> ".$row["grid_ref"]." </a></td>";
+						echo "</tr>";
+					}
 			}
 		}
 		else{
@@ -319,7 +332,7 @@
           <div class="modal-body">
 		  
 			<iframe id="imagepreview"
-		    width="600"
+		    width="540"
 		    height="450"
 			frameborder="0" style="border:0"
 			src="" 
@@ -338,11 +351,12 @@
     <script>
         function popUp(latitude,longitude){
 			var apiKey="AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo";//google maps api key (static browser key)
-			var embedURL ="https://www.google.com/maps/embed/v1/place?key="+apiKey+"&q="+latitude+","+longitude;
+			var embedURL ="https://www.google.com/maps/embed/v1/place?key="+apiKey+"&q="+latitude+","+longitude+"&maptype=satellite";
 			var visitURL="https://maps.google.com/?t=h&q="+latitude+","+longitude+"&ll="+latitude+","+longitude+"&z=8"
             console.log("grid reference popup");
-            $('#imagepreview').attr('src', embedURL); // here asign the embed url for google maps
+            //$('#imagepreview').attr('src', embedURL); // here asign the embed url for google maps
 			var visitFunction = "window.location='"+visitURL+"'";//the location the 'fullscreen button takes you to
+			$('#imagepreview').attr('src',embedURL);
 			$('#fullScreenButton').attr('onClick',visitFunction);// here assign the visit url for google maps
             $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
         }
