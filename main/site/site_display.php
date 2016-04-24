@@ -42,7 +42,7 @@
 		$counter=0;
 		if(isset($sitesList->num_rows) && $sitesList->num_rows>0){ 
 			while($row=$sitesList->fetch_assoc()){
-				    $arrayItem=$row["site_ID"];
+				    $arrayItem=$row["site_id"];
 					if(!empty($arrayItem))
 					{
 						if($counter==0){
@@ -422,7 +422,7 @@
 			
 			$speciesQueried=false;
 			//true if the aggregate table must be used for species information
-			$speciesQuery="SELECT DISTINCT photo.site_ID FROM photo INNER JOIN aggregate on photo.photo_ID = aggregate.photo_ID WHERE photo.site_ID IN (".$query.") AND aggregate.species=";
+			$speciesQuery="SELECT DISTINCT photo.site_id FROM photo INNER JOIN aggregate on photo.photo_ID = aggregate.photo_ID WHERE photo.site_id IN (".$query.") AND aggregate.species=";
 			if(!empty($_REQUEST['species'])){
 				$speciesQueried=true;
 				//handing changes to query if species was queried
