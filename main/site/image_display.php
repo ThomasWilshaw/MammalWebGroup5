@@ -85,11 +85,6 @@
 		//n.b. this function currently can use the species map to convert things that are
 		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
-			echo  var_dump($inputArray);
-			echo "<br><br>";
-			echo print_r($inputArray);
-			echo "<br><br>";
-
 			
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
 			
@@ -129,7 +124,6 @@
 			//used to count the number of classification variables recieved
 			
 			foreach($inputArray as $key => $value){
-				echo "<br>KEY:".$key."   VALUE:".$value."<br>";
 				
 				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here					
 					if(!(is_array($value))){						
@@ -150,7 +144,6 @@
 							$rawValue="";
 						}
 						//values such as "any" that shouldn't influence the query
-						echo "<br> RAW VALUE:".$rawValue."<br>";
 						
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
@@ -195,7 +188,6 @@
 							$query=$query.")";
 						}		
 					}
-					echo "<br>QUERY: ".$query."<br>";
 				}
 			
 				else{//handling for special variables such as time variables
@@ -266,7 +258,6 @@
 			//testing
 			//echo $query;
 			//
-			echo $query;
 			return $query;	
 		}
 		
