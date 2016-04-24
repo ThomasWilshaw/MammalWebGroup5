@@ -26,12 +26,16 @@
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);		
 		
+		$description="none";//will contain an english description of filter criteria specified
+		
 		/* NB the searching in site_display is a bit different to image_display.
 		site_display finds a list of unique site IDs fitting the criteria
 		and then does another query using these IDs to get information from the site table
 		*/
 		if(isset($_REQUEST)){
-			$sql=arrayToQuery($_REQUEST,$speciesMap);
+			$sqlArray=arrayToQuery($_REQUEST,$speciesMap);
+			$sql=$sqlArray[0];
+			$description=$sqlArray[1];
 		}
 		$sitesList=$connection->query($sql);
 		//sitesList here will be a list of unique site IDs fitting search criteria
@@ -64,6 +68,8 @@
 		//TABLE 1 - output results
 
 		echo "<h1>Query Results:</h1><br/>";
+		echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+		echo '<p>'.$counter.' results found. </p>';
 		echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
 		/*This is an easy way to structure the output table, have some string combination thing for
 		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
@@ -126,11 +132,13 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		/*generates an sql query using the variables in $_REQUEST. species is handled as a special
 		case at the end since it is the only attribute that uses the aggregate table, and an extra
-		join to the aggregate table would slow down the process hugely*/
+		join to the aggregate table would slow down the process hugely also generates an english description
+		of the filter criteria. Returns an array where index 0 contains the query, index 1 contains the description*/
 		function arrayToQuery($inputArray,$speciesMap){
 			
 			$query="SELECT DISTINCT site.site_id FROM site LEFT JOIN photo on site.site_id=photo.site_id";
-
+			$description="";
+			
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
@@ -202,10 +210,12 @@
 							
 							if($counter==0){
 								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
+								$description=$description.$key." = ".$rawValue;
 							}
 							
 							else{
 								$query=$query." AND ".$modifiedKey." = ".$rawValue;
+								$description=$description.",".$key." = ".$rawValue;
 							}
 							
 							$counter=$counter+1;
@@ -229,10 +239,12 @@
 							}
 							if($counter==0){
 									$query=$query." WHERE ".$modifiedKey." = ";
+									$description=$description.$key." = ";
 								}
 								
 							else{
 									$query=$query." AND ".$modifiedKey." = ";
+									$description=$description.",".$key." = ";
 								}
 							$counter=$counter+1;
 							$innerCounter=0;
@@ -244,10 +256,12 @@
 								{
 									if($innerCounter==0){
 										$query=$query.$arrayItem;
+										$description=$description.$arrayItem;
 									}
 									
 									else{
 										$query=$query." OR ".$arrayItem;
+										$description=$description." or ".$arrayItem;
 									}
 									$innerCounter+=1;
 								}	
@@ -276,6 +290,7 @@
 										
 							else{
 								$query=$query." AND ";
+								$description=$description.",";
 								}
 							$counter=$counter+1;
 							
@@ -286,8 +301,7 @@
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
 							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
 							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
-						
-						
+							$description=$description."time of photos taken between ".$modifiedStartTime." and ".$modifiedEndTime;
 						}
 					}
 
@@ -300,6 +314,7 @@
 									
 						else{
 							$query=$query." AND ";
+							$description=$description.",";
 							}
 							$counter=$counter+1;
 						
@@ -317,6 +332,7 @@
 						}
 						
 						$query=$query." latitude BETWEEN ".$lat1.' AND '.$lat2;
+						$description=$description."latitude between ".$lat1." and ".$lat2;
 						
 						$latDone=true;
 					}
@@ -331,6 +347,7 @@
 									
 						else{
 							$query=$query." AND ";
+							$description=$description.",";
 							}
 							$counter=$counter+1;
 						
@@ -348,6 +365,7 @@
 						}
 						
 						$query=$query." longitude BETWEEN ".$long1.' AND '.$long2;
+						$description=$description."longitude between ".$long1." and ".$long2;
 						
 						$longDone=true;
 					}
@@ -365,6 +383,7 @@
 									
 						else{
 							$query=$query." AND ";
+							$description=$description.",";
 							}
 							$counter=$counter+1;
 						
@@ -382,7 +401,7 @@
 						}
 						
 						$query=$query."site.site_id IN (SELECT site.site_id FROM site INNER JOIN photo on site.site_id = photo.site_id GROUP BY site.site_id HAVING COUNT(site.site_id) BETWEEN ".$photoCount1.' AND '.$photoCount2.')';
-						
+						$description=$description."between ".$photoCount1." and ".$photoCount2." photos taken";
 						$photoCountDone=true;
 					}
 					
@@ -397,6 +416,7 @@
 									
 						else{
 							$query=$query." AND ";
+							$description=$description.",";
 							}
 							$counter=$counter+1;
 						
@@ -414,7 +434,7 @@
 						}
 						
 						$query=$query."site.site_id IN (SELECT upload.site_id FROM photosequence INNER JOIN upload on upload.upload_id = photosequence.upload_id GROUP BY upload.site_id HAVING COUNT(upload.site_id) BETWEEN 0 and 200)";
-						
+						$description=$description."between ".$sequenceCount1." and ".$sequenceCount2." sequences taken";
 						$sequenceCountDone=true;
 					}
 				}
@@ -423,6 +443,7 @@
 			$speciesQueried=false;
 			//true if the aggregate table must be used for species information
 			$speciesQuery="SELECT DISTINCT photo.site_id FROM photo INNER JOIN aggregate on photo.photo_ID = aggregate.photo_ID WHERE photo.site_id IN (".$query.") AND aggregate.species=";
+			$speciesDescription="species present: ";
 			if(!empty($_REQUEST['species'])){
 				$speciesQueried=true;
 				//handing changes to query if species was queried
@@ -433,12 +454,20 @@
 					}
 					if(!empty($arrayItem))
 					{
+						if($counter!=0){
+								$description=$description.",";
+						}
+						$counter+=1;
 						if($innerCounter==0){
 							$speciesQuery=$speciesQuery.$arrayItem;
+							$rawValue=$speciesMap[$arrayItem];
+							$speciesDescription=$speciesDescription.$rawValue;
 						}
 						
 						else{
 							$speciesQuery=$speciesQuery." OR ".$arrayItem;
+							$rawValue=$speciesMap[$arrayItem];
+							$speciesDescription=$speciesDescription.",".$rawValue;
 						}
 						$innerCounter+=1;
 					}	
@@ -447,10 +476,24 @@
 			}
 			if($speciesQueried){
 				$query=$speciesQuery;
+				$description=$description.$speciesDescription;
 			}
+			
+			if(empty($description)){
+				$description="none";
+			}
+			
 			$query=$query.";";
-			return $query;	
+			$results=array();
+			$results[0]=$query;
+			$results[1]=$description;
+			
+			return $results;	
 		}
+		
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
