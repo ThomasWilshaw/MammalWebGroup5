@@ -34,172 +34,145 @@
 		it would be easy enough to then generate a dropdown for each attribute, outputting similar
 		stuff to the repeated echoing below */
 		
-		
-		echo '<div class="container">';
-		
-		$speciesValues=populateCategory($connection,"species","animal");
-		
-		echo'<div class="row">';
-		
-		echo'<div class="col-sm-4">';
-		
 		echo '<form id="inputs" role="form" action="site_display.php" method="post">';
-		
-		echo'  <label for="speciesSelect">Specific species spotted at site:</label>';
-		echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
-		echo'<option value="any">Any</option>';
-		foreach($speciesValues as $speciesValue)
-		{
-			$thisField=strip_tags($speciesMap[$speciesValue]);
-			if(!($thisField=="Like")){
-			echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
-			}
-		}
-		echo'  </select>';
-		
-		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		$person_idValues=populateCategory($connection,"person_id","photo");
-		
-		echo'<div class="form-group">';
-		echo'  <label for="person_idSelect">Specific person_id:</label>';
-		echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs" size=5>';
-		echo'<option value="any">Any</option>';
-		foreach($person_idValues as $person_idValue)
-		{
-			$thisField=strip_tags($person_idValue);
-			echo'<option value="'.$person_idValue.'">'.$thisField.'</option>';
-		}
-		echo'  </select>';
-		echo'</div>';
-		
-		
-		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		$site_idValues=populateCategory($connection,"site_id","photo");
-		
-		echo'<div class="form-group">';
-		echo'  <label for="site_idSelect">Specific Site id:</label>';
-		echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs" size=5>';
-		echo'<option value="any">Any</option>';
-		foreach($site_idValues as $site_idValue)
-		{
-			$thisField=strip_tags($site_idValue);
-			echo'<option value="'.$site_idValue.'">'.$thisField.'</option>';
-		}
-		echo'  </select>';
-		
-		echo'</div>';
-		
-		echo'</div>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<br/>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<div class="col-sm-4">';
-		
-		echo'  <label id="photoCountLabelLabel">Number of photos taken at site:</label>';
-		echo'<br/>';
-		echo'  <label for="photoCount1" id="photoCountLabel1">Between</label>';
-		echo'  <input type = "text" name="photoCount1" class="form-control" id="photoCount1" form="inputs">';
-		echo'  <label for="photoCount2" id="photoCountLabel2">and</label>';
-		echo'  <input type = "text" name="photoCount2" class="form-control" id="photoCount2" form="inputs">';
-		
-		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		echo'  <label id="photoCountLabelLabel">Number of sequences created at site:</label>';
-		echo'<br/>';
-		echo'  <label for="photoCount1" id="sequenceCountLabel1">Between</label>';
-		echo'  <input type = "text" name="sequenceCount1" class="form-control" id="sequenceCount1" form="inputs">';
-		echo'  <label for="photoCount2" id="sequenceCountLabel2">and</label>';
-		echo'  <input type = "text" name="sequenceCount2" class="form-control" id="sequenceCount2" form="inputs">';
-		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		echo'<div class="form-group">';
-		echo' <label for="contains_human">Humans Present:</label><br/>';
-		echo'<input type="radio" name="contains_human" value=1 form="inputs">Yes</input><br/>';
-		echo'<input type="radio" name="contains_human" value=0 form="inputs">No</input><br/>';
-		echo'<input type="radio" name="contains_human" value="any" form="inputs">Any</input><br/>';
-		echo'</div>';
-		
-		echo'</div>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<br/>';
-		echo'<div class="col-sm-8">';
-		
-		echo'<div class="form-group">';
-		echo' <label for="time1">Between specific times:</label>';
-		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
-		echo'</input>';
-		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
-		echo'</input>';
-		echo'</div>';
-		
-
-		
-		echo'</div>';
-		
-		
-		echo'<div class="col-sm-4">';
-	
-		$habitat_idValues=populateCategory($connection,"habitat_id","site");
-		
-		echo'<div class="form-group">';
-		echo'  <label for="site_idSelect">Specific habitats:</label>';
-		echo'  <select multiple name="habitat_id[]" class="form-control" id="habitat_idSelect" form="inputs" size=5>';
-		echo'<option value="any">Any</option>';
-		foreach($habitat_idValues as $habitat_idValue)
-		{
-			$thisField=strip_tags($speciesMap[$habitat_idValue]);
-			echo'<option value="'.$habitat_idValue.'">'.$thisField.'</option>';
-		}
-		echo'</select>';
-		echo'</div>';		
-		
-		echo'</div>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<div class="col-sm-4">';
-		
-		echo'<label id="latLabelLabel">Latitude:</label>';
-		echo'<br/>';
-		echo'<label for="lat1" id="latLabel1">Between</label>';
-		echo'<input type = "text" name="lat1" class="form-control" id="lat1" form="inputs">';
-		echo'<label for="lat2" id="latLabel2">and</label>';
-		echo'<input type = "text" name="lat2" class="form-control" id="lat2" form="inputs">';
-		
-		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		echo'<label id="longLabelLabel">Longitude:</label>';
-		echo'<br/>';
-		echo'<label for="long1" id="longLabel1">Between</label>';
-		echo'<input type = "text" name="long1" class="form-control" id="long1" form="inputs">';
-		echo'<label for="long2" id="long2">and</label>';
-		echo'<input type = "text" name="long2" class="form-control" id="long2" form="inputs">';
-		
-		echo'</div>';
-		echo'</div>';
-		
-		echo'<br/>';
-		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
-		echo '</form>';
+		echo '<div class="container">';
+			
+			$speciesValues=populateCategory($connection,"species","animal");
+			
+			echo'<div class="row">';
+				echo'<div class="col-sm-4">';
+					echo'<label for="speciesSelect">Specific species spotted at site:</label>';
+					echo'<select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
+					echo'<option value="any">Any</option>';
+					foreach($speciesValues as $speciesValue)
+					{
+						$thisField=strip_tags($speciesMap[$speciesValue]);
+						if(!($thisField=="Like")){
+						echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
+						}
+					}
+					echo'</select>';
+				echo'</div>';
+			
+				echo'<div class="col-sm-4">';	
+					$person_idValues=populateCategory($connection,"person_id","photo");
+					echo'<div class="form-group">';
+						echo'  <label for="person_idSelect">Specific person_id:</label>';
+						echo'  <select multiple name="person_id[]" class="form-control" id="person_idSelect" form="inputs" size=5>';
+						echo'<option value="any">Any</option>';
+						foreach($person_idValues as $person_idValue)
+						{
+							$thisField=strip_tags($person_idValue);
+							echo'<option value="'.$person_idValue.'">'.$thisField.'</option>';
+						}
+						echo'  </select>';
+					echo'</div>';
+				echo'</div>';
+			
+				echo'<div class="col-sm-4">';
+					$site_idValues=populateCategory($connection,"site_id","photo");
+					echo'<div class="form-group">';
+						echo'  <label for="site_idSelect">Specific Site id:</label>';
+						echo'  <select multiple name="site_id[]" class="form-control" id="site_idSelect" form="inputs" size=5>';
+						echo'<option value="any">Any</option>';
+						foreach($site_idValues as $site_idValue)
+						{
+							$thisField=strip_tags($site_idValue);
+							echo'<option value="'.$site_idValue.'">'.$thisField.'</option>';
+						}
+						echo'  </select>';
+					echo'</div>';
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<div class="row">';
+				echo'<br/>';
+			echo'</div>';
+			
+			echo'<div class="row">';
+				echo'<div class="col-sm-4">';	
+					echo'  <label id="photoCountLabelLabel">Number of photos taken at site:</label>';
+					echo'<br/>';
+					echo'  <label for="photoCount1" id="photoCountLabel1">Between</label>';
+					echo'  <input type = "text" name="photoCount1" class="form-control" id="photoCount1" form="inputs">';
+					echo'  <label for="photoCount2" id="photoCountLabel2">and</label>';
+					echo'  <input type = "text" name="photoCount2" class="form-control" id="photoCount2" form="inputs">';
+				echo'</div>';
+			
+				echo'<div class="col-sm-4">';
+					echo'  <label id="photoCountLabelLabel">Number of sequences created at site:</label>';
+					echo'<br/>';
+					echo'  <label for="photoCount1" id="sequenceCountLabel1">Between</label>';
+					echo'  <input type = "text" name="sequenceCount1" class="form-control" id="sequenceCount1" form="inputs">';
+					echo'  <label for="photoCount2" id="sequenceCountLabel2">and</label>';
+					echo'  <input type = "text" name="sequenceCount2" class="form-control" id="sequenceCount2" form="inputs">';
+				echo'</div>';
+				
+				echo'<div class="col-sm-4">';
+					echo'<div class="form-group">';
+						echo' <label for="contains_human">Humans Present:</label><br/>';
+						echo'<input type="radio" name="contains_human" value=1 form="inputs">Yes<br/>';
+						echo'<input type="radio" name="contains_human" value=0 form="inputs">No<br/>';
+						echo'<input type="radio" name="contains_human" value="any" form="inputs">Any<br/>';
+					echo'</div>';
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<div class="row">';
+				echo'<br/>';
+				echo'<div class="col-sm-8">';	
+					echo'<div class="form-group">';
+						echo' <label for="time1">Between specific times:</label>';
+						echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1" form="inputs" step="1">';
+						echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2" form="inputs" step="1">';
+					echo'</div>';
+				echo'</div>';
+				
+			
+				echo'<div class="col-sm-4">';
+					$habitat_idValues=populateCategory($connection,"habitat_id","site");
+					echo'<div class="form-group">';
+						echo'  <label for="site_idSelect">Specific habitats:</label>';
+						echo'  <select multiple name="habitat_id[]" class="form-control" id="habitat_idSelect" form="inputs" size=5>';
+						echo'<option value="any">Any</option>';
+						foreach($habitat_idValues as $habitat_idValue)
+						{
+							$thisField=strip_tags($speciesMap[$habitat_idValue]);
+							echo'<option value="'.$habitat_idValue.'">'.$thisField.'</option>';
+						}
+						echo'</select>';
+					echo'</div>';			
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<div class="row">';
+				echo'<div class="col-sm-4">';
+					echo'<label id="latLabelLabel">Latitude:</label>';
+					echo'<br/>';
+					echo'<label for="lat1" id="latLabel1">Between</label>';
+					echo'<input type = "text" name="lat1" class="form-control" id="lat1" form="inputs">';
+					echo'<label for="lat2" id="latLabel2">and</label>';
+					echo'<input type = "text" name="lat2" class="form-control" id="lat2" form="inputs">';
+				echo'</div>';
+				
+				echo'<div class="col-sm-4">';
+					echo'<label id="longLabelLabel">Longitude:</label>';
+					echo'<br/>';
+					echo'<label for="long1" id="longLabel1">Between</label>';
+					echo'<input type = "text" name="long1" class="form-control" id="long1" form="inputs">';
+					echo'<label for="long2" id="long2">and</label>';
+					echo'<input type = "text" name="long2" class="form-control" id="long2" form="inputs">';
+				echo'</div>';
+				
+				echo'<div class="col-sm-4">';
+					echo'view on map';
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<br/>';
+			echo '<input type="submit" class="btn btn-default" value="Submit"> ';		
 		echo '</div>';
+		echo '</form>';
 		
 		$connection->close();//closes connection when you're done with it
 		

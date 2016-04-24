@@ -85,7 +85,6 @@
 					$long=$row["longitude"];
 					//if there is no data on this row for lat/long
 					if(!isset($lat)){
-											echo $lat;
 						echo "<tr>";
 						echo "<td>".$row["site_id"]."</td>";
 						echo "<td>".$row["site_name"]."</td>";
@@ -129,18 +128,8 @@
 		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
 			
-			$query="SELECT DISTINCT photo.site_id FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
-			
-			//if 'habitat' is included as a filter option, we must also include data from the sites table in the search query
-			if(isset($_REQUEST['habitat_id'])){
-				if($_REQUEST['habitat_id'][0]!="any"){
-					$query="SELECT DISTINCT site.site_id FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
-				}
-			}
-			//if a habitat filter is also set, the base SQL query needs to be extended, above
-			//could always do this for all cases, but best not to as it creates a larger table to query.
-			
-			
+			$query="SELECT DISTINCT site.site_id FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id RIGHT JOIN site ON photo.site_id=site.site_id";
+
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
@@ -152,8 +141,21 @@
 			$handledGroup2=['time1_form=','time2_form='];
 			//the group of variables to be handled in the time section
 			
-			$handledGroup3=['num_class1','num_class2'];
-			//the number of classifications, searches for an attribute between these two variables
+			$handledGroup3=['lat1','lat2'];
+			//latitude and longitude boundaries
+			$latDone=false;
+			
+			$handledGroup4=['long1','long2'];
+			//latitude and longitude boundaries
+			$longDone=false;
+			
+			$handledGroup5=['photoCount1','photoCount2'];
+			//number of photos taken at a site
+			$photoCountDone=false;
+			
+			$handledGroup6=['sequenceCount1','sequenceCount2'];
+			//number of sequences associatd with a site
+			$sequenceCountDone=false;
 			
 			$timeVariablesRecieved=0;
 			//used to count the number of time variables recieved,
@@ -270,31 +272,134 @@
 					}
 
 					//if the variable is in the third behaviour group
-					//relating to the num class num_class1<x<num_class2
-					if(in_array($key,$handledGroup3) AND (!empty($value))){
-						
-						$num_classVariablesRecieved+=1;
-						
-						if($num_classVariablesRecieved==2){//must have 
-						//before and after time before the time part of the
-						//query can be constructed
-						
-							if($counter==0){
-								$query=$query." WHERE ";
-								}
-										
-							else{
-								$query=$query." AND ";
-								}
+					//relating to latitude boundaries
+					if(in_array($key,$handledGroup3) AND (!empty($value)) AND (!$latDone)){
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							}
 							$counter=$counter+1;
-							
-							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
-						}	
+						
+						if(!empty($_REQUEST['lat1'])){
+							$lat1=$_REQUEST['lat1'];
+						}
+						else{
+							$lat1="-200";
+						}
+						if(!empty($_REQUEST['lat2'])){
+							$lat2=$_REQUEST['lat2'];
+						}
+						else{
+							$lat2="200";
+						}
+						
+						$query=$query." latitude BETWEEN ".$lat1.' AND '.$lat2;
+						
+						$latDone=true;
+					}
+					
+					//if the variable is in the fourth behaviour group
+					//relating to longitude
+					if(in_array($key,$handledGroup4) AND (!empty($value)) AND (!$longDone)){
+						
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							}
+							$counter=$counter+1;
+						
+						if(!empty($_REQUEST['long1'])){
+							$long1=$_REQUEST['long1'];
+						}
+						else{
+							$long1="-200";
+						}
+						if(!empty($_REQUEST['long2'])){
+							$long2=$_REQUEST['long2'];
+						}
+						else{
+							$long2="200";
+						}
+						
+						$query=$query." longitude BETWEEN ".$long1.' AND '.$long2;
+						
+						$longDone=true;
+					}
+					
+					
+					
+					
+					//if the variable is in the fifth behaviour group
+					//relating to photo count at a site
+					if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$longDone)){
+						
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							}
+							$counter=$counter+1;
+						
+						if(!empty($_REQUEST['photoCount1'])){
+							$photoCount1=$_REQUEST['photoCount1'];
+						}
+						else{
+							$photoCount1="0";
+						}
+						if(!empty($_REQUEST['photoCount2'])){
+							$photoCount2=$_REQUEST['photoCount2'];
+						}
+						else{
+							$photoCount2="999";
+						}
+						
+						$query=$query."site.site_id IN (SELECT site.site_id FROM site INNER JOIN photo on site.site_id = photo.site_id GROUP BY site.site_id HAVING COUNT(site.site_id) BETWEEN ".$photoCount1.' AND '.$photoCount2.')';
+						
+						$photoCountDone=true;
+					}
+					
+					
+					//if the variable is in the sixth behaviour group
+					//relating to sequence count at a site
+					if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$longDone)){
+						
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							}
+							$counter=$counter+1;
+						
+						if(!empty($_REQUEST['sequenceCount1'])){
+							$sequenceCount1=$_REQUEST['sequenceCount1'];
+						}
+						else{
+							$sequenceCount1="0";
+						}
+						if(!empty($_REQUEST['sequenceCount2'])){
+							$sequenceCount2=$_REQUEST['sequenceCount2'];
+						}
+						else{
+							$sequenceCount2="999";
+						}
+						
+						$query=$query."site.site_id IN (SELECT upload.site_id FROM photosequence INNER JOIN upload on upload.upload_id = photosequence.upload_id GROUP BY upload.site_id HAVING COUNT(upload.site_id) BETWEEN 0 and 200)";
+						
+						$sequenceCountDone=true;
 					}
 				}
 			}
-			
-			//$query=$query." ORDER BY photo.site_id;";
+			echo $query;
 			return $query;	
 		}
 		
