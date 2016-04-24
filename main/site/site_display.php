@@ -42,7 +42,7 @@
 		$counter=0;
 		if(isset($sitesList->num_rows) && $sitesList->num_rows>0){ 
 			while($row=$sitesList->fetch_assoc()){
-				    $arrayItem=$row["site_id"];
+				    $arrayItem=$row["site_ID"];
 					if(!empty($arrayItem))
 					{
 						if($counter==0){
@@ -449,7 +449,6 @@
 				$query=$speciesQuery;
 			}
 			$query=$query.";";
-			echo $query;
 			return $query;	
 		}
 		
