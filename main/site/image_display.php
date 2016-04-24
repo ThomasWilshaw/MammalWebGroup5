@@ -41,7 +41,7 @@
 		//TABLE 1 - output results
 
 		echo "<h1>Query Results:</h1><br/>";
-		echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+		echo '<p> Image filters applied:<br/> '.$description.' <br/></p>';
 		echo '<p>'.$counter.' results found. </p>';
 		/*This is an easy way to structure the output table, have some string combination thing for
 		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
