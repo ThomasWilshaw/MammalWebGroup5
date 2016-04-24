@@ -128,7 +128,7 @@
 		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
 			
-			$query="SELECT DISTINCT site.site_id FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id RIGHT JOIN site ON photo.site_id=site.site_id";
+			$query="SELECT DISTINCT site.site_id FROM site LEFT JOIN photo on site.site_id=photo.site_id";
 
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
@@ -165,6 +165,10 @@
 			$num_classVariablesRecieved=0;
 			//used to count the number of classification variables recieved
 			
+			//some attributes are in the site table, other are in the photo table
+			$siteAttributes=['site_id','habitat_id'];
+			$photoAttributes=['person_id','contains_human'];
+			
 			foreach($inputArray as $key => $value){
 				
 				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
@@ -192,12 +196,25 @@
 						
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
+							/*changes attribute to incude table e.g.
+							site.site_id or photo.person_id */
+							$modifiedKey=$key;
+							if(in_array($modifiedKey,$siteAttributes)){
+								$modifiedKey="site.".$key;
+							}
+							else{
+								if(in_array($modifiedKey,$photoAttributes)){
+									$modifiedKey="photo.".$key;	
+								}									
+							}
+							
+							
 							if($counter==0){
-								$query=$query." WHERE ".$key." = ".$rawValue;
+								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
 							}
 							
 							else{
-								$query=$query." AND ".$key." = ".$rawValue;
+								$query=$query." AND ".$modifiedKey." = ".$rawValue;
 							}
 							
 							$counter=$counter+1;
@@ -207,12 +224,24 @@
 					else{
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
+														
+							/*changes attribute to incude table e.g.
+							site.site_id or photo.person_id */
+							$modifiedKey=$key;
+							if(in_array($modifiedKey,$siteAttributes)){
+								$modifiedKey="site.".$key;
+							}
+							else{
+								if(in_array($modifiedKey,$photoAttributes)){
+									$modifiedKey="photo.".$key;	
+								}									
+							}
 							if($counter==0){
-									$query=$query." WHERE ".$key." = ";
+									$query=$query." WHERE ".$modifiedKey." = ";
 								}
 								
 							else{
-									$query=$query." AND ".$key." = ";
+									$query=$query." AND ".$modifiedKey." = ";
 								}
 							$counter=$counter+1;
 							$innerCounter=0;
@@ -273,7 +302,7 @@
 
 					//if the variable is in the third behaviour group
 					//relating to latitude boundaries
-					if(in_array($key,$handledGroup3) AND (!empty($value)) AND (!$latDone)){
+					else if(in_array($key,$handledGroup3) AND (!empty($value)) AND (!$latDone)){
 						if($counter==0){
 							$query=$query." WHERE ";
 							}
@@ -303,7 +332,7 @@
 					
 					//if the variable is in the fourth behaviour group
 					//relating to longitude
-					if(in_array($key,$handledGroup4) AND (!empty($value)) AND (!$longDone)){
+					 else if(in_array($key,$handledGroup4) AND (!empty($value)) AND (!$longDone)){
 						
 						if($counter==0){
 							$query=$query." WHERE ";
@@ -337,7 +366,7 @@
 					
 					//if the variable is in the fifth behaviour group
 					//relating to photo count at a site
-					if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$longDone)){
+					else if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$longDone)){
 						
 						if($counter==0){
 							$query=$query." WHERE ";
@@ -369,7 +398,7 @@
 					
 					//if the variable is in the sixth behaviour group
 					//relating to sequence count at a site
-					if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$longDone)){
+					else if(in_array($key,$handledGroup6) AND (!empty($value)) AND (!$longDone)){
 						
 						if($counter==0){
 							$query=$query." WHERE ";
