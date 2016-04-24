@@ -191,7 +191,7 @@
 			echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2" form="inputs" step="1">';
 			echo'</div>';
 			
-			echo '<input type="submit" class="btn btn-default" value="Submit">';		
+			echo '<input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit"> ';	
 			
 		echo '</div>';
 		echo '</form>';
