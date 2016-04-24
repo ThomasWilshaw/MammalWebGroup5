@@ -80,30 +80,6 @@
 		
 		echo'<div class="col-sm-4">';
 		
-				echo'<div class="form-group">';
-		echo' <label for="contains_human">Humans Present:</label><br/>';
-		echo'<input type="radio" name="contains_human" value=1 form="inputs">Yes</input><br/>';
-		echo'<input type="radio" name="contains_human" value=0 form="inputs">No</input><br/>';
-		echo'<input type="radio" name="contains_human" value="any" form="inputs">Any</input><br/>';
-		echo'</div>';
-		
-		echo'</div>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<br/>';
-		echo'</div>';
-		
-		echo'<div class="row">';
-		echo'<div class="col-sm-4">';
-		
-		echo'NOT USED';
-		
-		echo'</div>';
-		
-		
-		echo'<div class="col-sm-4">';
-		
 		$site_idValues=populateCategory($connection,"site_id","photo");
 		
 		echo'<div class="form-group">';
@@ -116,28 +92,66 @@
 			echo'<option value="'.$site_idValue.'">'.$thisField.'</option>';
 		}
 		echo'  </select>';
-		echo'</div>';
 		
 		echo'</div>';
-		
-		echo'<div class="col-sm-4">';
-		
-		echo'NOT USED';
 		
 		echo'</div>';
 		echo'</div>';
 		
 		echo'<div class="row">';
 		echo'<br/>';
+		echo'</div>';
+		
+		echo'<div class="row">';
 		echo'<div class="col-sm-4">';
-		echo'NOT USED';
+		
+		echo'  <label id="photoCountLabelLabel">Number of photos taken at site:</label>';
+		echo'<br/>';
+		echo'  <label for="photoCount1" id="photoCountLabel1">Between</label>';
+		echo'  <input type = "text" name="photoCount1" class="form-control" id="photoCount1" form="inputs">';
+		echo'  <label for="photoCount2" id="photoCountLabel2">and</label>';
+		echo'  <input type = "text" name="photoCount2" class="form-control" id="photoCount2" form="inputs">';
+		
 		echo'</div>';
 		
 		echo'<div class="col-sm-4">';
 		
-		echo'NOT USED';
+		echo'  <label id="photoCountLabelLabel">Number of sequences created at site:</label>';
+		echo'<br/>';
+		echo'  <label for="photoCount1" id="sequenceCountLabel1">Between</label>';
+		echo'  <input type = "text" name="sequenceCount1" class="form-control" id="sequenceCount1" form="inputs">';
+		echo'  <label for="photoCount2" id="sequenceCountLabel2">and</label>';
+		echo'  <input type = "text" name="sequenceCount2" class="form-control" id="sequenceCount2" form="inputs">';
+		echo'</div>';
+		
+		echo'<div class="col-sm-4">';
+		
+		echo'<div class="form-group">';
+		echo' <label for="contains_human">Humans Present:</label><br/>';
+		echo'<input type="radio" name="contains_human" value=1 form="inputs">Yes</input><br/>';
+		echo'<input type="radio" name="contains_human" value=0 form="inputs">No</input><br/>';
+		echo'<input type="radio" name="contains_human" value="any" form="inputs">Any</input><br/>';
+		echo'</div>';
 		
 		echo'</div>';
+		echo'</div>';
+		
+		echo'<div class="row">';
+		echo'<br/>';
+		echo'<div class="col-sm-8">';
+		
+		echo'<div class="form-group">';
+		echo' <label for="time1">Between specific times:</label>';
+		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
+		echo'</input>';
+		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
+		echo'</input>';
+		echo'</div>';
+		
+
+		
+		echo'</div>';
+		
 		
 		echo'<div class="col-sm-4">';
 	
@@ -152,25 +166,39 @@
 			$thisField=strip_tags($speciesMap[$habitat_idValue]);
 			echo'<option value="'.$habitat_idValue.'">'.$thisField.'</option>';
 		}
-		echo'  </select>';
+		echo'</select>';
 		echo'</div>';		
 		
 		echo'</div>';
 		echo'</div>';
 		
+		echo'<div class="row">';
+		echo'<div class="col-sm-4">';
 		
+		echo'<label id="latLabelLabel">Latitude:</label>';
+		echo'<br/>';
+		echo'<label for="lat1" id="latLabel1">Between</label>';
+		echo'<input type = "text" name="lat1" class="form-control" id="lat1" form="inputs">';
+		echo'<label for="lat2" id="latLabel2">and</label>';
+		echo'<input type = "text" name="lat2" class="form-control" id="lat2" form="inputs">';
 		
-		echo'<div class="form-group">';
-		echo' <label for="time1">Between specific times:</label>';
-		echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1 form="inputs" step="1">';
-		echo'</input>';
-		echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2 form="inputs" step="1">';
-		echo'</input>';
 		echo'</div>';
 		
+		echo'<div class="col-sm-4">';
+		
+		echo'<label id="longLabelLabel">Longitude:</label>';
+		echo'<br/>';
+		echo'<label for="long1" id="longLabel1">Between</label>';
+		echo'<input type = "text" name="long1" class="form-control" id="long1" form="inputs">';
+		echo'<label for="long2" id="long2">and</label>';
+		echo'<input type = "text" name="long2" class="form-control" id="long2" form="inputs">';
+		
+		echo'</div>';
+		echo'</div>';
+		
+		echo'<br/>';
 		echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
 		echo '</form>';
-		
 		echo '</div>';
 		
 		$connection->close();//closes connection when you're done with it
