@@ -24,20 +24,25 @@
 		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
 
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
-		$speciesMap=loadSpeciesMap($connection);		
+		$speciesMap=loadSpeciesMap($connection);	
+
+		$description="none";//will contain an english description of filter criteria specified		
+		$counter=0;
 		
 		if(isset($_REQUEST)){
-			$sql=arrayToQuery($_REQUEST,$speciesMap);
+			$sqlArray=arrayToQuery($_REQUEST,$speciesMap);
+			$sql=$sqlArray[0];
+			$description=$sqlArray[1];
 		}
 		
 		$sqlResults=$connection->query($sql);
-		//var_dump($_REQUEST);
-		//var_dump($sqlResults);
+		$counter=mysqli_num_rows($sqlResults);
 
 		//TABLE 1 - output results
 
 		echo "<h1>Query Results:</h1><br/>";
-		echo '<p> Table showing images meeting the filter criteria. Use the "back" button to revise the filter. </p>';
+		echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+		echo '<p>'.$counter.' results found. </p>';
 		/*This is an easy way to structure the output table, have some string combination thing for
 		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
 		echo '<table class="table table-hover">';
@@ -82,11 +87,13 @@
 		}
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//n.b. this function currently can use the species map to convert things that are
-		//values from the options table rather than the animal table
+		/*generates an sql query using the variables in $_REQUEST.
+		Returns an array where index 0 contains the query, 
+		index 1 contains the description */
 		function arrayToQuery($inputArray,$speciesMap){
 			
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
+			$description="";//the list of filter criteria
 			
 			if(isset($_REQUEST['habitat_id'])){
 				if($_REQUEST['habitat_id'][0]!="any"){
@@ -125,15 +132,19 @@
 			
 			foreach($inputArray as $key => $value){
 				
-				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here					
-					if(!(is_array($value))){						
+				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
+					
+					if(!(is_array($value))){
+						
 						if(in_array($key,$handledGroup1Mapped)){
 							$rawValue = array_search($value,$speciesMap);
 							//raw value is the value in the animal table
 							//corresponding to the value in the options table	
+							$descriptionValue=$speciesMap[$value];
 						}
 						else{
 							$rawValue=$value;
+							$descriptionValue=$value;
 						}
 						if(empty($rawValue)){
 							$rawValue=$value;
@@ -144,31 +155,37 @@
 							$rawValue="";
 						}
 						//values such as "any" that shouldn't influence the query
+
 						
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
 							if($counter==0){
 								$query=$query." WHERE ".$key." = ".$rawValue;
+								$description=$description.$key." = ".$descriptionValue;
 							}
 							
 							else{
 								$query=$query." AND ".$key." = ".$rawValue;
+								$description=$description.",".$key." = ".$descriptionValue;
 							}
 							
-							$counter+=1;
+							$counter=$counter+1;
 						}
-					}					
+					}
+					
 					else{
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
 							if($counter==0){
-								$query=$query." WHERE (".$key." = ";
+								$query=$query." WHERE ".$key." = ";
+								$description=$description.$key." = ";
 							}
-								
+							
 							else{
-								$query=$query." AND (".$key." = ";
+								$query=$query." AND ".$key." = ";
+								$description=$description.",".$key." = ";
 							}
-							$counter+=1;
+							$counter=$counter+1;
 							$innerCounter=0;
 							foreach($value as $arrayItem){
 								if($arrayItem=="any"){
@@ -176,18 +193,31 @@
 								}
 								if(!empty($arrayItem))
 								{
+									
+									if(in_array($key,$handledGroup1Mapped)){//if it is mapped in options table
+										$descriptionValue=$speciesMap[$arrayItem];
+									}
+									else{
+										$descriptionValue=$arrayItem;
+									}
+									
 									if($innerCounter==0){
 										$query=$query.$arrayItem;
-									}	
+										$description=$description.$descriptionValue;
+									}
+									
 									else{
 										$query=$query." OR ".$arrayItem;
+										$description=$description." or ".$descriptionValue;
 									}
 									$innerCounter+=1;
-								}
+								}	
+									
 							}
-							$query=$query.")";
-						}		
+						}
+							
 					}
+					
 				}
 			
 				else{//handling for special variables such as time variables
@@ -202,12 +232,14 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ";
-								}
-										
+								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
+								$description=$description.$key." = ".$rawValue;
+							}
+							
 							else{
-								$query=$query." AND ";
-								}
+								$query=$query." AND ".$modifiedKey." = ".$rawValue;
+								$description=$description.",".$key." = ".$rawValue;
+							}
 							$counter=$counter+1;
 							
 							$modifiedStartTime=$_REQUEST['time1_form='];
@@ -216,17 +248,12 @@
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
 							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
-							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;	
+							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
+							$description=$description." taken between ".$modifiedStartTime." and ".$modifiedEndTime;
+						
+						
 						}
 					}
-
-					//if the variable is in the third behaviour group
-					//relating to the flag attribute
-					if(in_array($key,$handledGroup3) AND (!empty($value))){
-						
-						
-					}
-					
 					
 					//if the variable is in the fourth behaviour group
 					//relating to the num class num_class1<x<num_class2
@@ -239,26 +266,29 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ";
-								}
-										
+								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
+								$description=$description.$key." = ".$rawValue;
+							}
+							
 							else{
-								$query=$query." AND ";
-								}
+								$query=$query." AND ".$modifiedKey." = ".$rawValue;
+								$description=$description.",".$key." = ".$rawValue;
+							}
 							$counter=$counter+1;
 							
 							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
-						}
+							$description=$description."with between ".$_REQUEST['num_class1']." and ".$_REQUEST['num_class2']." classifications";		
+						}	
 					}
 				}
+					
 			}
-			
 			$query=$query.";";
+			$results=array();
+			$results[0]=$query;
+			$results[1]=$description;
 			
-			//testing
-			//echo $query;
-			//
-			return $query;	
+			return $results;
 		}
 		
 		
