@@ -33,11 +33,11 @@
 		if(isset($_REQUEST)){
 			$sql=arrayToQuery($_REQUEST,$speciesMap);
 		}
-		
 		$sitesList=$connection->query($sql);
 		//sitesList here will be a list of unique site IDs fitting search criteria
 		/*constructs a second query to search for all data from the site table
-		for the site IDs in the sqlResults array.*/
+		for the site IDs in the sqlResults array. */
+		
 		$sql="SELECT * FROM site WHERE site_id =";
 		$counter=0;
 		if(isset($sitesList->num_rows) && $sitesList->num_rows>0){ 
@@ -124,8 +124,9 @@
 		}
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		//n.b. this function currently can use the species map to convert things that are
-		//values from the options table rather than the animal table
+		/*generates an sql query using the variables in $_REQUEST. species is handled as a special
+		case at the end since it is the only attribute that uses the aggregate table, and an extra
+		join to the aggregate table would slow down the process hugely*/
 		function arrayToQuery($inputArray,$speciesMap){
 			
 			$query="SELECT DISTINCT site.site_id FROM site LEFT JOIN photo on site.site_id=photo.site_id";
@@ -133,10 +134,8 @@
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
-			$handledGroup1=['species','person_id','contains_human','site_id','habitat_id'];
+			$handledGroup1=['person_id','contains_human','site_id','habitat_id'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
-			$handledGroup1Mapped=['species'];
-			//the variables in the group 1 list that have been mapped to something else via options table
 			
 			$handledGroup2=['time1_form=','time2_form='];
 			//the group of variables to be handled in the time section
@@ -174,15 +173,7 @@
 				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
 					
 					if(!(is_array($value))){
-						
-						if(in_array($key,$handledGroup1Mapped)){
-							$rawValue = array_search($value,$speciesMap);
-							//raw value is the value in the animal table
-							//corresponding to the value in the options table	
-						}
-						else{
-							$rawValue=$value;
-						}
+						$rawValue=$value;
 						if(empty($rawValue)){
 							$rawValue=$value;
 						}
@@ -428,6 +419,36 @@
 					}
 				}
 			}
+			
+			$speciesQueried=false;
+			//true if the aggregate table must be used for species information
+			$speciesQuery="SELECT DISTINCT photo.site_ID FROM photo INNER JOIN aggregate on photo.photo_ID = aggregate.photo_ID WHERE photo.site_ID IN (".$query.") AND aggregate.species=";
+			if(!empty($_REQUEST['species'])){
+				$speciesQueried=true;
+				//handing changes to query if species was queried
+				$innerCounter=0;
+				foreach($_REQUEST['species'] as $arrayItem){
+					if($arrayItem=="any"){
+						$speciesQueried=false;
+					}
+					if(!empty($arrayItem))
+					{
+						if($innerCounter==0){
+							$speciesQuery=$speciesQuery.$arrayItem;
+						}
+						
+						else{
+							$speciesQuery=$speciesQuery." OR ".$arrayItem;
+						}
+						$innerCounter+=1;
+					}	
+									
+					}
+			}
+			if($speciesQueried){
+				$query=$speciesQuery;
+			}
+			$query=$query.";";
 			echo $query;
 			return $query;	
 		}
