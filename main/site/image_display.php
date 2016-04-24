@@ -85,6 +85,11 @@
 		//n.b. this function currently can use the species map to convert things that are
 		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
+			echo  var_dump($inputArray);
+			echo "<br><br>";
+			echo print_r($inputArray);
+			echo "<br><br>";
+
 			
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
 			
@@ -124,11 +129,10 @@
 			//used to count the number of classification variables recieved
 			
 			foreach($inputArray as $key => $value){
+				echo "<br>KEY:".$key."   VALUE:".$value."<br>";
 				
-				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
-					
-					if(!(is_array($value))){
-						
+				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here					
+					if(!(is_array($value))){						
 						if(in_array($key,$handledGroup1Mapped)){
 							$rawValue = array_search($value,$speciesMap);
 							//raw value is the value in the animal table
@@ -146,7 +150,7 @@
 							$rawValue="";
 						}
 						//values such as "any" that shouldn't influence the query
-
+						echo "<br> RAW VALUE:".$rawValue."<br>";
 						
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
@@ -158,21 +162,20 @@
 								$query=$query." AND ".$key." = ".$rawValue;
 							}
 							
-							$counter=$counter+1;
+							$counter+=1;
 						}
-					}
-					
+					}					
 					else{
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
 							if($counter==0){
-									$query=$query." WHERE ".$key." = ";
-								}
+								$query=$query." WHERE (".$key." = ";
+							}
 								
 							else{
-									$query=$query." AND ".$key." = ";
-								}
-							$counter=$counter+1;
+								$query=$query." AND (".$key." = ";
+							}
+							$counter+=1;
 							$innerCounter=0;
 							foreach($value as $arrayItem){
 								if($arrayItem=="any"){
@@ -182,19 +185,17 @@
 								{
 									if($innerCounter==0){
 										$query=$query.$arrayItem;
-									}
-									
+									}	
 									else{
 										$query=$query." OR ".$arrayItem;
 									}
 									$innerCounter+=1;
-								}	
-									
+								}
 							}
-						}
-							
+							$query=$query.")";
+						}		
 					}
-					
+					echo "<br>QUERY: ".$query."<br>";
 				}
 			
 				else{//handling for special variables such as time variables
@@ -223,21 +224,13 @@
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
 							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
-							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
-						
-						
+							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;	
 						}
 					}
-					
-					
-					
+
 					//if the variable is in the third behaviour group
 					//relating to the flag attribute
 					if(in_array($key,$handledGroup3) AND (!empty($value))){
-						
-						
-						
-						
 						
 						
 					}
@@ -263,16 +256,9 @@
 							$counter=$counter+1;
 							
 							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
-						
-						
 						}
-						
-						
-						
-						
 					}
 				}
-					
 			}
 			
 			$query=$query.";";
@@ -280,7 +266,7 @@
 			//testing
 			//echo $query;
 			//
-			
+			echo $query;
 			return $query;	
 		}
 		
