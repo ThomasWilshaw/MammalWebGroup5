@@ -145,6 +145,15 @@
 					echo'</div>';			
 				echo'</div>';
 				
+				echo'<div class="col-sm-4">';
+					echo'<p id="mapInfo" style="visibility:hidden;">-Left click briskly on the map to select the top left point of your selection box.';
+					echo'<br/>';
+					echo'-Click again to select the bottom right point of your selection box.';
+					echo'<br/>';
+					echo'-A third click clears the selection box';
+					echo'</p>';
+				echo'</div>';	
+				
 			echo'</div>';
 			
 			echo'<div class="row">';
@@ -258,6 +267,8 @@
 			$('#mapDiv').attr('style',"height:0px;visibility:hidden");
 			//clicking the toggle button again will show the map
 			$('#mapButton').attr('onClick',"drawMap()");
+			//hides map usage info
+			$('#mapInfo').attr('style',"visibility:hidden");
 		}
 		
 		//used to clear an array of markers from my google map
@@ -279,7 +290,8 @@
 		function drawMap() {
 			//expand and show the div that will display the google map
 			$('#mapDiv').attr('style',"height:800px;visibility:visible");
-			
+			//display map usage info
+			$('#mapInfo').attr('style',"visibility:visible");
 			//create the google map
 			map = new google.maps.Map(document.getElementById('mapDiv'), {
 			center: {lat: 54.7650, lng: -1.5782},
