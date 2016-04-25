@@ -137,7 +137,7 @@
 		function arrayToQuery($inputArray,$speciesMap){
 			
 			$query="SELECT DISTINCT site.site_id FROM site LEFT JOIN photo on site.site_id=photo.site_id";
-			$description="";
+			$description="";//the list of filter criteria
 			
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
@@ -300,7 +300,7 @@
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
 							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
-							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
+							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime." OR taken BETWEEN ".$modifiedEndTime.' AND '.$modifiedStartTime;
 							$description=$description."time of photos taken between ".$modifiedStartTime." and ".$modifiedEndTime;
 						}
 					}
@@ -330,9 +330,16 @@
 						else{
 							$lat2="200";
 						}
-						
-						$query=$query." latitude BETWEEN ".$lat1.' AND '.$lat2;
-						$description=$description."latitude between ".$lat1." and ".$lat2;
+						if($lat1<=$lat2){
+							$latLower=$lat1;
+							$latHigher=$lat2;
+						}
+						else{
+							$latHigher=$lat1;
+							$latLower=$lat2;
+						}
+						$query=$query." latitude BETWEEN ".$latLower.' AND '.$latHigher;
+						$description=$description."latitude between ".$latLower." and ".$latHigher;
 						
 						$latDone=true;
 					}
@@ -363,9 +370,16 @@
 						else{
 							$long2="200";
 						}
-						
-						$query=$query." longitude BETWEEN ".$long1.' AND '.$long2;
-						$description=$description."longitude between ".$long1." and ".$long2;
+						if($long1<=$long2){
+							$longLower=$long1;
+							$longHigher=$long2;
+						}
+						else{
+							$longHigher=$long1;
+							$longLower=$long2;
+						}
+						$query=$query." longitude BETWEEN ".$longLower.' AND '.$longHigher;
+						$description=$description."longitude between ".$longLower." and ".$longHigher;
 						
 						$longDone=true;
 					}
@@ -399,9 +413,17 @@
 						else{
 							$photoCount2="999";
 						}
-						
-						$query=$query."site.site_id IN (SELECT site.site_id FROM site INNER JOIN photo on site.site_id = photo.site_id GROUP BY site.site_id HAVING COUNT(site.site_id) BETWEEN ".$photoCount1.' AND '.$photoCount2.')';
-						$description=$description."between ".$photoCount1." and ".$photoCount2." photos taken";
+						//makes sure that the first of the pair is lower for SQL between
+						if($photoCount1<=$photoCount2){
+							$photoCountLower=$photoCount1;
+							$photoCountHigher=$photoCount2;
+						}
+						else{
+							$photoCountHigher=$photoCount1;
+							$photoCountLower=$photoCount2;
+						}
+						$query=$query."site.site_id IN (SELECT site.site_id FROM site INNER JOIN photo on site.site_id = photo.site_id GROUP BY site.site_id HAVING COUNT(site.site_id) BETWEEN ".$photoCountLower.' AND '.$photoCountHigher.')';
+						$description=$description."between ".$photoCountLower." and ".$photoCountHigher." photos taken";
 						$photoCountDone=true;
 					}
 					
@@ -432,9 +454,17 @@
 						else{
 							$sequenceCount2="999";
 						}
-						
-						$query=$query."site.site_id IN (SELECT upload.site_id FROM photosequence INNER JOIN upload on upload.upload_id = photosequence.upload_id GROUP BY upload.site_id HAVING COUNT(upload.site_id) BETWEEN 0 and 200)";
-						$description=$description."between ".$sequenceCount1." and ".$sequenceCount2." sequences taken";
+						//makes sure that the first of the pair is lower for SQL between
+						if($sequenceCount1<=$sequenceCount2){
+							$sequenceCountLower=$sequenceCount1;
+							$sequenceCountHigher=$sequenceCount2;
+						}
+						else{
+							$sequenceCountHigher=$sequenceCount1;
+							$sequenceCountLower=$sequenceCount2;
+						}
+						$query=$query."site.site_id IN (SELECT upload.site_id FROM photosequence INNER JOIN upload on upload.upload_id = photosequence.upload_id GROUP BY upload.site_id HAVING COUNT(upload.site_id) BETWEEN ".$sequenceCountLower." and ".$sequenceCountHigher.")";
+						$description=$description."between ".$sequenceCountLower." and ".$sequenceCountHigher." sequences taken";
 						$sequenceCountDone=true;
 					}
 				}
@@ -452,25 +482,25 @@
 					if($arrayItem=="any"){
 						$speciesQueried=false;
 					}
-					if(!empty($arrayItem))
-					{
-						if($counter!=0){
-								$description=$description.",";
-						}
-						$counter+=1;
-						if($innerCounter==0){
-							$speciesQuery=$speciesQuery.$arrayItem;
-							$rawValue=$speciesMap[$arrayItem];
-							$speciesDescription=$speciesDescription.$rawValue;
-						}
-						
-						else{
-							$speciesQuery=$speciesQuery." OR ".$arrayItem;
-							$rawValue=$speciesMap[$arrayItem];
-							$speciesDescription=$speciesDescription.",".$rawValue;
-						}
-						$innerCounter+=1;
-					}	
+						if(!empty($arrayItem))
+							{
+							if($counter!=0){
+									$description=$description.",";
+							}
+							$counter+=1;
+							if($innerCounter==0){
+								$speciesQuery=$speciesQuery.$arrayItem;
+								$rawValue=$speciesMap[$arrayItem];
+								$speciesDescription=$speciesDescription.$rawValue;
+							}
+							
+							else{
+								$speciesQuery=$speciesQuery." OR ".$arrayItem;
+								$rawValue=$speciesMap[$arrayItem];
+								$speciesDescription=$speciesDescription.",".$rawValue;
+							}
+							$innerCounter+=1;
+						}	
 									
 					}
 			}
@@ -487,7 +517,7 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
-			
+			echo $query;
 			return $results;	
 		}
 		
@@ -499,7 +529,7 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		function searchBetweenDates($connection,$d1,$d2){
-			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2."'";
+			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2."' OR taken BETWEEN ".$d2." AND ".$d1;
 			$datequery=$connection->query($sql);
 
 			echo "<h2>Photo IDs from between dates ".$d1." and ".$d2." (current time) maybe want to get filename/some other field in future?";
