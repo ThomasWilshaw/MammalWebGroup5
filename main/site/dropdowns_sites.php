@@ -146,9 +146,9 @@
 				echo'</div>';
 				
 				echo'<div class="col-sm-4">';
-					echo'<p id="mapInfo" style="visibility:hidden;">-Left click briskly on the map to select the top left point of your selection box.';
+					echo'<p id="mapInfo" style="visibility:hidden;">-Left click on the map to place a corner of your selection area.';
 					echo'<br/>';
-					echo'-Click again to select the bottom right point of your selection box.';
+					echo'-Click again to place the opposite corner and draw the box.';
 					echo'<br/>';
 					echo'-A third click clears the selection box';
 					echo'</p>';
