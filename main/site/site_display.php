@@ -517,6 +517,8 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
+			var_dump($_REQUEST);
+			echo $query;
 			return $results;	
 		}
 		
@@ -528,7 +530,7 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		function searchBetweenDates($connection,$d1,$d2){
-			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2."' OR taken BETWEEN ".$d2." AND ".$d1;
+			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2;
 			$datequery=$connection->query($sql);
 
 			echo "<h2>Photo IDs from between dates ".$d1." and ".$d2." (current time) maybe want to get filename/some other field in future?";

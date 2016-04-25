@@ -112,7 +112,7 @@
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			$handledGroup1Mapped=['species','gender','age'];
 			
-			$handledGroup2=['time1_form=','time2_form='];
+			$handledGroup2=['time1','time2'];
 			//the group of variables to be handled in the time section
 			
 			$handledGroup3=['blank','classified'];
@@ -242,8 +242,8 @@
 							}
 							$counter=$counter+1;
 							
-							$modifiedStartTime=$_REQUEST['time1_form='];
-							$modifiedEndTime=$_REQUEST['time2_form='];
+							$modifiedStartTime=$_REQUEST['time1'];
+							$modifiedEndTime=$_REQUEST['time2'];
 							//start and end time must be modified to take the "T" out of the middle of the string
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
@@ -275,9 +275,18 @@
 								$description=$description.",".$key." = ".$rawValue;
 							}
 							$counter=$counter+1;
-							
-							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
-							$description=$description."with between ".$_REQUEST['num_class1']." and ".$_REQUEST['num_class2']." classifications";		
+							$numClass1=$_REQUEST['num_class1'];
+							$numClass2=$_REQUEST['num_class2'];
+							if($numClass1<=$numClass2){
+								$numClassLower=$numClass1;
+								$numClassHigher=$numClass2;
+							}
+							else{
+								$numClassHigher=$numClass1;
+								$numClassLower=$numClass2;
+						}
+							$query=$query." num_class BETWEEN ".$numClassLower.' AND '.$numClassHigher;
+							$description=$description."with between ".$numClassLower." and ".$numClassHigher." classifications";		
 						}	
 					}
 				}
@@ -287,7 +296,6 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
-			
 			return $results;
 		}
 		
