@@ -6,8 +6,6 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-	
-	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
 	/*At the moment, three searches are hard coded into the page. Once we know 
@@ -65,14 +63,24 @@
 		}
 		$sql=$sql.";";
 
-		//TABLE 1 - output results
-
+		//words and titles on the page shown to viewer other than the table
 		echo "<h1>Query Results:</h1><br/>";
-		echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
-		echo '<p>'.$counter.' results found. </p>';
-		echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
-		/*This is an easy way to structure the output table, have some string combination thing for
-		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
+		echo'<div class= "row">';
+			echo '<div class="col-sm-6">';
+				echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+				echo '<p>'.$counter.' results found. </p>';
+				echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
+			echo '</div>';
+			echo '<div class="col-sm-3">';
+				
+			echo '</div>';
+			echo '<div class="col-sm-2">';
+				echo'<a href="dropdowns_sites.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				echo'<br/>';
+				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+			echo '</div>';
+		echo'</div>';
+		/*output table showing sites meeting the filter criteria */
 		echo '<table class="table table-hover">';
 		echo '<thead>';
 		echo "<tr>";
@@ -84,6 +92,7 @@
 		echo '</thead>';
 		echo '<tbody>';
 		
+		//TABLE 1 - output results
 		$sqlResults=$connection->query($sql);
 		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 			while($row=$sqlResults->fetch_assoc()){
@@ -517,8 +526,6 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
-			var_dump($_REQUEST);
-			echo $query;
 			return $results;	
 		}
 		
@@ -546,7 +553,6 @@
 		}
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		
 		?>
     
     <!-- Creates the bootstrap modal where the image will appear -->
