@@ -517,8 +517,6 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
-			var_dump($_REQUEST);
-			echo $query;
 			return $results;	
 		}
 		
