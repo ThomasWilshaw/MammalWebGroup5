@@ -145,7 +145,7 @@
 			$handledGroup1=['person_id','contains_human','site_id','habitat_id'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			
-			$handledGroup2=['time1_form=','time2_form='];
+			$handledGroup2=['time1','time2'];
 			//the group of variables to be handled in the time section
 			
 			$handledGroup3=['lat1','lat2'];
@@ -294,8 +294,8 @@
 								}
 							$counter=$counter+1;
 							
-							$modifiedStartTime=$_REQUEST['time1_form='];
-							$modifiedEndTime=$_REQUEST['time2_form='];
+							$modifiedStartTime=$_REQUEST['time1'];
+							$modifiedEndTime=$_REQUEST['time2'];
 							//start and end time must be modified to take the "T" out of the middle of the string
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
@@ -517,6 +517,7 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
+			var_dump($_REQUEST);
 			echo $query;
 			return $results;	
 		}
