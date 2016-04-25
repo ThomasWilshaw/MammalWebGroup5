@@ -39,8 +39,8 @@
             
         echo'<div class="row">';
 		echo'<div class="col-sm-4">';
-	$speciesValues=populateCategory($connection,"species","animal");
-        echo '<form id="inputs" role="form" action="displayAnimalMonth.php" method="post">';
+		$speciesValues=populateCategory($connection,"species","animal");
+        echo '<form id="inputs" role="form" action="displayAnimalMonth.php" method="get">';
     
 		echo'  <label for="speciesSelect">Specific species:</label>';
 		echo'  <select name="species[]" class="form-control" id="speciesSelect" form="inputs" size=6>';

@@ -16,7 +16,7 @@
     $total=sizeof(json_decode($array));
 ?>
 
-    <a href="selectAnimalMonth.php">Back</a>
+    <a href="scientistDashboard.php">Back</a>
 
 <meta charset="utf-8">
 <style>

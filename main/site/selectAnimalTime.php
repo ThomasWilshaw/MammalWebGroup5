@@ -18,11 +18,10 @@
 		//establish connection
 		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
-		$dropdownCategories=getCategories($connection);
-		//An array. uses the function below to get an array of the categories in the table
 		
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);
+		$speciesValues=populateCategory($connection,"species","animal");
 		
 		//visible part of page:
 		echo "<h1>Select animal to see what time of day the photos of them are captured:</h1><br/>";
@@ -39,7 +38,6 @@
             
         echo'<div class="row">';
 		echo'<div class="col-sm-4">';
-	$speciesValues=populateCategory($connection,"species","animal");
         echo '<form id="inputs" role="form" action="displayAnimalHistogram.php" method="post">';
     
 		echo'  <label for="speciesSelect">Specific species:</label>';
@@ -48,17 +46,11 @@
 		{
 			$thisField=strip_tags($speciesMap[$speciesValue]);
 			if(!($thisField=="Like")){
-			echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
+				echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
 			}
 		}
 		echo'  </select>';
 		echo'</div>';
-		
-
-//code mostly from part of the dropdown menu, now only showing the options for person_id which is then passed onto displayUserChart.php to generate a chart
-	
-
-		
 		
 		echo'</div>';
 		
@@ -69,19 +61,7 @@
 		echo '</div>';
 		
 		$connection->close();//closes connection when you're done with it
-	/////////////////////////////////////////////////////////////////////////////////////////////
-		function getCategories($connection){//returns attributes of a table as an array
-			//creating and sending query
-			$sql="SHOW COLUMNS FROM `animal`";  //replace "animal" with any other table part of the database initialised in the dbname variable.
-			$categoryQuery=$connection->query($sql);
-			//using query results
-			$categoryArray=array();
-			while($attribute=$categoryQuery->fetch_assoc()){
-				array_push($categoryArray,$attribute['Field']);
-			}
-			return $categoryArray;
-		}
-		////////////////////////////////////////////////////////////////////////////////////////////////////	
+
 		function populateCategory($connection,$category,$tableName){
 			//returns an array of possible values for an attribute that appear in the database
 			//in the named table
@@ -111,12 +91,7 @@
 			$speciesmap[0]="Undefined";
 			return $speciesmap;
 		}
-		
-		
-		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
-		<script>
-		</script>
 </body>
 </html>

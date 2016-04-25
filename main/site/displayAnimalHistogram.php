@@ -3,7 +3,7 @@
 
 <?php
     
-    $animalid = $_POST["species"][0];
+    $animalid = $_GET["species"][0];
     //echo $animalid;
     //$animalid=json_encode($animalid);
     $url="http://localhost/groupproject5/main/site/getAnimalWithTime.php";
@@ -16,7 +16,7 @@
     $total=sizeof(json_decode($array));
 ?>
 
-    <a href="selectAnimalTime.php">Back</a>
+    <a href="scientistDashboard.php">Back</a>
 
 <meta charset="utf-8">
 <style>
@@ -44,12 +44,8 @@ body {
 <body>
 <font size="4">
 <div id="top">
-
-    
-
-    
-    </div>
-        </font>
+</div>
+</font>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 // each element in value represents one instance for the corresponding histogram value
@@ -113,5 +109,5 @@ svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
-
 </script>
+</body>
