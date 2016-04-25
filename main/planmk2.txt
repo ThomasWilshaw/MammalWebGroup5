@@ -1,0 +1,13 @@
+Bug fix
+
+Add csv export option to image_display/site_display
+
+Link pages together (search tabs point to search pages, ) 
+
+Clean up code/document
+
+Stat charts moved to scientistdashboard
+
+Fill out matrix
+
+Prep demo presentation
