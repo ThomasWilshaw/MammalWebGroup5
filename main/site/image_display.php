@@ -1,51 +1,54 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Php x SQL</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
+	<a href="dropdowns_march.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
-	/*At the moment, three searches are hard coded into the page. Once we know 
-    *the input format from the search form, change to only output a single table 
-    *that includes all the fields being searched for.
-    */
+	//At the moment, three searches are hard coded into the page. Once we know the input format from the search form, change to only output a single table that includes all the fields being searched for.
 
-		set_time_limit(120);
-		//sets a 2 minute timeout 
-		
-		include('config.php');
-		
-		//establish connection
-		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
+		$servername="localhost";
+		$username="root";
+		$password="";
+		$dbname="mammalweb2";
+
+		$connection=new mysqli($servername,$username,$password,$dbname);
 
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
-		$speciesMap=loadSpeciesMap($connection);	
-
-		$description="none";//will contain an english description of filter criteria specified		
-		$counter=0;
+		$speciesMap=loadSpeciesMap($connection);		
 		
 		if(isset($_REQUEST)){
-			$sqlArray=arrayToQuery($_REQUEST,$speciesMap);
-			$sql=$sqlArray[0];
-			$description=$sqlArray[1];
+			$sql=arrayToQuery($_REQUEST,$speciesMap);
 		}
 		
 		$sqlResults=$connection->query($sql);
-		$counter=mysqli_num_rows($sqlResults);
+	//	var_dump($_REQUEST);
+	//	var_dump($sqlResults);
 
-		//TABLE 1 - output results
-
+		//words and titles on the page shown to viewer other than the table
 		echo "<h1>Query Results:</h1><br/>";
-		echo '<p> Image filters applied:<br/> '.$description.' <br/></p>';
-		echo '<p>'.$counter.' results found. </p>';
-		/*This is an easy way to structure the output table, have some string combination thing for
-		all the passed in variables (from dropdowns) that define the columns as well as for the SQL queries*/
-		echo '<table class="table table-hover">';
+		echo'<div class= "row">';
+			echo '<div class="col-sm-6">';
+				echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+				echo '<p>'.$counter.' results found. </p>';
+				echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
+			echo '</div>';
+			echo '<div class="col-sm-3">';
+				
+			echo '</div>';
+			echo '<div class="col-sm-2">';
+				echo'<a href="dropdowns_sites.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				echo'<br/>';
+				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+			echo '</div>';
+		echo'</div>';
+		/*output table showing sites meeting the filter criteria */
+		
 		echo '<thead>';
 		echo "<tr>";
 		echo '<th>Photo ID</th>';
@@ -55,14 +58,12 @@
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
-		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
+		if($sqlResults->num_rows>0){
 			while($row=$sqlResults->fetch_assoc()){
-                $imagePath = "http://www.mammalweb.org//biodivimages/person_" . $row["person_id"] . "/site_" . $row["site_id"] . "/" . $row['filename'];
 				echo "<tr>";
 				echo "<td>".$row["photo_id"]."</td>";
 				echo "<td>".$row["site_id"]."</td>";
-				echo "<td>".$row["person_id"]."</td>";
-                echo "<td><a href=\"javascript:;\" src=$imagePath" . " onclick=\"popUp(this)\"" . "> View Image </a></td>";
+				echo "<td>".$row["upload_id"]."</td>";
 				echo "</tr>";
 			}
 		}
@@ -71,7 +72,9 @@
 		}
 		echo '</tbody>';
 		echo "</table>";
-
+		
+		
+		//exportToCSV($sqlResults);
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		function loadSpeciesMap($connection){
@@ -87,32 +90,20 @@
 		}
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		/*generates an sql query using the variables in $_REQUEST.
-		Returns an array where index 0 contains the query, 
-		index 1 contains the description */
+		//n.b. this function currently can use the species map to convert things that are
+		//values from the options table rather than the animal table
 		function arrayToQuery($inputArray,$speciesMap){
-			
+						
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
-			$description="";//the list of filter criteria
-			
-			if(isset($_REQUEST['habitat_id'])){
-				if($_REQUEST['habitat_id'][0]!="any"){
-					$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
-					
-				}
-			}
-			//if a habitat filter is also set, the base SQL query needs to be extended, above
-			//could always do this for all cases, but best not to as it creates a larger table to query.
-			
 			
 			$counter=0;
 			//counter detects when you are at the start of creating the sql query (for writing select where etc)
 			
-			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id','flag','habitat_id'];
+			$handledGroup1=['species','gender','age','person_id','contains_human','site_id','sequence_id','flag'];
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			$handledGroup1Mapped=['species','gender','age'];
 			
-			$handledGroup2=['time1','time2'];
+			$handledGroup2=['time1_form=','time2_form='];
 			//the group of variables to be handled in the time section
 			
 			$handledGroup3=['blank','classified'];
@@ -140,11 +131,9 @@
 							$rawValue = array_search($value,$speciesMap);
 							//raw value is the value in the animal table
 							//corresponding to the value in the options table	
-							$descriptionValue=$speciesMap[$value];
 						}
 						else{
 							$rawValue=$value;
-							$descriptionValue=$value;
 						}
 						if(empty($rawValue)){
 							$rawValue=$value;
@@ -161,12 +150,10 @@
 						{
 							if($counter==0){
 								$query=$query." WHERE ".$key." = ".$rawValue;
-								$description=$description.$key." = ".$descriptionValue;
 							}
 							
 							else{
 								$query=$query." AND ".$key." = ".$rawValue;
-								$description=$description.",".$key." = ".$descriptionValue;
 							}
 							
 							$counter=$counter+1;
@@ -177,14 +164,12 @@
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
 							if($counter==0){
-								$query=$query." WHERE ".$key." = ";
-								$description=$description.$key." = ";
-							}
-							
+									$query=$query." WHERE ".$key." = ";
+								}
+								
 							else{
-								$query=$query." AND ".$key." = ";
-								$description=$description.",".$key." = ";
-							}
+									$query=$query." AND ".$key." = ";
+								}
 							$counter=$counter+1;
 							$innerCounter=0;
 							foreach($value as $arrayItem){
@@ -193,22 +178,12 @@
 								}
 								if(!empty($arrayItem))
 								{
-									
-									if(in_array($key,$handledGroup1Mapped)){//if it is mapped in options table
-										$descriptionValue=$speciesMap[$arrayItem];
-									}
-									else{
-										$descriptionValue=$arrayItem;
-									}
-									
 									if($innerCounter==0){
 										$query=$query.$arrayItem;
-										$description=$description.$descriptionValue;
 									}
 									
 									else{
 										$query=$query." OR ".$arrayItem;
-										$description=$description." or ".$descriptionValue;
 									}
 									$innerCounter+=1;
 								}	
@@ -232,28 +207,39 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
-								$description=$description.$key." = ".$rawValue;
-							}
-							
+								$query=$query." WHERE ";
+								}
+										
 							else{
-								$query=$query." AND ".$modifiedKey." = ".$rawValue;
-								$description=$description.",".$key." = ".$rawValue;
-							}
+								$query=$query." AND ";
+								}
 							$counter=$counter+1;
 							
-							$modifiedStartTime=$_REQUEST['time1'];
-							$modifiedEndTime=$_REQUEST['time2'];
+							$modifiedStartTime=$_REQUEST['time1_form='];
+							$modifiedEndTime=$_REQUEST['time2_form='];
 							//start and end time must be modified to take the "T" out of the middle of the string
 							//to make it work with the sql format for date and time
 							$modifiedStartTime="'".str_ireplace("T"," ",$modifiedStartTime)."'";
 							$modifiedEndTime="'".str_ireplace("T"," ",$modifiedEndTime)."'";
 							$query=$query." taken BETWEEN ".$modifiedStartTime.' AND '.$modifiedEndTime;
-							$description=$description." taken between ".$modifiedStartTime." and ".$modifiedEndTime;
 						
 						
 						}
 					}
+					
+					
+					
+					//if the variable is in the third behaviour group
+					//relating to the flag attribute
+					if(in_array($key,$handledGroup3) AND (!empty($value))){
+						
+						
+						
+						
+						
+						
+					}
+					
 					
 					//if the variable is in the fourth behaviour group
 					//relating to the num class num_class1<x<num_class2
@@ -266,92 +252,85 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
-								$description=$description.$key." = ".$rawValue;
-							}
-							
+								$query=$query." WHERE ";
+								}
+										
 							else{
-								$query=$query." AND ".$modifiedKey." = ".$rawValue;
-								$description=$description.",".$key." = ".$rawValue;
-							}
+								$query=$query." AND ";
+								}
 							$counter=$counter+1;
-							$numClass1=$_REQUEST['num_class1'];
-							$numClass2=$_REQUEST['num_class2'];
-							if($numClass1<=$numClass2){
-								$numClassLower=$numClass1;
-								$numClassHigher=$numClass2;
-							}
-							else{
-								$numClassHigher=$numClass1;
-								$numClassLower=$numClass2;
+							
+							$query=$query." num_class BETWEEN ".$_REQUEST['num_class1'].' AND '.$_REQUEST['num_class2'];
+						
+						
 						}
-							$query=$query." num_class BETWEEN ".$numClassLower.' AND '.$numClassHigher;
-							$description=$description."with between ".$numClassLower." and ".$numClassHigher." classifications";		
-						}	
+						
+						
+						
+						
 					}
 				}
 					
 			}
+			
 			$query=$query.";";
-			$results=array();
-			$results[0]=$query;
-			$results[1]=$description;
-			return $results;
+			
+			//testing
+			echo $query;
+			//
+			
+			return $query;	
 		}
 		
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//uses script from exportCSV.php to turn the results of the sql query on this page into a csv file.
+		//inputs: $results = the results of the sql query 
+		function exportToCSV($results){
+				$fields =  mysqli_fetch_fields($results);
+	
+				$header="";
 
-		function searchBetweenDates($connection,$d1,$d2){
-			$sql="SELECT photo_id FROM photo WHERE taken BETWEEN '".$d1."' AND '".$d2."'";
-			$datequery=$connection->query($sql);
+				foreach($fields as $val){
+					$header .= $val->name . ",";
+				}
 
-			echo "<h2>Photo IDs from between dates ".$d1." and ".$d2." (current time) maybe want to get filename/some other field in future?";
-			echo "<table>";
-			echo "<tr><td>Photo ID</td></tr>";
-			if($datequery->num_rows>0){
-			while($row=$datequery->fetch_assoc()){
-				echo"<tr>";
-				echo "<td>".$row["photo_id"]."</td>";
-				echo"</tr>";
-			}
-			echo "</table>";
+				$data="";
+				while( $row = mysqli_fetch_row( $results ) )
+				{
+					$line = '';
+					foreach( $row as $value )
+					{											 
+						if ( ( !isset( $value ) ) || ( $value == "" ) )
+						{
+							$value = ",";
+						}
+						else
+						{
+							$value = str_replace( '"' , '""' , $value );
+							$value = '"' . $value . '"' . ",";
+						}
+						$line .= $value;
+					}
+					$data .= trim( $line ) . "\n";
+				}
+				$data = str_replace( "\r" , "" , $data );
+
+				if ( $data == "" )
+				{
+					$data = "\n(0) Records Found!\n";						 
+				}
+
+				header("Expires: 0");
+				header("Cache-control: private");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				header("Content-Description: File Transfer");
+				header("Content-Type: application/vnd.ms-excel");
+				header("Content-disposition: attachment; filename=export.csv");
+				print "$header\n$data";
+				echo('done');
+			
 		}
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		
 		?>
-	</table>
-    
-    <!-- Creates the bootstrap modal where the image will appear -->
-    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">Image preview</h4>
-          </div>
-          <div class="modal-body">
-            <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" onclick="fullScreen()">Full Screen</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-        function popUp(param){
-            console.log("hello");
-            $('#imagepreview').attr('src', param.getAttribute('src')); // here asign the image to the modal when the user click the enlarge link
-            $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-        }
-        
-        function fullScreen(){
-            window.location = $('#imagepreview').attr('src');
-        }
-    </script>
 </body>
 </html>
