@@ -20,6 +20,9 @@
 		
 		//establish connection
 		$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
+		
+		//removes any sql injection from $_REQUEST array
+		makeSecureForSQL($connection);
 
 		//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 		$speciesMap=loadSpeciesMap($connection);		
@@ -526,6 +529,7 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
+			echo $query;
 			return $results;	
 		}
 		
@@ -553,6 +557,29 @@
 		}
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
+				/////////////////////////////////////////////////////////////////////////////////////////////////////
+		/*this function will be used to make sure every variable set in the $_REQUEST array doesn't contain
+		injected SQL. It doesn't need to operate on the keys of the array, only the values, as only specific
+		keys will be used in the arrayToQuery function to generate the SQL query.
+		The $connection parameter is included because the mysqli real_escape_string() function takes this
+		as a parameter to see which characters are acceptable*/
+		function makeSecureForSQL($myConnection){
+			//parses through everything in $_REQUEST
+			foreach($_REQUEST as $key=>$value)
+			{
+				if(is_array($value)){
+					foreach($value as $valueKey=>$valueValue)
+					{
+						//escapes any character that may enable an sql injection attack
+						$_REQUEST[$key]=$myConnection->real_escape_string($valueValue);
+					}
+				}
+				else{
+					//escapes any character that may enable an sql injection attack
+					$_REQUEST[$key]=$myConnection->real_escape_string($value);
+				}
+			}
+		}
 		?>
     
     <!-- Creates the bootstrap modal where the image will appear -->
