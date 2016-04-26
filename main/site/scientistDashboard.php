@@ -70,6 +70,8 @@
 			
 				<div class="col-md-8 col-xs-12 form-col">
 				<!-- form-middle-col -->
+					<h6>Only aggregate classification which are of high certainty are used for these graphs</h6>
+
 					<h3>Select animal to see what time of day photos of them are captured:</h3>
 					<div class="container">
 					    <div class="row">
@@ -82,12 +84,10 @@
 											//establish connection
 											$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
-											
 											//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
 											$speciesMap=loadSpeciesMap($connection);
 											$speciesValues=populateCategory($connection,"species","animal");
 
-											
 											foreach($speciesValues as $speciesValue){
 												$thisField=strip_tags($speciesMap[$speciesValue]);
 												if(!($thisField=="Like")){
@@ -97,37 +97,49 @@
 										?>
 							  		</select>
 							  		<button type="button" id="timeButton">Submit</button>
+							  		<button type="button" id="clearTimeButton">Clear</button>
 							  	</form>
 							</div>
 						</div>
 					</div>
+
+					<div id="timeChart">
+					</div>
+
+					<h3>Select animal to see what time of year photos of them are captured:</h3>
+					<div class="container">
+					    <div class="row">
+							<div class="col-sm-4">
+							    <form id="inputs" role="form">
+									<select name="species[]" class="form-control" id="speciesSelectMonth" form="inputs" size=6>
+										<?php		
+											include('config.php');
+											
+											$speciesMap=loadSpeciesMap($connection);
+											$speciesValues=populateCategory($connection,"species","animal");
+
+											foreach($speciesValues as $speciesValue){
+												$thisField=strip_tags($speciesMap[$speciesValue]);
+												if(!($thisField=="Like")){
+													echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
+												}
+											}
+
 						
-
-						<div id="timeChart">
-
+											$connection->close();//closes connection when you're done with it
+										?>
+							  		</select>
+							  		<button type="button" id="monthButton">Submit</button>
+							  		<button type="button" id="clearMonthButton">Clear</button>
+							  	</form>
+							</div>
 						</div>
+					</div>
+
+					<div id="monthChart">
+					</div>
 
 						<?php
-						echo "<h3>Select animal to see what time of year photos of them are captured:</h3>";
-						echo '<div class="container">';
-				        echo '<div class="row">';
-						echo '<div class="col-sm-4">';
-				        echo '<form id="inputs" role="form" action="displayAnimalMonth.php" method="get">';
-						echo '  <select name="species[]" class="form-control" id="speciesSelectDate" form="inputs" size=6>';
-						foreach($speciesValues as $speciesValue){
-							$thisField=strip_tags($speciesMap[$speciesValue]);
-							if(!($thisField=="Like")){
-							echo'<option value="'.$speciesValue.'">'.$thisField.'</option>';
-							}
-						}
-						echo '  </select>';
-						echo '</div>';					
-						echo '</div>';
-						echo '<input type="submit" class="btn btn-default" value="Submit"></button> ';		
-						echo '</form>';
-						echo '</div>';
-						
-						$connection->close();//closes connection when you're done with it
 
 						function populateCategory($connection,$category,$tableName){
 							//returns an array of possible values for an attribute that appear in the database

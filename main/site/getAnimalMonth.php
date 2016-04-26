@@ -3,7 +3,7 @@
 //interval of one hour
     //$animal_id = 22;
     include('config.php');
-    $animal_id = $_POST["animal_id"];
+    $animal_id = $_GET["animal_id"];
     //connects to database
     $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);
     $timeArray = numberOfAnimalInHour($connection, $animal_id);
