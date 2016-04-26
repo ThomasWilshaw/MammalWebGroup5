@@ -3,10 +3,16 @@
 	include('config.php');
 		
     //establish connection
-        $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
+    $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 	
 	//The results of this sql query will be output to a csv file
-	$sql="SELECT photo_id FROM `animal`;";
+    if(isset($_GET["data"])){
+	    $sql=$_GET["data"];	
+    }
+    else{
+    	$sql="SELECT photo_id FROM `animal`;";
+    }
+	
 	$results=$connection->query($sql);
 	$fields =  mysqli_fetch_fields($results);
 	
