@@ -6,8 +6,6 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-	<a href="dropdowns_images.php">Back</a>  <!--  MAKE THIS POINT BACK TO THE SEARCH pAGE  -->
 	<?php 
 
 	/*At the moment, three searches are hard coded into the page. Once we know 
@@ -464,7 +462,6 @@
     
     <script>
         function popUp(param){
-            console.log("hello");
             $('#imagepreview').attr('src', param.getAttribute('src')); // here asign the image to the modal when the user click the enlarge link
             $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
         }
