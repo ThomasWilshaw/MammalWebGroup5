@@ -109,11 +109,8 @@
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
 			$description="";//the list of filter criteria
 			
-			if(isset($_REQUEST['habitat_id'])){
-				if($_REQUEST['habitat_id'][0]!="any"){
+			if((isset($_REQUEST['habitat_id']) and ($_REQUEST['habitat_id'][0]!="any")) or (isset($_REQUEST['lat2'])) or (isset($_REQUEST['long1'])) or (isset($_REQUEST['long2'])) or (isset($_REQUEST['lat1'])) ){
 					$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
-					
-				}
 			}
 			//if a habitat filter is also set, the base SQL query needs to be extended, above
 			//could always do this for all cases, but best not to as it creates a larger table to query.
@@ -135,6 +132,14 @@
 			
 			$handledGroup4=['num_class1','num_class2'];
 			//the number of classifications, searches for an attribute between these two variables
+			
+			$handledGroup5=['lat1','lat2'];
+			//latitude and longitude boundaries
+			$latDone=false;
+			
+			$handledGroup6=['long1','long2'];
+			//latitude and longitude boundaries
+			$longDone=false;
 			
 			$timeVariablesRecieved=0;
 			//used to count the number of time variables recieved,
@@ -271,7 +276,7 @@
 					
 					//if the variable is in the fourth behaviour group
 					//relating to the num class num_class1<x<num_class2
-					if(in_array($key,$handledGroup4) AND (!empty($value))){
+					else if(in_array($key,$handledGroup4) AND (!empty($value))){
 						
 						$num_classVariablesRecieved+=1;
 						
@@ -302,6 +307,84 @@
 							$query=$query." num_class BETWEEN ".$numClassLower.' AND '.$numClassHigher;
 							$description=$description."with between ".$numClassLower." and ".$numClassHigher." classifications";		
 						}	
+					}
+					//if the variable is in the third behaviour group
+					//relating to latitude boundaries
+					else if(in_array($key,$handledGroup5) AND (!empty($value)) AND (!$latDone)){
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							$description=$description.",";
+							}
+							$counter=$counter+1;
+						
+						if(!empty($_REQUEST['lat1'])){
+							$lat1=$_REQUEST['lat1'];
+						}
+						else{
+							$lat1="-200";
+						}
+						if(!empty($_REQUEST['lat2'])){
+							$lat2=$_REQUEST['lat2'];
+						}
+						else{
+							$lat2="200";
+						}
+						if($lat1<=$lat2){
+							$latLower=$lat1;
+							$latHigher=$lat2;
+						}
+						else{
+							$latHigher=$lat1;
+							$latLower=$lat2;
+						}
+						$query=$query." latitude BETWEEN ".$latLower.' AND '.$latHigher;
+						$description=$description."latitude between ".$latLower." and ".$latHigher;
+						
+						$latDone=true;
+					}
+					
+					//if the variable is in the fourth behaviour group
+					//relating to longitude
+					 else if(in_array($key,$handledGroup6) AND (!empty($value)) AND (!$longDone)){
+						
+						if($counter==0){
+							$query=$query." WHERE ";
+							}
+									
+						else{
+							$query=$query." AND ";
+							$description=$description.",";
+							}
+							$counter=$counter+1;
+						
+						if(!empty($_REQUEST['long1'])){
+							$long1=$_REQUEST['long1'];
+						}
+						else{
+							$long1="-200";
+						}
+						if(!empty($_REQUEST['long2'])){
+							$long2=$_REQUEST['long2'];
+						}
+						else{
+							$long2="200";
+						}
+						if($long1<=$long2){
+							$longLower=$long1;
+							$longHigher=$long2;
+						}
+						else{
+							$longHigher=$long1;
+							$longLower=$long2;
+						}
+						$query=$query." longitude BETWEEN ".$longLower.' AND '.$longHigher;
+						$description=$description."longitude between ".$longLower." and ".$longHigher;
+						
+						$longDone=true;
 					}
 				}
 					

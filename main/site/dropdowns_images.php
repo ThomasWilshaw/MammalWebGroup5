@@ -197,6 +197,41 @@
 				echo'</div>';
 			echo'</div>';
 			
+			echo'<div class="row">';
+				echo'<div class="col-sm-4">';
+					echo'<label id="latLabelLabel">Latitude:</label>';
+					echo'<br/>';
+					echo'<label for="lat1" id="latLabel1">Between</label>';
+					echo'<input type = "number" step="any" name="lat1" class="form-control" id="lat1" form="inputs">';
+					echo'<label for="lat2" id="latLabel2">and</label>';
+					echo'<input type = "number" step="any" name="lat2" class="form-control" id="lat2" form="inputs">';
+				echo'</div>';
+				
+				echo'<div class="col-sm-4">';
+					echo'<label id="longLabelLabel">Longitude:</label>';
+					echo'<br/>';
+					echo'<label for="long1" id="longLabel1">Between</label>';
+					echo'<input type = "number" step="any" name="long1" class="form-control" id="long1" form="inputs">';
+					echo'<label for="long2" id="longLabel2">and</label>';
+					echo'<input type = "number" step="any" name="long2" class="form-control" id="long2" form="inputs">';
+				echo'</div>';
+				
+				echo'<div class="col-sm-4">';
+					echo'<br/><br/>';
+					echo'<button type="button" class="btn btn-secondary" id="mapButton" onClick="drawMap()">Toggle Map</button>';
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<br/>';
+			
+			echo'<div class="row">';
+				echo'<div class="col-sm-16" id="mapDiv" style="height:0px;visibility:hidden">';
+					
+				echo'</div>';
+			echo'</div>';
+			
+			echo'<br/><br/>';
+			
 			echo '<input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit"> ';	
 			
 		echo '</div>';
@@ -262,7 +297,128 @@
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		?>
-		<script>
-		</script>
+		
+	<script>//map related functions
+		var map;
+		var markerList=[];//an array with my markers (up to 2);
+		
+		function hideMap(){
+			//hide and shrink the div that shows the google map
+			$('#mapDiv').attr('style',"height:0px;visibility:hidden");
+			//clicking the toggle button again will show the map
+			$('#mapButton').attr('onClick',"drawMap()");
+			//hides map usage info
+			$('#mapInfo').attr('style',"visibility:hidden");
+		}
+		
+		//used to clear an array of markers from my google map
+		function clearArrayOfMarkers(markerArray){
+			for (item in markerArray) {
+				markerArray[item].setMap(null);
+			}
+		}
+		
+		//these will hold the coordinates of the box when selected
+		var latitude1=0;
+		var longitude1=0;
+		var latitude2=0;
+		var longitude2=0;
+		
+		//this variable is my polyline
+		var myPolyLine;
+		
+		function drawMap() {
+			//expand and show the div that will display the google map
+			$('#mapDiv').attr('style',"height:800px;visibility:visible");
+			//display map usage info
+			$('#mapInfo').attr('style',"visibility:visible");
+			//create the google map
+			map = new google.maps.Map(document.getElementById('mapDiv'), {
+			center: {lat: 54.7650, lng: -1.5782},
+			zoom: 8
+			});
+	
+			var pointsClicked=0;
+			//listener for click event
+            google.maps.event.addListener(map, "click", function(event) {
+				//user clicks at a specific latitude and longitude
+                var latitude = event.latLng.lat();
+                var longitude = event.latLng.lng();
+				
+				if(pointsClicked==0)//if this is the first point, the top left of the box
+				{
+				//places marker there
+                  var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude,longitude),
+                        map: map,
+                  });
+				  markerList.push(marker);
+				  latitude1=latitude;
+				  longitude1=longitude;
+				  //update top left lat long values, all to 6 d.p.
+				  document.getElementById("lat1").value = latitude.toFixed(6);
+				  document.getElementById("long1").value = longitude.toFixed(6);
+				  pointsClicked+=1;//count this point as clicked
+				}
+				   
+				else
+				{
+					if(pointsClicked==1)//if this is the second, the bottom right
+					{
+					//places marker there
+					  var marker = new google.maps.Marker({
+							position: new google.maps.LatLng(latitude,longitude),
+							map: map,
+					  });
+					  markerList.push(marker);
+					  latitude2=latitude;
+					  longitude2=longitude;
+					  //update bottom right lat long values, all to 6 d.p.
+					  document.getElementById("lat2").value = latitude.toFixed(6);
+					  document.getElementById("long2").value = longitude.toFixed(6);
+					  pointsClicked+=1;//count this point as clicked
+					  
+					  //draw the box
+					  assignBox();
+					}   
+					else{
+						pointsClicked=0;//resets points clicked if something went wrong or over clicked
+						clearArrayOfMarkers(markerList);//clearing markers from map
+						markerList=[];
+						removeBox();
+					}
+				}	
+            });
+			
+			//draw my box between selected points on map
+			function assignBox(){
+				var corners=[
+					{lat: latitude1, lng: longitude1},
+					{lat: latitude1, lng: longitude2},
+					{lat: latitude2, lng: longitude2},
+					{lat: latitude2, lng: longitude1},
+					{lat: latitude1, lng: longitude1}
+				  ];
+				myPolyLine = new google.maps.Polyline({
+					path: corners,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 1
+				  });
+				myPolyLine.setMap(map);
+			}
+			
+			//undraw my box between selected points on map
+			function removeBox(){
+				myPolyLine.setMap(null);
+			}
+			
+		
+			//clicking the toggle button again will hide the map
+			$('#mapButton').attr('onClick',"hideMap()");
+			}
+	</script>
+	 <!--google maps javascript api-->
+	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo" async defer></script>
 </body>
 </html>
