@@ -30,10 +30,15 @@
 		$description="none";//will contain an english description of filter criteria specified		
 		$counter=0;
 		
+		$safeSQL="";//the part of the SQL query after "where", sent on its own to avoid injection
+		$mode=0;//keeps track of which tables had to be queried
+		
 		if(isset($_REQUEST)){
 			$sqlArray=arrayToQuery($_REQUEST,$speciesMap);
 			$sql=$sqlArray[0];
+			$safeSQL=$sqlArray[2];
 			$description=$sqlArray[1];
+			$mode=$sqlArray[3];
 		}
 		
 		$sqlResults=$connection->query($sql);
@@ -54,6 +59,9 @@
 				echo'<a href="dropdowns_images.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 				echo'<br/>';
 				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+				echo'<br/>';
+				echo'<a id="dashBoardButton" href="scientistDashboard.php?searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+				echo'<br/>';
 			echo '</div>';
 		echo'</div>';
 		/*output table showing sites meeting the filter criteria */
@@ -106,9 +114,11 @@
 			
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
 			$description="";//the list of filter criteria
+			$mode=1;
 			
 			if((isset($_REQUEST['habitat_id']) and ($_REQUEST['habitat_id'][0]!="any")) or (isset($_REQUEST['lat2'])) or (isset($_REQUEST['long1'])) or (isset($_REQUEST['long2'])) or (isset($_REQUEST['lat1'])) ){
 					$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
+					$mode=2;
 			}
 			//if a habitat filter is also set, the base SQL query needs to be extended, above
 			//could always do this for all cases, but best not to as it creates a larger table to query.
@@ -388,9 +398,12 @@
 					
 			}
 			$query=$query.";";
+			$safeSQL=explode("WHERE",$query)[1];
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
+			$results[2]=$safeSQL;
+			$results[3]=$mode;
 			return $results;
 		}
 		
