@@ -178,17 +178,23 @@
 					echo'</div>';
 			echo'</div>';
 			
-			echo'<div class="form-group">';
-			echo'<label for="num_class1">Number of classifications. Between:</label>';
-			echo '<input type="number" name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
-			echo'<label for="num_class2">and</label>';
-			echo '<input type="number" name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
-			echo'</div>';
-			
-			echo'<div class="form-group">';
-			echo' <label for="time1">Between specific times:</label>';
-			echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1" form="inputs" step="1">';
-			echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2" form="inputs" step="1">';
+			echo'<div class="row">';
+				echo'<div class="col-sm-6">';
+					echo'<div class="form-group">';
+						echo'<label for="num_class1">Number of classifications. Between:</label>';
+						echo '<input type="number" name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
+						echo'<label for="num_class2">and</label>';
+						echo '<input type="number" name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
+					echo'</div>';
+				echo'</div>';
+				
+				echo'<div class="col-sm-6">';
+					echo'<div class="form-group">';
+						echo' <label for="time1">Between specific times:</label>';
+						echo'<input type="datetime-local" class="form-control" id="time1Input" name="time1" form="inputs" step="1">';
+						echo'<input type="datetime-local" class="form-control" id="time2Input" name="time2" form="inputs" step="1">';
+					echo'</div>';
+				echo'</div>';
 			echo'</div>';
 			
 			echo '<input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit"> ';	
