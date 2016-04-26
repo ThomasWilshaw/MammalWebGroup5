@@ -10,10 +10,6 @@
 	<meta charset="utf-8">
     <style>
 
-    body {
-      font: 10px sans-serif;
-    }
-
     .bar rect {
       fill: steelblue;
       shape-rendering: crispEdges;
@@ -46,7 +42,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href=".">Mamal Web</a>
+	      <a class="navbar-brand" href="http://www.mammalweb.org/">Mammal Web</a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
