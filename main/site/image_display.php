@@ -346,7 +346,7 @@
 					foreach($value as $valueKey=>$valueValue)
 					{
 						//escapes any character that may enable an sql injection attack
-						$_REQUEST[$key]=$myConnection->real_escape_string($valueValue);
+						$value[$valueKey]=$myConnection->real_escape_string($valueValue);
 					}
 				}
 				else{
