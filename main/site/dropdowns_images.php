@@ -180,9 +180,9 @@
 			
 			echo'<div class="form-group">';
 			echo'<label for="num_class1">Number of classifications. Between:</label>';
-			echo '<input name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
+			echo '<input type="number" name="num_class1" class="form-control" id="num_class1Input" form="inputs" value="0">';
 			echo'<label for="num_class2">and</label>';
-			echo '<input name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
+			echo '<input type="number" name="num_class2" class="form-control" id="num_class2Input" form="inputs" value="0">';
 			echo'</div>';
 			
 			echo'<div class="form-group">';
