@@ -161,18 +161,18 @@
 					echo'<label id="latLabelLabel">Latitude:</label>';
 					echo'<br/>';
 					echo'<label for="lat1" id="latLabel1">Between</label>';
-					echo'<input type = "text" name="lat1" class="form-control" id="lat1" form="inputs">';
+					echo'<input type = "number" step="any" name="lat1" class="form-control" id="lat1" form="inputs">';
 					echo'<label for="lat2" id="latLabel2">and</label>';
-					echo'<input type = "text" name="lat2" class="form-control" id="lat2" form="inputs">';
+					echo'<input type = "number" step="any" name="lat2" class="form-control" id="lat2" form="inputs">';
 				echo'</div>';
 				
 				echo'<div class="col-sm-4">';
 					echo'<label id="longLabelLabel">Longitude:</label>';
 					echo'<br/>';
 					echo'<label for="long1" id="longLabel1">Between</label>';
-					echo'<input type = "text" name="long1" class="form-control" id="long1" form="inputs">';
+					echo'<input type = "number" step="any" name="long1" class="form-control" id="long1" form="inputs">';
 					echo'<label for="long2" id="longLabel2">and</label>';
-					echo'<input type = "text" name="long2" class="form-control" id="long2" form="inputs">';
+					echo'<input type = "number" step="any" name="long2" class="form-control" id="long2" form="inputs">';
 				echo'</div>';
 				
 				echo'<div class="col-sm-4">';
