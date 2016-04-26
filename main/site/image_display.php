@@ -196,12 +196,12 @@
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
 							if($counter==0){
-								$query=$query." WHERE ".$key." = ";
+								$query=$query." WHERE (".$key." = ";
 								$description=$description.$key." = ";
 							}
 							
 							else{
-								$query=$query." AND ".$key." = ";
+								$query=$query." AND (".$key." = ";
 								$description=$description.",".$key." = ";
 							}
 							$counter=$counter+1;
@@ -233,6 +233,7 @@
 								}	
 									
 							}
+							$query=$query.")";
 						}
 							
 					}
