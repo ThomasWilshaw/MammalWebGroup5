@@ -111,17 +111,20 @@
 							}
 							//the optional section
 							echo'<h3>Graphs of your most recent search:</h3>';
-							echo'<div class="container">';
-									echo'<div class="row">';
-										echo'<div class="col-sm-6">';
-											echo '<p>'.$counter." ".$searchTypeName.' results were found. ';
-											echo'<br/>';
-											echo'The distribution of your results is show on the map below:';
-											
-											echo'</p>';
+								echo'<div class="row">';
+									echo'<div class="col-sm-6">';
+										echo '<p>'.$counter." ".$searchTypeName.' results were found. ';
+										echo'<br/>';
+										echo'The distribution of your results is show on the map below:';
+										echo'</p>';
+									echo'</div>';
+									echo'<div class="col-sm-6">';
+										echo '<p>To generate a bar graph of your recent search relating to a certain attribute, ';
+										echo'<br/>';
+										echo'select an attribute below:';
+										echo'</p>';
 									echo'</div>';
 								echo'</div>';
-							echo'</div>';
 							
 							echo'<div class="row">';
 								echo'<div class="col-sm-3">';
@@ -136,14 +139,35 @@
 									echo'Zoom with the buttons in the bottom right of the map, or the mouse wheel';
 									echo'</p>';
 								echo'</div>';
+								$attributeValues=getCategories($connection);
+								//the dropdowns menu for a custom graph
+									echo'<div class="col-sm-6">';
+										echo'<form id="inputs">';
+											echo'  <label for="attributeSelect">Select category:</label>';
+											echo'  <select multiple name="attribute[]" class="form-control" id="attributeSelect" form="inputs" size=5>';
+											foreach($attributeValues as $attributeValue)
+											{
+												echo'<option value="'.$attributeValue.'">'.$attributeValue.'</option>';										
+											}
+											echo'  </select>';
+										echo'</form>';
+										echo'<button type="button" class="btn btn-primary" id="graphButton" onClick="generateGraph()">Generate Graph</button>';
+									echo'</div>';
 							echo'</div>';
 							
 							echo'<br/>';
 							
 							echo'<div class="row">';
 								echo'<div class="col-sm-6" id="mapDiv" style="height:0px;visibility:hidden">';
+								//map will be drawn here
+								echo'</div>';
+								echo'<div class="col-sm-6" id="graphDiv">';
+								//custom graph will be drawn here
 								echo'</div>';
 							echo'</div>';
+							echo'<br/>';
+							echo'<br/>';
+							echo'<br/>';
 						}
 						$connection->close();
 					?>
@@ -269,6 +293,18 @@
 									$_REQUEST[$key]=$myConnection->real_escape_string($value);
 								}
 							}
+						}
+						/////////////////////////////////////////////////////////////////////////////////////////////
+						function getCategories($connection){//returns attributes of a table as an array
+							//creating and sending query
+							$sql="SHOW COLUMNS FROM `animal`";  //replace "animal" with any other table part of the database initialised in the dbname variable.
+							$categoryQuery=$connection->query($sql);
+							//using query results
+							$categoryArray=array();
+							while($attribute=$categoryQuery->fetch_assoc()){
+								array_push($categoryArray,$attribute['Field']);
+							}
+							return $categoryArray;
 						}
 						?>
 

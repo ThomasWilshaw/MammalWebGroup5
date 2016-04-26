@@ -64,7 +64,22 @@ function drawMap(locations) {
 //END OF MAP RELATED CODE
 
 function generateGraph(){
-	
+	   $("#timeButton").click(function(){
+        
+        $.ajax({
+            url: "getAnimalWithTime.php",
+            type: "GET",
+            //This should send the users ID
+            data: "animal_id="+$("#speciesSelectTime").val(),
+            success: function (response){
+                if (response != ''){
+                    $("#timeChart").html(" ");
+                    var values=jQuery.parseJSON(response);
+                    
+                    drawChart(values,"timeChart");
+                }
+            }
+        });
 	
 }
 
