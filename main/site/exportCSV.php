@@ -7,7 +7,8 @@
 	
 	//The results of this sql query will be output to a csv file
     if(isset($_GET["data"])){
-	    $sql=$_GET["data"];	
+	    $sql=$_GET["data"];
+	    echo $sql;
     }
     else{
     	$sql="SELECT photo_id FROM `animal`;";
@@ -37,6 +38,7 @@
 				$value = str_replace( '"' , '""' , $value );
 				$value = '"' . $value . '"' . ",";
 			}
+
 			$line .= $value;
 		}
 		$data .= trim( $line ) . "\n";
@@ -57,17 +59,4 @@
 	print "$header\n$data";
 	
 	$connection->close();
-
-	
-	function getCategories($connection){//returns attributes of a table as an array
-		//creating and sending query
-		$sql="SHOW COLUMNS FROM `animal`";	//replace "animal" with any other table part of the database initialised in the dbname variable.
-		$categoryQuery=$connection->query($sql);
-		//using query results
-		$categoryArray=array();
-		while($attribute=$categoryQuery->fetch_assoc()){
-			array_push($categoryArray,$attribute['Field']);
-		}
-		return $categoryArray;
-	}
 ?>
