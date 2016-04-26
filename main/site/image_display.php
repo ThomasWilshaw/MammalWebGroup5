@@ -224,7 +224,7 @@
 									}
 									
 									else{
-										$query=$query." OR ".$arrayItem;
+										$query=$query." OR ".$key."=".$arrayItem;
 										$description=$description." or ".$descriptionValue;
 									}
 									$innerCounter+=1;
@@ -235,7 +235,6 @@
 						}
 							
 					}
-					
 				}
 			
 				else{//handling for special variables such as time variables

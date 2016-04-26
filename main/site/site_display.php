@@ -250,12 +250,12 @@
 								}									
 							}
 							if($counter==0){
-									$query=$query." WHERE ".$modifiedKey." = ";
+									$query=$query." WHERE (".$modifiedKey." = ";
 									$description=$description.$key." = ";
 								}
 								
 							else{
-									$query=$query." AND ".$modifiedKey." = ";
+									$query=$query." AND (".$modifiedKey." = ";
 									$description=$description.",".$key." = ";
 								}
 							$counter=$counter+1;
@@ -272,17 +272,16 @@
 									}
 									
 									else{
-										$query=$query." OR ".$arrayItem;
+										$query=$query." OR ".$key."=".$arrayItem;
 										$description=$description." or ".$arrayItem;
 									}
 									$innerCounter+=1;
 								}	
 									
 							}
+							$query=$query.")";
 						}
-							
 					}
-					
 				}
 			
 				else{//handling for special variables such as time variables
