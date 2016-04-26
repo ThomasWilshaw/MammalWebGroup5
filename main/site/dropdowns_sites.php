@@ -95,18 +95,18 @@
 					echo'  <label id="photoCountLabelLabel">Number of photos taken at site:</label>';
 					echo'<br/>';
 					echo'  <label for="photoCount1" id="photoCountLabel1">Between</label>';
-					echo'  <input type = "text" name="photoCount1" class="form-control" id="photoCount1" form="inputs">';
+					echo'  <input type = "number" name="photoCount1" class="form-control" id="photoCount1" form="inputs">';
 					echo'  <label for="photoCount2" id="photoCountLabel2">and</label>';
-					echo'  <input type = "text" name="photoCount2" class="form-control" id="photoCount2" form="inputs">';
+					echo'  <input type = "number" name="photoCount2" class="form-control" id="photoCount2" form="inputs">';
 				echo'</div>';
 			
 				echo'<div class="col-sm-4">';
 					echo'  <label id="photoCountLabelLabel">Number of sequences created at site:</label>';
 					echo'<br/>';
 					echo'  <label for="photoCount1" id="sequenceCountLabel1">Between</label>';
-					echo'  <input type = "text" name="sequenceCount1" class="form-control" id="sequenceCount1" form="inputs">';
+					echo'  <input type = "number" name="sequenceCount1" class="form-control" id="sequenceCount1" form="inputs">';
 					echo'  <label for="photoCount2" id="sequenceCountLabel2">and</label>';
-					echo'  <input type = "text" name="sequenceCount2" class="form-control" id="sequenceCount2" form="inputs">';
+					echo'  <input type = "number" name="sequenceCount2" class="form-control" id="sequenceCount2" form="inputs">';
 				echo'</div>';
 				
 				echo'<div class="col-sm-4">';
