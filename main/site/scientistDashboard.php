@@ -70,6 +70,84 @@
 			
 				<div class="col-md-8 col-xs-12 form-col">
 				<!-- form-middle-col -->
+				
+					<!-- an optional portion of the page that displays graphs and information about the most recent filter search-->
+					<?php
+						include('config.php');
+						$query="";
+						//establish connection
+						$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
+						
+						//escapes all $_REQUEST data against potential sql injection
+						makeSecureForSQL($connection);
+						
+						$searchType="0";//1 for images, 2 for sites
+						$searchTypeName="";//the name in english of the search type
+						
+						if(isset($_REQUEST['data'])){
+							if($_REQUEST['mode']=="2"){
+								$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
+							}
+							if($_REQUEST['mode']=="1"){
+								$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id";
+							}
+							$searchType=$_REQUEST['searchType'];
+							if($searchType=="1"){
+								$searchTypeName="images";
+							}
+							else{
+								$searchTypeName="sites";
+							}
+							$query=$query." WHERE ".$_REQUEST['data'].";";
+							$sqlResults=$connection->query($query);
+							$counter=mysqli_num_rows($sqlResults);
+							$locations="";
+							if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
+								while($row=$sqlResults->fetch_assoc()){
+									if($row["latitude"]!="NULL"){
+										$locations=$locations.$row["latitude"]."a".$row["longitude"]."b";
+									}
+								}
+							}
+							//the optional section
+							echo'<h3>Graphs of your most recent search:</h3>';
+							echo'<div class="container">';
+									echo'<div class="row">';
+										echo'<div class="col-sm-6">';
+											echo '<p>'.$counter." ".$searchTypeName.' results were found. ';
+											echo'<br/>';
+											echo'The distribution of your results is show on the map below:';
+											
+											echo'</p>';
+									echo'</div>';
+								echo'</div>';
+							echo'</div>';
+							
+							echo'<div class="row">';
+								echo'<div class="col-sm-3">';
+									echo'<br/><br/>';
+									echo'<button type="button" class="btn btn-primary" id="mapButton" onClick="drawMap(\''.$locations.'\')">Toggle Map</button>';
+								echo'</div>';
+								echo'<div class="col-sm-3">';
+									echo'<p id="mapInfo" style="visibility:hidden;">This map shows the geographical distribution of your search results.';
+									echo'<br/>';
+									echo'Left click and draw the map to move';
+									echo'<br/>';
+									echo'Zoom with the buttons in the bottom right of the map, or the mouse wheel';
+									echo'</p>';
+								echo'</div>';
+							echo'</div>';
+							
+							echo'<br/>';
+							
+							echo'<div class="row">';
+								echo'<div class="col-sm-6" id="mapDiv" style="height:0px;visibility:hidden">';
+								echo'</div>';
+							echo'</div>';
+						}
+						$connection->close();
+					?>
+					
 					<h6>Only aggregate classification which are of high certainty are used for these graphs</h6>
 
 					<h3>Select animal to see what time of day photos of them are captured:</h3>
@@ -79,8 +157,6 @@
 							    <form id="inputs" role="form">
 									<select name="species[]" class="form-control" id="speciesSelectTime" form="inputs" size=6>
 										<?php		
-											include('config.php');
-											
 											//establish connection
 											$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 
@@ -171,6 +247,29 @@
 							return $speciesmap;
 						}
 						/////////////////////////////////////////////////////////////////////////////////////////////////////
+						/////////////////////////////////////////////////////////////////////////////////////////////////////
+						/*this function will be used to make sure every variable set in the $_REQUEST array doesn't contain
+						injected SQL. It doesn't need to operate on the keys of the array, only the values, as only specific
+						keys will be used in the arrayToQuery function to generate the SQL query.
+						The $connection parameter is included because the mysqli real_escape_string() function takes this
+						as a parameter to see which characters are acceptable*/
+						function makeSecureForSQL($myConnection){
+							//parses through everything in $_REQUEST
+							foreach($_REQUEST as $key=>$value)
+							{
+								if(is_array($value)){
+									foreach($value as $valueKey=>$valueValue)
+									{
+										//escapes any character that may enable an sql injection attack
+										$value[$valueKey]=$myConnection->real_escape_string($valueValue);
+									}
+								}
+								else{
+									//escapes any character that may enable an sql injection attack
+									$_REQUEST[$key]=$myConnection->real_escape_string($value);
+								}
+							}
+						}
 						?>
 
 				</div>
@@ -182,15 +281,7 @@
 			</div>
 		</div>
 
-	<!--Footer-->
-		
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-md-12" id="footer">
-					footer
-				</div>
-			</div>
-		</div>
-
+	 <!--google maps javascript api-->
+	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo" async defer></script>
 	</body>
 </html>

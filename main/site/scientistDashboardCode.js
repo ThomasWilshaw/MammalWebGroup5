@@ -1,3 +1,73 @@
+//MAP RELATED CODE
+var map;
+var locationsGlobal;
+var locationsArray=[];
+var markerList=[];//an array with my markers (up to 2);
+	
+function hideMap(){
+	//hide and shrink the div that shows the google map
+	$('#mapDiv').attr('style',"height:0px;visibility:hidden");
+	//clicking the toggle button again will show the map
+	$('#mapButton').attr('onClick',"drawMap(\'"+locationsGlobal+"\')");
+	//hides map usage info
+	$('#mapInfo').attr('style',"visibility:hidden");
+}
+	
+function drawMap(locations) {
+	//DEALING WITH DATA
+	/*getting latitude and longitude data from locations string 
+	encoded latalongb for each point as one long string*/
+	locationsGlobal=locations.trim();
+	locationsArray=locationsGlobal.split("b");
+	coordinatesArray=[];
+	var latitude;
+	var longitude;
+	var pointArray;
+	for (var index = 0; index < locationsArray.length; ++index) {
+		pointArray=locationsArray[index].split("a");
+		if((pointArray.length>1))
+		{
+		latitude=pointArray[0];
+		longitude=pointArray[1];
+		coordinatesArray.push([latitude,longitude]);
+		}
+	}
+	
+	//DRAWING MAP AND TAKING CARE OF PAGE THINGS
+	//expand and show the div that will display the google map
+	$('#mapDiv').attr('style',"height:400px;visibility:visible");
+	//display map usage info
+	$('#mapInfo').attr('style',"visibility:visible");
+	//create the google map
+	map = new google.maps.Map(document.getElementById('mapDiv'), {
+	center: {lat: 54.7650, lng: -1.5782},
+	zoom: 8
+	});
+	//clicking the toggle button again will hide the map
+	$('#mapButton').attr('onClick',"hideMap()");
+	
+	var drawnPoints=[]
+	//ADDING MARKERS ON TO MAP
+	//draw one marker for each lat lang pair stored 
+	for (var index = 0; index < coordinatesArray.length; ++index) {
+		//check if there is already a marker for this point
+		if(!(drawnPoints.indexOf([coordinatesArray[index][0],coordinatesArray[index][1]])>-1))
+		{
+			var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(coordinatesArray[index][0],coordinatesArray[index][1]),
+			map: map,
+			});
+			drawnPoints.push([coordinatesArray[index][0],coordinatesArray[index][1]])
+		}
+	}
+}
+//END OF MAP RELATED CODE
+
+function generateGraph(){
+	
+	
+}
+
 window.onload=function(){
     $("#timeButton").click(function(){
         
@@ -96,3 +166,4 @@ function drawChart(values,id){
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 }
+
