@@ -50,7 +50,7 @@
 				
 			echo '</div>';
 			echo '<div class="col-sm-2">';
-				echo'<a href="dropdowns_sites.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				echo'<a href="dropdowns_images.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 				echo'<br/>';
 				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
 			echo '</div>';
