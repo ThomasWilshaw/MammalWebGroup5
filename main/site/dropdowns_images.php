@@ -216,9 +216,17 @@
 					echo'<input type = "number" step="any" name="long2" class="form-control" id="long2" form="inputs">';
 				echo'</div>';
 				
-				echo'<div class="col-sm-4">';
+				echo'<div class="col-sm-1">';
 					echo'<br/><br/>';
 					echo'<button type="button" class="btn btn-secondary" id="mapButton" onClick="drawMap()">Toggle Map</button>';
+				echo'</div>';
+				echo'<div class="col-sm-3">';
+					echo'<p id="mapInfo" style="visibility:hidden;">-Left click on the map to place a corner of your selection area.';
+					echo'<br/>';
+					echo'-Click again to place the opposite corner and draw the box.';
+					echo'<br/>';
+					echo'-A third click clears the selection box';
+					echo'</p>';
 				echo'</div>';
 			echo'</div>';
 			
