@@ -80,10 +80,12 @@
 						
 						//escapes all $_REQUEST data against potential sql injection
 						makeSecureForSQL($connection);
-						
+						//Get species list - $speciesMap holds an associative array of number(int)->species(string) as found in the options table
+						$speciesMap=loadSpeciesMap($connection);
 						$searchType="0";//1 for images, 2 for sites
 						$searchTypeName="";//the name in english of the search type
-						
+						$categoryList =["site_id","person_id","sequence_id","species","gender","age"]; //allowed categories for graph gen on images
+						$mappedList=["species","gender","age"];
 						if(isset($_REQUEST['data'])){
 							if($_REQUEST['mode']=="2"){
 								$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id";
@@ -100,14 +102,36 @@
 							}
 							$query=$query." WHERE ".$_REQUEST['data'].";";
 							$sqlResults=$connection->query($query);
+							$resultsArray=array();//sql results in array form ready for sending to javascript
+							foreach($categoryList as $value){
+								$tempArray=array();
+								$resultsArray[$value]=$tempArray;
+							}
 							$counter=mysqli_num_rows($sqlResults);
 							$locations="";
 							if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
 								while($row=$sqlResults->fetch_assoc()){
 									if($row["latitude"]!="NULL"){
 										$locations=$locations.$row["latitude"]."a".$row["longitude"]."b";
+									}//adding each latitude and longitude coordinate to the locations variable
+									foreach($row as $key=>$value){
+										if(in_array($key,$categoryList)){
+											$mappedValue=$value;
+											if(in_array($key,$mappedList)){
+												if($value>2){
+													$mappedValue=$speciesMap[$value];
+												}
+												else{
+													$mappedValue="undefined";
+												}
+											}
+											$tempArray=$resultsArray[$key];
+											array_push($tempArray,$mappedValue);
+											$resultsArray[$key]=$tempArray;
+										}
 									}
 								}
+								$resultsJSON=json_encode($resultsArray);
 							}
 							//the optional section
 							echo'<h3>Graphs of your most recent search:</h3>';
@@ -139,19 +163,19 @@
 									echo'Zoom with the buttons in the bottom right of the map, or the mouse wheel';
 									echo'</p>';
 								echo'</div>';
-								$attributeValues=getCategories($connection);
+								$attributeValues=$categoryList;
 								//the dropdowns menu for a custom graph
 									echo'<div class="col-sm-6">';
 										echo'<form id="inputs">';
 											echo'  <label for="attributeSelect">Select category:</label>';
 											echo'  <select multiple name="attribute[]" class="form-control" id="attributeSelect" form="inputs" size=5>';
 											foreach($attributeValues as $attributeValue)
-											{
-												echo'<option value="'.$attributeValue.'">'.$attributeValue.'</option>';										
-											}
+												{
+													echo'<option value="'.$attributeValue.'">'.$attributeValue.'</option>';										
+												}
 											echo'  </select>';
 										echo'</form>';
-										echo'<button type="button" class="btn btn-primary" id="graphButton" onClick="generateGraph()">Generate Graph</button>';
+										echo"<button type=\"button\" class=\"btn btn-primary\" id=\"graphButton\" onClick='generateGraph(".$resultsJSON.")'>Generate Graph</button>";
 									echo'</div>';
 							echo'</div>';
 							
@@ -295,9 +319,9 @@
 							}
 						}
 						/////////////////////////////////////////////////////////////////////////////////////////////
-						function getCategories($connection){//returns attributes of a table as an array
+						function getCategories($connection,$table){//returns attributes of a table as an array
 							//creating and sending query
-							$sql="SHOW COLUMNS FROM `animal`";  //replace "animal" with any other table part of the database initialised in the dbname variable.
+							$sql="SHOW COLUMNS FROM ".$table;  //replace "animal" with any other table part of the database initialised in the dbname variable.
 							$categoryQuery=$connection->query($sql);
 							//using query results
 							$categoryArray=array();

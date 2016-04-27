@@ -57,30 +57,18 @@ function drawMap(locations) {
 			position: new google.maps.LatLng(coordinatesArray[index][0],coordinatesArray[index][1]),
 			map: map,
 			});
-			drawnPoints.push([coordinatesArray[index][0],coordinatesArray[index][1]])
+			drawnPoints.push([coordinatesArray[index][0],coordinatesArray[index][1]]);
 		}
 	}
 }
 //END OF MAP RELATED CODE
 
-function generateGraph(){
-	   $("#timeButton").click(function(){
-        
-        $.ajax({
-            url: "getAnimalWithTime.php",
-            type: "GET",
-            //This should send the users ID
-            data: "animal_id="+$("#speciesSelectTime").val(),
-            success: function (response){
-                if (response != ''){
-                    $("#timeChart").html(" ");
-                    var values=jQuery.parseJSON(response);
-                    
-                    drawChart(values,"timeChart");
-                }
-            }
-        });
-	
+//drawing the custom graph into the graph div
+function generateGraph(values){
+		$("#graphDiv").html(" ");
+		
+		var valuesToUse=$("#attributeSelect").val()
+        drawChartSmall(values[valuesToUse],"graphDiv");
 }
 
 window.onload=function(){
@@ -95,7 +83,7 @@ window.onload=function(){
                 if (response != ''){
                     $("#timeChart").html(" ");
                     var values=jQuery.parseJSON(response);
-                    
+                    console.log(values);
                     drawChart(values,"timeChart");
                 }
             }
@@ -182,3 +170,108 @@ function drawChart(values,id){
         .call(xAxis);
 }
 
+//draws a smaller chart with axis markers dependant on the values
+function drawChartSmall(values,id){
+	
+	//dimensions with margin
+	var margin = {top: 10, right: 30, bottom: 30, left: 30},
+	width = 540 - margin.left - margin.right,
+	height = 400 - margin.top - margin.bottom;
+	
+	//SETTING UP AND HANDLING DATA
+	//array to hold unique values from values
+	var uniqueValues=[];
+	var valueMap=[];//the number of occurences of each value
+	for (var index = 0; index < values.length; ++index) {
+		//check if this value is already in the value counts list
+		if(!(values[index] in valueMap))
+		{
+			valueMap[values[index]]=1;
+		}
+		else{
+			valueMap[values[index]]=(valueMap[values[index]]+1);
+		}
+		//check if this value is already in the unique value list
+		if(!(uniqueValues.indexOf(values[index])>-1))
+		{
+			uniqueValues.push(values[index]);
+		}
+	}
+	var dataset = [];
+	for (var index=0;index<uniqueValues.length;++index){
+		var dictObject = { key: uniqueValues[index] , value: valueMap[uniqueValues[index]]  };
+		dataset.push(dictObject);
+	}
+	//DATA NOW READY TO BE USED
+
+	
+	//x scale and x domain
+	var xScale = d3.scale.ordinal()
+					.domain(d3.range(dataset.length))
+					.rangeRoundBands([0, width], 0.1); 
+	
+	//y scale and domain
+	var yScale = d3.scale.linear()
+					.domain([0, d3.max(dataset, function(d) {return d.value;})])
+					.range([0, height]);
+	
+	//creating svg object with assigned width and height
+	var svg = d3.select("#"+id)
+				.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom);
+	//shortcut to accessing key part of data dictionary objects each time			
+	var key = function(d) {
+		return d.key;
+	};
+	//drawing rectangles
+	svg.selectAll("rect")
+	   .data(dataset, key)
+	   .enter()
+	   .append("rect")
+	   .attr("x", function(d, i) {
+			return xScale(i);
+	   })
+	   .attr("y", function(d) {
+			return height - yScale(d.value);
+	   })
+	   .attr("width", xScale.rangeBand())
+	   .attr("height", function(d) {
+			return yScale(d.value);
+	   })
+	//adding labels for each bar showing what they are
+	svg.selectAll(".xaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.key;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y",  height + margin.bottom)
+	.attr("font-size", "11px")
+	.attr("fill", "black");
+	 
+	//adding a label on each bar showing its value
+	svg.selectAll(".yaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.value;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y", function(d) {
+		return height - yScale(d.value) + 25;
+	})
+	.attr("font-family", "sans-serif") 
+	.attr("font-size", "11px")
+	.attr("fill", "white");
+
+}
