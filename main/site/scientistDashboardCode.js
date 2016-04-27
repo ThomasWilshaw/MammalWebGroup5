@@ -174,7 +174,7 @@ function drawChart(values,id){
 function drawChartSmall(values,id){
 	
 	//dimensions with margin
-	var margin = {top: 10, right: 30, bottom: 30, left: 30},
+	var margin = {top: 30, right: 30, bottom: 30, left: 30},
 	width = 540 - margin.left - margin.right,
 	height = 400 - margin.top - margin.bottom;
 	
@@ -268,9 +268,26 @@ function drawChartSmall(values,id){
 		return xScale(i) + xScale.rangeBand() / 2;
 	})
 	.attr("y", function(d) {
-		return height - yScale(d.value) + 25;
+		return height - yScale(d.value) - 10;
 	})
-	.attr("font-family", "sans-serif") 
+	.attr("font-size", "11px")
+	.attr("fill", "black");
+	
+	//adding another label on each bar showing its value
+	svg.selectAll(".zaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.value;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y", function(d) {
+		return height - yScale(d.value) + 10;
+	})
 	.attr("font-size", "11px")
 	.attr("fill", "white");
 
