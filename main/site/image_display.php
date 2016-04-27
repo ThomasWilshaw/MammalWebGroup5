@@ -131,6 +131,8 @@
 			//the group of variables to be handled togethor by the main body of the sql creation code below
 			$handledGroup1Mapped=['species','gender','age'];
 			
+			$ambiguousPhotoAttributes=['person_id','site_id'];//must be changed to photo.attribute for ambiguity in the join
+			
 			$handledGroup2=['time1','time2'];
 			//the group of variables to be handled in the time section
 			
@@ -160,7 +162,12 @@
 			foreach($inputArray as $key => $value){
 				
 				if(in_array($key,$handledGroup1)){//if this is a variable on the list to be handled here
-					
+					if(in_array($key,$ambiguousPhotoAttributes)){
+						$siteKey="photo.".$key;
+					}
+					else{
+						$siteKey=$key;
+					}
 					if(!(is_array($value))){
 						
 						if(in_array($key,$handledGroup1Mapped)){
@@ -187,12 +194,12 @@
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
 						{
 							if($counter==0){
-								$query=$query." WHERE ".$key." = ".$rawValue;
+								$query=$query." WHERE ".$siteKey." = ".$rawValue;
 								$description=$description.$key." = ".$descriptionValue;
 							}
 							
 							else{
-								$query=$query." AND ".$key." = ".$rawValue;
+								$query=$query." AND ".$siteKey." = ".$rawValue;
 								$description=$description.",".$key." = ".$descriptionValue;
 							}
 							
@@ -204,12 +211,12 @@
 						if(!in_array("any",$value)){
 							//if the "any" option is selected, this overrides other options
 							if($counter==0){
-								$query=$query." WHERE (".$key." = ";
+								$query=$query." WHERE (".$siteKey." = ";
 								$description=$description.$key." = ";
 							}
 							
 							else{
-								$query=$query." AND (".$key." = ";
+								$query=$query." AND (".$siteKey." = ";
 								$description=$description.",".$key." = ";
 							}
 							$counter=$counter+1;
@@ -234,7 +241,7 @@
 									}
 									
 									else{
-										$query=$query." OR ".$key."=".$arrayItem;
+										$query=$query." OR ".$siteKey."=".$arrayItem;
 										$description=$description." or ".$descriptionValue;
 									}
 									$innerCounter+=1;
