@@ -84,7 +84,7 @@
 						$speciesMap=loadSpeciesMap($connection);
 						$searchType="0";//1 for images, 2 for sites
 						$searchTypeName="";//the name in english of the search type
-						$categoryList =["site_id","person_id","sequence_id","species","gender","age"]; //allowed categories for graph gen on images
+						$categoryList =["site_id","person_id","species","gender","age"]; //allowed categories for graph gen on images
 						$mappedList=["species","gender","age"];
 						if(isset($_REQUEST['data'])){
 							if($_REQUEST['mode']=="2"){
@@ -126,6 +126,7 @@
 												}
 											}
 											$tempArray=$resultsArray[$key];
+											$mappedValue=str_replace("'"," ",$mappedValue);
 											array_push($tempArray,$mappedValue);
 											$resultsArray[$key]=$tempArray;
 										}
