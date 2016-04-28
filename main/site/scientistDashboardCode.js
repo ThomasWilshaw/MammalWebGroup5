@@ -83,7 +83,6 @@ window.onload=function(){
                 if (response != ''){
                     $("#timeChart").html(" ");
                     var values=jQuery.parseJSON(response);
-                    console.log(values);
                     drawChart(values,"timeChart");
                 }
             }
@@ -123,13 +122,19 @@ function drawChart(values,id){
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
+    if("timeChart"==id){
+    	var topD=24;
+    }
+    else{
+    	var topD=12;
+    }
     var x = d3.scale.linear()
-        .domain([0, 24])
+        .domain([0, topD])
         .range([0, width]);
 
     // Generate a histogram using twenty four uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(24))
+        .bins(x.ticks(topD))
         (values);
 
     var y = d3.scale.linear()
