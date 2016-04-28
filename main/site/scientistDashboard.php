@@ -143,28 +143,27 @@
 								echo'<div class="row">';
 									echo'<div class="col-sm-6">';
 										echo '<p>'.$counter." ".$searchTypeName.' results were found. ';
-										echo'<br/>';
+										echo'<br>';
 										echo'The distribution of your results is show on the map below:';
 										echo'</p>';
 									echo'</div>';
 									echo'<div class="col-sm-6">';
 										echo '<p>To generate a bar graph of your recent search relating to a certain attribute, ';
-										echo'<br/>';
+										echo'<br>';
 										echo'select an attribute below:';
 										echo'</p>';
 									echo'</div>';
 								echo'</div>';
 							
 							echo'<div class="row">';
-								echo'<div class="col-sm-3">';
-									echo'<br/><br/>';
+								echo'<div class="col-sm-6">';
+									echo'<br>';
 									echo'<button type="button" class="btn btn-primary" id="mapButton" onClick="drawMap(\''.$locations.'\')">Toggle Map</button>';
-								echo'</div>';
-								echo'<div class="col-sm-3">';
+									echo '<br>';
 									echo'<p id="mapInfo" style="visibility:hidden;">This map shows the geographical distribution of your search results.';
-									echo'<br/>';
+									echo'<br>';
 									echo'Left click and draw the map to move';
-									echo'<br/>';
+									echo'<br>';
 									echo'Zoom with the buttons in the bottom right of the map, or the mouse wheel';
 									echo'</p>';
 								echo'</div>';
@@ -184,7 +183,7 @@
 									echo'</div>';
 							echo'</div>';
 							
-							echo'<br/>';
+							echo'<br>';
 							
 							echo'<div class="row">';
 								echo'<div class="col-sm-6" id="mapDiv" style="height:0px;visibility:hidden">';
@@ -194,9 +193,8 @@
 								//custom graph will be drawn here
 								echo'</div>';
 							echo'</div>';
-							echo'<br/>';
-							echo'<br/>';
-							echo'<br/>';
+							echo'<br>';
+							echo'<br>';
 						}
 						$connection->close();
 					?>
@@ -235,7 +233,7 @@
 					<div id="timeChart">
 					</div>
 
-					<h3>Select animal to see what time of year photos of them are captured:</h3>
+					<h3>Select animal to see what month photos of them are captured:</h3>
 					<div class="container">
 					    <div class="row">
 							<div class="col-sm-4">
