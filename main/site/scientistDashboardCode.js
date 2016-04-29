@@ -68,7 +68,7 @@ function generateGraph(values){
 		$("#graphDiv").html(" ");
 		
 		var valuesToUse=$("#attributeSelect").val()
-        drawChartSmall(values[valuesToUse],"graphDiv");
+        drawChartSmall(values[valuesToUse],"graphDiv",valuesToUse);
 }
 
 window.onload=function(){
@@ -176,7 +176,7 @@ function drawChart(values,id){
 }
 
 //draws a smaller chart with axis markers dependant on the values
-function drawChartSmall(values,id){
+function drawChartSmall(values,id,xLabel){
 	
 	//dimensions with margin
 	var margin = {top: 30, right: 30, bottom: 30, left: 30},
@@ -295,5 +295,11 @@ function drawChartSmall(values,id){
 	})
 	.attr("font-size", "11px")
 	.attr("fill", "white");
-
+	
+	//adding x axis label showing what is being measured on the x axis	
+	svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height +55)
+    .text(xLabel);
 }
