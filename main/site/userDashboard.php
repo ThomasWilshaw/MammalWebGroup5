@@ -70,12 +70,12 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-3 col-xs-0 margin-shape" id="test">
+			<div class="col-md-1 col-xs-0 margin-shape" id="test">
 			<!-- margin-left -->
 				stuff
 			</div>
 		
-			<div class="col-md-6 col-xs-12 form-col">
+			<div class="col-md-10 col-xs-12 form-col">
 			<!-- form-middle-col -->
 			
 			
@@ -240,7 +240,7 @@
 			    </div>
 			</div>
 		
-			<div class="col-md-3 col-xs-0 margin-shape">
+			<div class="col-md-1 col-xs-0 margin-shape">
 			<!-- margin-left -->
 				stuff
 			</div>
@@ -326,14 +326,7 @@
 	}
 	?>
 
-				</div>
-			
-				<div class="col-md-2 col-xs-0 margin-shape">
-				<!-- margin-left -->
-					stuff
-				</div>
-			</div>
-		</div>
+
 
 	 <!--google maps javascript api-->
 	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo"></script>
