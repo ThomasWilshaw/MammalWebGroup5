@@ -34,7 +34,13 @@
 		it would be easy enough to then generate a dropdown for each attribute, outputting similar
 		stuff to the repeated echoing below */
 		
+		//We default to scientist mode if it's not set for site dropdowns
+		$mode="s";
+		if(isset($_GET["userMode"])){
+			$mode=$_GET["userMode"];
+		}
 		echo '<form id="inputs" role="form" action="site_display.php" method="post">';
+		echo '<input type="hidden" name="userMode" value="'.$mode.'" />';//to send user mode onwards, either s (scientist) or u (user)
 		echo '<div class="container">';
 			
 			$speciesValues=populateCategory($connection,"species","animal");
