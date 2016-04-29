@@ -4,14 +4,6 @@ var locationsGlobal;
 var locationsArray=[];
 var markerList=[];//an array with my markers (up to 2);
 	
-function hideMap(){
-	//hide and shrink the div that shows the google map
-	$('#mapDiv').attr('style',"height:0px;visibility:hidden");
-	//clicking the toggle button again will show the map
-	$('#mapButton').attr('onClick',"drawMap(\'"+locationsGlobal+"\')");
-	//hides map usage info
-	$('#mapInfo').attr('style',"visibility:hidden");
-}
 	
 function drawMap(locations) {
 	//DEALING WITH DATA
@@ -43,8 +35,6 @@ function drawMap(locations) {
 	center: {lat: 54.7650, lng: -1.5782},
 	zoom: 8
 	});
-	//clicking the toggle button again will hide the map
-	$('#mapButton').attr('onClick',"hideMap()");
 	
 	var drawnPoints=[]
 	//ADDING MARKERS ON TO MAP

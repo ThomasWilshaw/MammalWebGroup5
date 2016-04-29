@@ -158,7 +158,6 @@
 							echo'<div class="row">';
 								echo'<div class="col-sm-6">';
 									echo'<br>';
-									echo'<button type="button" class="btn btn-primary" id="mapButton" onClick="drawMap(\''.$locations.'\')">Toggle Map</button>';
 									echo '<br>';
 									echo'<p id="mapInfo" style="visibility:hidden;">This map shows the geographical distribution of your search results.';
 									echo'<br>';
@@ -167,6 +166,7 @@
 									echo'Zoom with the buttons in the bottom right of the map, or the mouse wheel';
 									echo'</p>';
 								echo'</div>';
+							
 								$attributeValues=$categoryList;
 								//the dropdowns menu for a custom graph
 									echo'<div class="col-sm-6">';
@@ -343,6 +343,13 @@
 		</div>
 
 	 <!--google maps javascript api-->
-	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo" async defer></script>
+	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo"></script>
+     
+	 <?php
+	 if(isset($_REQUEST['data'])){
+	 //drawing the map (using code from the dashboard js file)	
+	 echo'<script>drawMap("'.$locations.'");</script>';
+	 }
+	 ?>
 	</body>
 </html>
