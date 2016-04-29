@@ -308,7 +308,7 @@
 					
 					//if the variable is in the fourth behaviour group
 					//relating to the num class num_class1<x<num_class2
-					else if(in_array($key,$handledGroup4) AND (!empty($value))){
+					else if(in_array($key,$handledGroup4) AND ((!empty($value)) OR $value==0)){
 						
 						$num_classVariablesRecieved+=1;
 						
@@ -426,6 +426,7 @@
 			$results[1]=$description;
 			$results[2]=$safeSQL;
 			$results[3]=$mode;
+			echo $query;
 			return $results;
 		}
 		
