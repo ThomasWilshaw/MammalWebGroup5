@@ -29,6 +29,9 @@
 		
 		$description="none";//will contain an english description of filter criteria specified
 		
+		$safeSQL="";//the part of the SQL query after "where", sent on its own to avoid injection
+		$mode=0;//keeps track of which tables had to be queried
+		
 		/* NB the searching in site_display is a bit different to image_display.
 		site_display finds a list of unique site IDs fitting the criteria
 		and then does another query using these IDs to get information from the site table
@@ -37,6 +40,7 @@
 			$sqlArray=arrayToQuery($_REQUEST,$speciesMap);
 			$sql=$sqlArray[0];
 			$description=$sqlArray[1];
+			$mode=3;
 		}
 		$sitesList=$connection->query($sql);
 		//sitesList here will be a list of unique site IDs fitting search criteria
@@ -44,6 +48,7 @@
 		for the site IDs in the sqlResults array. */
 		
 		$sql="SELECT * FROM site WHERE site_id =";
+		$safeSQL="site_id =";
 		$counter=0;
 		if(isset($sitesList->num_rows) && $sitesList->num_rows>0){ 
 			while($row=$sitesList->fetch_assoc()){
@@ -52,10 +57,12 @@
 					{
 						if($counter==0){
 							$sql=$sql.$arrayItem;
+							$safeSQL=$safeSQL.$arrayItem;
 						}
 						
 						else{
 							$sql=$sql." OR site_id=".$arrayItem;
+							$safeSQL=$safeSQL." OR site_id=".$arrayItem;
 						}
 						$counter+=1;
 					}		
@@ -81,6 +88,9 @@
 				echo'<a href="dropdowns_sites.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 				echo'<br/>';
 				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+				echo'<br/>';
+				echo'<a id="dashBoardButton" href="scientistDashboard.php?searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+				echo'<br/>';
 			echo '</div>';
 		echo'</div>';
 		/*output table showing sites meeting the filter criteria */
@@ -528,6 +538,7 @@
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
+			
 			return $results;	
 		}
 		
