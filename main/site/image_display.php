@@ -320,7 +320,8 @@
 						
 						$num_classVariablesRecieved+=1;
 						
-						if(($num_classVariablesRecieved==2) AND ((['num_class1']!=0)OR(['num_class1'])!=0)){//must have 
+						if(($num_classVariablesRecieved==2) AND (($_REQUEST['num_class1']!=0)OR ($_REQUEST['num_class2']!=0))){//must have 
+						
 						//before and after time before the time part of the
 						//query can be constructed
 						
