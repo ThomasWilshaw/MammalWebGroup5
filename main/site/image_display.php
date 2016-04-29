@@ -56,10 +56,15 @@
 				
 			echo '</div>';
 			echo '<div class="col-sm-2">';
-				echo'<a href="dropdowns_images.php" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				echo'<a href=dropdowns_images.php?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 				echo'<br/>';
-				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
-				echo'<br/>';
+
+				if(isset($_GET["mode"])){
+					if($_GET["mode"]=="s"){
+						echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+						echo'<br/>';
+					}
+				}
 				echo'<a id="dashBoardButton" href="scientistDashboard.php?searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
 				echo'<br/>';
 			echo '</div>';

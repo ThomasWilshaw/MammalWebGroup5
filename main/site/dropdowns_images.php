@@ -33,14 +33,19 @@
 		since the function getCategories can return an array of attributes in a table
 		it would be easy enough to then generate a dropdown for each attribute, outputting similar
 		stuff to the repeated echoing below */
-		
-		echo '<form id="inputs" role="form" action="image_display.php" method="post">';
+
+		//We default to user mode if it's not set
+		$mode="u";
+		if(isset($_GET["mode"])){
+			$mode=$_GET["mode"];
+		}
+		echo '<form id="inputs" role="form" action="image_display.php" method="get">';
 		echo '<div class="container">';
 			
 			$speciesValues=populateCategory($connection,"species","animal");
 			
 			echo'<div class="row">';
-			
+				echo '<input type="hidden" name="mode" value="'.$mode.'" />';
 				echo'<div class="col-sm-4">';
 					echo'  <label for="speciesSelect">Specific species:</label>';
 					echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
