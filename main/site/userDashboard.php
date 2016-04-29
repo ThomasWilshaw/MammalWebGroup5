@@ -82,6 +82,9 @@
 			
 				<!-- an optional portion of the page that displays graphs and information about the most recent filter search-->
 					<?php
+						set_time_limit(120);
+						//sets a 2 minute timeout 
+		
 						include('config.php');
 						$query="";
 						//establish connection
@@ -247,15 +250,7 @@
 		</div>
 	</div>
 
-<!--Footer-->
-	
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12" id="footer">
-				footer
-			</div>
-		</div>
-	</div>
+
 	
 	<?php
 
