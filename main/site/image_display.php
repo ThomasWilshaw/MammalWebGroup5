@@ -56,28 +56,28 @@
 				
 			echo '</div>';
 			echo '<div class="col-sm-2">';
-				if(isset($_GET["mode"])){
-					if($_GET["mode"]=="s"){
-						echo'<a href=scientistSearch.html?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				if(isset($_GET["userMode"])){
+					if($_GET["userMode"]=="s"){
+						echo'<a href=scientistSearch.html?userMode='.$_GET["userMode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 					}
 					else{
-						echo'<a href=userSearch.html?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+						echo'<a href=userSearch.html?userMode='.$_GET["userMode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 					}
 				}
 				//default to usersearch, the least powerful page
 				else{
-					echo'<a href=userSearch.html?mode=u class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+					echo'<a href=userSearch.html?userMode=u class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 				}
 				
 				echo'<br/>';
 
-				if(isset($_GET["mode"])){
-					if($_GET["mode"]=="s"){
+				if(isset($_GET["userMode"])){
+					if($_GET["userMode"]=="s"){
 						echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
 						echo'<br/>';
 					}
 				}
-				echo'<a id="dashBoardButton" href="scientistDashboard.php?searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+				echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_GET["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
 				echo'<br/>';
 			echo '</div>';
 		echo'</div>';
