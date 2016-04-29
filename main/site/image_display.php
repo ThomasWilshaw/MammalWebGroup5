@@ -58,10 +58,10 @@
 			echo '<div class="col-sm-2">';
 				if(isset($_GET["userMode"])){
 					if($_GET["userMode"]=="s"){
-						echo'<a href=scientistSearch.html?userMode='.$_GET["userMode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+						echo'<a href="scientistSearch.html?userMode='.$_GET["userMode"].'" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 					}
 					else{
-						echo'<a href=userSearch.html?userMode='.$_GET["userMode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+						echo'<a href="userSearch.php?userMode='.$_GET["userMode"].'" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 					}
 				}
 				//default to usersearch, the least powerful page
