@@ -317,13 +317,11 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
-								$description=$description.$key." = ".$rawValue;
+								$query=$query." WHERE "
 							}
 							
 							else{
-								$query=$query." AND ".$modifiedKey." = ".$rawValue;
-								$description=$description.",".$key." = ".$rawValue;
+								$query=$query." AND "
 							}
 							$counter=$counter+1;
 							$numClass1=$_REQUEST['num_class1'];
@@ -336,8 +334,8 @@
 								$numClassHigher=$numClass1;
 								$numClassLower=$numClass2;
 						}
-							$query=$query." num_class BETWEEN ".$numClassLower.' AND '.$numClassHigher;
-							$description=$description."with between ".$numClassLower." and ".$numClassHigher." classifications";		
+							$query=$query."num_class BETWEEN ".$numClassLower.' AND '.$numClassHigher;
+							$description=$description." with between ".$numClassLower." and ".$numClassHigher." classifications";		
 						}	
 					}
 					//if the variable is in the third behaviour group
