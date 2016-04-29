@@ -76,8 +76,16 @@
 						echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
 						echo'<br/>';
 					}
+				}				
+				if(isset($_GET["userMode"])){
+					if($_GET["userMode"]=="s"){//if in scientist mode  generate dashboard link to scientist dashboard to view graphs based on filter data
+						echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_GET["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+					}
+					else{//if in user mode, generate dashboard link to user dashboard to view graphs based on filter data
+						echo'<a id="dashBoardButton" href="userDashboard.php?userMode='.$_GET["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+					}
 				}
-				echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_GET["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+				
 				echo'<br/>';
 			echo '</div>';
 		echo'</div>';
