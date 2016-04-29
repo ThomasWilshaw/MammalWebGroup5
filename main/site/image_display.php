@@ -317,11 +317,11 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE "
+								$query=$query." WHERE ";
 							}
 							
 							else{
-								$query=$query." AND "
+								$query=$query." AND ";
 							}
 							$counter=$counter+1;
 							$numClass1=$_REQUEST['num_class1'];
