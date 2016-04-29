@@ -240,8 +240,6 @@
 							    <form id="inputs" role="form">
 									<select name="species[]" class="form-control" id="speciesSelectMonth" form="inputs" size=6>
 										<?php		
-											include('config.php');
-											
 											$speciesMap=loadSpeciesMap($connection);
 											$speciesValues=populateCategory($connection,"species","animal");
 
