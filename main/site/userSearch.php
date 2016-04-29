@@ -2,16 +2,16 @@
 <html>
 <head>
 	<title>
-		MammalWeb User
+		MammalWeb Search
 	</title>
 
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="MW.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script type="text/javascript" src="MW.js"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	
 </head>
 <body>
-    
+
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -28,9 +28,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="userHome.html">Home</a></li>
         <li><a href="userDashboard.php">Dashboard</a></li>
-        <li><a href="userSearch.php">Search</a></li>
+        <li class="active"><a href="#">Search<span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Logout</a></li>
@@ -48,45 +48,14 @@
 				stuff
 			</div>
 		
-			<div class="col-md-10col-xs-12 form-col">
+			<div class="col-md-10 col-xs-12 form-col" id="dropdowns">
 			<!-- form-middle-col -->
-			<dl class="dropdown"> 
-  
-    <dt>
-    <a href="#">
-      <span class="hida">Select</span>    
-      <p class="multiSel"></p>  
-    </a>
-    </dt>
-  
-    <dd>
-        <div class="mutliSelect">
-            <ul>
-                <li>
-                    <input type="checkbox" value="Apple" />Apple</li>
-                <li>
-                    <input type="checkbox" value="Blackberry" />Blackberry</li>
-                <li>
-                    <input type="checkbox" value="HTC" />HTC</li>
-                <li>
-                    <input type="checkbox" value="Sony Ericson" />Sony Ericson</li>
-                <li>
-                    <input type="checkbox" value="Motorola" />Motorola</li>
-                <li>
-                    <input type="checkbox" value="Nokia" />Nokia</li>
-            </ul>
-        </div>
-    </dd>
-  <button>Filter</button>
-</dl>
-				User details profile picture, etc.
+				Load search php file into this div
 
 			</div>
-			
 		
 			<div class="col-md-1 col-xs-0 margin-shape">
-			<!-- margin-left -->
-				stuff
+			<!-- margin-right-->
 			</div>
 		</div>
 	</div>
@@ -95,11 +64,18 @@
 	
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12" id="footer">
+			<div class = "col-md-12" id="footer">
 				footer
 			</div>
 		</div>
 	</div>
 
+	<script>//load image search dropdowns into relevant div
+	window.onload = function(){
+		$("#dropdowns").load("dropdowns_images.php?userMode=u");
+	}
+	</script>
+	
 </body>
+
 </html>

@@ -57,7 +57,7 @@
       <ul class="nav navbar-nav">
         <li><a href="userHome.html">Home</a></li>
         <li class="active"><a href="#">Dashboard<span class="sr-only">(current)</span></a></li>
-        <li><a href="userSearch.html">Search</a></li>
+        <li><a href="userSearch.php">Search</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Logout</a></li>
