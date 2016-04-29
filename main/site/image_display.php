@@ -56,7 +56,19 @@
 				
 			echo '</div>';
 			echo '<div class="col-sm-2">';
-				echo'<a href=dropdowns_images.php?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				if(isset($_GET["mode"])){
+					if($_GET["mode"]=="s"){
+						echo'<a href=scientistSearch.html?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+					}
+					else{
+						echo'<a href=userSearch.html?mode='.$_GET["mode"].' class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+					}
+				}
+				//default to usersearch, the least powerful page
+				else{
+					echo'<a href=userSearch.html?mode=u class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+				}
+				
 				echo'<br/>';
 
 				if(isset($_GET["mode"])){
