@@ -221,7 +221,7 @@
 					echo'<input type = "number" step="any" name="long2" class="form-control" id="long2" form="inputs">';
 				echo'</div>';
 				
-				echo'<div class="col-sm-1">';
+				echo'<div class="col-sm-4">';
 					echo'<br/><br/>';
 					echo'<button type="button" class="btn btn-secondary" id="mapButton" onClick="drawMap()">Toggle Map</button>';
 				echo'</div>';
