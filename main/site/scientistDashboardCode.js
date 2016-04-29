@@ -180,7 +180,7 @@ function drawChartSmall(values,id,xLabel){
 	
 	//dimensions with margin
 	var margin = {top: 30, right: 30, bottom: 30, left: 30},
-	width = 540 - margin.left - margin.right,
+	width = 640 - margin.left - margin.right,
 	height = 400 - margin.top - margin.bottom;
 	
 	//SETTING UP AND HANDLING DATA
