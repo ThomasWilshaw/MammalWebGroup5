@@ -1,3 +1,200 @@
+//MAP RELATED CODE
+var map;
+var locationsGlobal;
+var locationsArray=[];
+var markerList=[];//an array with my markers (up to 2);
+	
+	
+function drawMap(locations) {
+	//DEALING WITH DATA
+	/*getting latitude and longitude data from locations string 
+	encoded latalongb for each point as one long string*/
+	locationsGlobal=locations.trim();
+	locationsArray=locationsGlobal.split("b");
+	coordinatesArray=[];
+	var latitude;
+	var longitude;
+	var pointArray;
+	for (var index = 0; index < locationsArray.length; ++index) {
+		pointArray=locationsArray[index].split("a");
+		if((pointArray.length>1))
+		{
+		latitude=pointArray[0];
+		longitude=pointArray[1];
+		coordinatesArray.push([latitude,longitude]);
+		}
+	}
+	
+	//DRAWING MAP AND TAKING CARE OF PAGE THINGS
+	//expand and show the div that will display the google map
+	$('#mapDiv').attr('style',"height:400px;visibility:visible");
+	//display map usage info
+	$('#mapInfo').attr('style',"visibility:visible");
+	//create the google map
+	map = new google.maps.Map(document.getElementById('mapDiv'), {
+	center: {lat: 54.7650, lng: -1.5782},
+	zoom: 8
+	});
+	
+	var drawnPoints=[]
+	//ADDING MARKERS ON TO MAP
+	//draw one marker for each lat lang pair stored 
+	for (var index = 0; index < coordinatesArray.length; ++index) {
+		//check if there is already a marker for this point
+		if(!(drawnPoints.indexOf([coordinatesArray[index][0],coordinatesArray[index][1]])>-1))
+		{
+			var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(coordinatesArray[index][0],coordinatesArray[index][1]),
+			map: map,
+			});
+			drawnPoints.push([coordinatesArray[index][0],coordinatesArray[index][1]]);
+		}
+	}
+}
+//END OF MAP RELATED CODE
+
+//drawing the custom graph into the graph div
+function generateGraph(values){
+		$("#graphDiv").html(" ");
+		
+		var valuesToUse=$("#attributeSelect").val()
+        drawChartSmall(values[valuesToUse],"graphDiv",valuesToUse);
+}
+
+
+//draws a smaller chart with axis markers dependant on the values
+function drawChartSmall(values,id,xLabel){
+	
+	//dimensions with margin
+	var margin = {top: 30, right: 30, bottom: 30, left: 30},
+	width = 640 - margin.left - margin.right,
+	height = 400 - margin.top - margin.bottom;
+	
+	//SETTING UP AND HANDLING DATA
+	//array to hold unique values from values
+	var uniqueValues=[];
+	var valueMap=[];//the number of occurences of each value
+	for (var index = 0; index < values.length; ++index) {
+		//check if this value is already in the value counts list
+		if(!(values[index] in valueMap))
+		{
+			valueMap[values[index]]=1;
+		}
+		else{
+			valueMap[values[index]]=(valueMap[values[index]]+1);
+		}
+		//check if this value is already in the unique value list
+		if(!(uniqueValues.indexOf(values[index])>-1))
+		{
+			uniqueValues.push(values[index]);
+		}
+	}
+	var dataset = [];
+	for (var index=0;index<uniqueValues.length;++index){
+		var dictObject = { key: uniqueValues[index] , value: valueMap[uniqueValues[index]]  };
+		dataset.push(dictObject);
+	}
+	//DATA NOW READY TO BE USED
+
+	
+	//x scale and x domain
+	var xScale = d3.scale.ordinal()
+					.domain(d3.range(dataset.length))
+					.rangeRoundBands([0, width], 0.1); 
+	
+	//y scale and domain
+	var yScale = d3.scale.linear()
+					.domain([0, d3.max(dataset, function(d) {return d.value;})])
+					.range([0, height]);
+	
+	//creating svg object with assigned width and height
+	var svg = d3.select("#"+id)
+				.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom);
+	//shortcut to accessing key part of data dictionary objects each time			
+	var key = function(d) {
+		return d.key;
+	};
+	//drawing rectangles
+	svg.selectAll("rect")
+	   .data(dataset, key)
+	   .enter()
+	   .append("rect")
+	   .attr("x", function(d, i) {
+			return xScale(i);
+	   })
+	   .attr("y", function(d) {
+			return height - yScale(d.value);
+	   })
+	   .attr("width", xScale.rangeBand())
+	   .attr("height", function(d) {
+			return yScale(d.value);
+	   })
+	//adding labels for each bar showing what they are
+	svg.selectAll(".xaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.key;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y",  height + margin.bottom)
+	.attr("font-size", "11px")
+	.attr("fill", "black");
+	 
+	//adding a label on each bar showing its value
+	svg.selectAll(".yaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.value;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y", function(d) {
+		return height - yScale(d.value) - 10;
+	})
+	.attr("font-size", "11px")
+	.attr("fill", "black");
+	
+	//adding another label on each bar showing its value
+	svg.selectAll(".zaxis text")
+	.data(dataset, key)
+	.enter()
+	.append("text")
+	.text(function(d) {
+		return d.value;
+	})
+	.attr("text-anchor", "middle")
+	.attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	})
+	.attr("y", function(d) {
+		return height - yScale(d.value) + 10;
+	})
+	.attr("font-size", "11px")
+	.attr("fill", "white");
+	
+	//adding x axis label showing what is being measured on the x axis	
+	svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height +55)
+    .text(xLabel);
+}
+
+
+
+
+
 window.onload = function() {
   var person_id=194;
   var uploadArray = [
