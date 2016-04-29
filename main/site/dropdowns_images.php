@@ -40,12 +40,12 @@
 			$mode=$_GET["userMode"];
 		}
 		echo '<form id="inputs" role="form" action="image_display.php" method="get">';
+		echo '<input type="hidden" name="userMode" value="'.$mode.'" />';//to send user mode onwards, either s (scientist) or u (user)
 		echo '<div class="container">';
 			
 			$speciesValues=populateCategory($connection,"species","animal");
 			
 			echo'<div class="row">';
-				echo '<input type="hidden" name="userMode" value="'.$mode.'" />';
 				echo'<div class="col-sm-4">';
 					echo'  <label for="speciesSelect">Specific species:</label>';
 					echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
