@@ -256,6 +256,93 @@
 			</div>
 		</div>
 	</div>
+	
+	<?php
 
+	function populateCategory($connection,$category,$tableName){
+		//returns an array of possible values for an attribute that appear in the database
+		//in the named table
+		//creating and sending query
+		$sql="SELECT DISTINCT ".$category." FROM `".$tableName."`"; 
+		//replace "animal" with any other table part of the database initialised in the dbname variable.
+		$categoryQuery=$connection->query($sql);
+		//using query results
+		$categoryArray=array();
+		while($attribute=$categoryQuery->fetch_assoc()){
+			if(trim($attribute[$category])!=""){
+				array_push($categoryArray,$attribute[$category]);
+			}
+		}
+		return $categoryArray;			
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	function loadSpeciesMap($connection){
+		$sql="SELECT option_id,option_name FROM options";  
+		$speciesquery=$connection->query($sql);
+
+		$speciesmap=array();
+		while($row=$speciesquery->fetch_assoc()){
+			$speciesmap[$row["option_id"]]=$row["option_name"];
+		}
+		$speciesmap[0]="Undefined";
+		return $speciesmap;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*this function will be used to make sure every variable set in the $_REQUEST array doesn't contain
+	injected SQL. It doesn't need to operate on the keys of the array, only the values, as only specific
+	keys will be used in the arrayToQuery function to generate the SQL query.
+	The $connection parameter is included because the mysqli real_escape_string() function takes this
+	as a parameter to see which characters are acceptable*/
+	function makeSecureForSQL($myConnection){
+		//parses through everything in $_REQUEST
+		foreach($_REQUEST as $key=>$value)
+		{
+			if(is_array($value)){
+				foreach($value as $valueKey=>$valueValue)
+				{
+					//escapes any character that may enable an sql injection attack
+					$value[$valueKey]=$myConnection->real_escape_string($valueValue);
+				}
+			}
+			else{
+				//escapes any character that may enable an sql injection attack
+				$_REQUEST[$key]=$myConnection->real_escape_string($value);
+			}
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	function getCategories($connection,$table){//returns attributes of a table as an array
+		//creating and sending query
+		$sql="SHOW COLUMNS FROM ".$table;  //replace "animal" with any other table part of the database initialised in the dbname variable.
+		$categoryQuery=$connection->query($sql);
+		//using query results
+		$categoryArray=array();
+		while($attribute=$categoryQuery->fetch_assoc()){
+			array_push($categoryArray,$attribute['Field']);
+		}
+		return $categoryArray;
+	}
+	?>
+
+				</div>
+			
+				<div class="col-md-2 col-xs-0 margin-shape">
+				<!-- margin-left -->
+					stuff
+				</div>
+			</div>
+		</div>
+
+	 <!--google maps javascript api-->
+	 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3bN3ZwaXsZ2Eloq_4KOn2CQrXcvL6fIo"></script>
+     
+	 <?php
+	 if(isset($_REQUEST['data'])){
+	 //drawing the map (using code from the dashboard js file)	
+	 echo'<script>drawMap("'.$locations.'");</script>';
+	 }
+	 ?>
 </body>
 </html>
