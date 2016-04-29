@@ -233,7 +233,6 @@ window.onload = function() {
     $("details").text("An error occurred");
   }
   });
-  console.log()
   var width = 600;
 
   function buildTimeline() {
