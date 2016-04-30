@@ -99,7 +99,7 @@
 							else{
 								//mode 3 onwards means the page was visited from a site search
 								if($_REQUEST['mode']=="3"){
-									$categoryList =["site_id","person_id","purpose_id","habitat_id","water_id","camera_id","camera_height"]; //allowed categories for graph gen on images
+									$categoryList =["person_id","purpose_id","habitat_id","water_id","camera_id","camera_height"]; //allowed categories for graph gen on images
 									$mappedList=["purpose_id","water_id","camera_id"];
 									$query="SELECT * FROM site";	
 								}
