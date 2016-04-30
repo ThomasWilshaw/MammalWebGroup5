@@ -235,7 +235,7 @@
 				  </a>
 				</div>
 
-				<h3>Your photo uploads:</h3>
+				<h3>Your photo uploads and classifications:</h3>
 			    <div id="timeline"></div>
 			    <div id="hoverRes">
 			    	<div id="hoverDetails"></div>

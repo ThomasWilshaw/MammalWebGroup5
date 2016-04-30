@@ -198,11 +198,13 @@ function drawChartSmall(values,id,xLabel){
 
 
 window.onload = function() {
-  var person_id=194;
+  var person_id=182;
   var uploadArray = [
-    {times: []}
+    {label:"uploads", times: []},
+    {label:"classifications", times: []}
   ];
   var uploads=0;
+  var classifications=0;
   $.ajax({
     url: "getUploadData.php",
     type: "GET",
@@ -212,21 +214,34 @@ window.onload = function() {
       if (response != ''){
          var uploadData=jQuery.parseJSON(response);
          var numUploads=0;
-          for(var i in uploadData){
-            if(uploadData.hasOwnProperty(i)){
+          for(var i in uploadData["uploads"]){
               numUploads+=1;
-            }
           }
-         jQuery.each(uploadData,function(key,value){
+          var numClass=0;
+          for(var i in uploadData["classifications"]){
+              numClass+=1;
+          }
+         jQuery.each(uploadData["uploads"],function(key,value){
             var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+uploads,"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
+            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
             uploads++;
+         });
+         jQuery.each(uploadData["classifications"],function(key,value){
+            var d=new Date(value);
+            //Can add more data to this object to enable more interesting things later
+            uploadArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
+            console.log( uploadArray[1]["times"][classifications]["id"]);
+            classifications++;
          });
          //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
          if(uploads>0){
             uploadArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
             $("#details").text("You have " + uploads + " total uploads");
+         }
+         if(classifications>0){
+            uploadArray[1]["times"][classifications-1]["ending_time"]=new Date().getTime();
+            $("#details").append("<br>You have " + classifications + " total image classifications");
          }
          buildTimeline();
        }
@@ -235,12 +250,14 @@ window.onload = function() {
     $("details").text("An error occurred");
   }
   });
-  var width = 600;
+
+  var width = 1200;
+  var highlightID=null;
 
   function buildTimeline() {
     if(uploadArray[0]["times"].length>0){
       var chart = d3.timeline()
-      .width(width*2)
+      .width(width)
       .margin({left:70, right:50, top:0, bottom:0})
       .display("circle")
       .tickFormat({
@@ -258,18 +275,23 @@ window.onload = function() {
       // i is the index during d3 rendering
       // datum is the id object
         var div = $('#hoverRes');
-        var colors = chart.colors();
-        //div.find('.coloredDiv').css('background-color', colors(i))
         var dDay=new Date(d["starting_time"]).getDate();
         var dMonth=new Date(d["starting_time"]).getMonth();
         var dYear=new Date(d["starting_time"]).getFullYear();
-        div.find('#hoverDetails').text("This was " + d["id"] + ", uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos");
+        if(d.hasOwnProperty("num_photos")){
+        	div.find('#hoverDetails').text("This was " + d["id"] + ", uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos");
+        }
+        else{
+        	div.find('#hoverDetails').text("You classified a photo on " + dDay+"/"+ dMonth+"/"+ dYear + ", this was " + d["id"]);
+        }
+        
       })
       .mouseover(function(d,i,datum){
+      	if(highlightID!=null){
+      		d3.select("#"+highlightID).style("fill", $("#"+highlightID)[0]["__data__"]["color"]);
+      	}
         d3.select("#"+d["id"]).style("fill", "red");
-      })
-      .mouseout(function(d,i,datum){
-        d3.select("#"+d["id"]).style("fill", d["color"]);
+        highlightID=d["id"];
       });
       var svg = d3.select("#timeline").append("svg").attr("width", width)
           .datum(uploadArray).call(chart);
@@ -279,13 +301,13 @@ window.onload = function() {
     }
   }
 
+  //Gets the urls for photos that have been favourited by the user and constructs a carousel from them
   $.ajax({
     url: "getFavouriteURLS.php",
     type: "GET",
     data: "person_id="+person_id,
     success: function (response) {
       if (response != 'no_likes'){
-        console.log(response);
         var urls=jQuery.parseJSON(response);
         //For each photo, we create new html elements on te page that are inside the carousel
         //First entry is different (active) and it's easier to do it outside the loop
