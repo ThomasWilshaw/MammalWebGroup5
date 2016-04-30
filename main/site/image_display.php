@@ -429,13 +429,17 @@
 					
 			}
 			$query=$query.";";
-			$safeSQL=explode("WHERE",$query)[1];
+			if($counter>0){
+				$safeSQL=explode("WHERE",$query)[1];
+			}
+			else{
+				$safeSQL="1";
+			}
 			$results=array();
 			$results[0]=$query;
 			$results[1]=$description;
 			$results[2]=$safeSQL;
 			$results[3]=$mode;
-			echo $query;
 			return $results;
 		}
 		
