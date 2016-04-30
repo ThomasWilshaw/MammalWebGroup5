@@ -117,6 +117,7 @@ function drawChartSmall(values,id,xLabel){
 		return d.key;
 	};
 	//drawing rectangles
+	var redShades=["Red","DarkRed","OrangeRed","FireBrick"];
 	svg.selectAll("rect")
 	   .data(dataset, key)
 	   .enter()
@@ -131,6 +132,7 @@ function drawChartSmall(values,id,xLabel){
 	   .attr("height", function(d) {
 			return yScale(d.value);
 	   })
+	   .attr("fill",function(d,i){return redShades[i%3]});//shaded in different reds
 	//adding labels for each bar showing what they are
 	svg.selectAll(".xaxis text")
 	.data(dataset, key)
@@ -317,3 +319,7 @@ window.onload = function() {
     }
   });  
 }
+
+$("#marginLeft").attr('style',"visibility:visible");
+$("#marginRight").attr('style',"visibility:visible");
+
