@@ -199,7 +199,7 @@ function drawChartSmall(values,id,xLabel){
 
 window.onload = function() {
   var person_id=182;
-  var uploadArray = [
+  var timelineArray = [
     {label:"uploads", times: []},
     {label:"classifications", times: []}
   ];
@@ -224,23 +224,22 @@ window.onload = function() {
          jQuery.each(uploadData["uploads"],function(key,value){
             var d=new Date(value["timestamp"]);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
+            timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
             uploads++;
          });
          jQuery.each(uploadData["classifications"],function(key,value){
             var d=new Date(value);
             //Can add more data to this object to enable more interesting things later
-            uploadArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
-            console.log( uploadArray[1]["times"][classifications]["id"]);
+            timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
             classifications++;
          });
          //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
          if(uploads>0){
-            uploadArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
+            timelineArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
             $("#details").text("You have " + uploads + " total uploads");
          }
          if(classifications>0){
-            uploadArray[1]["times"][classifications-1]["ending_time"]=new Date().getTime();
+            timelineArray[1]["times"][classifications-1]["ending_time"]=new Date().getTime();
             $("#details").append("<br>You have " + classifications + " total image classifications");
          }
          buildTimeline();
@@ -255,7 +254,7 @@ window.onload = function() {
   var highlightID=null;
 
   function buildTimeline() {
-    if(uploadArray[0]["times"].length>0){
+    if(timelineArray[0]["times"].length>0 || timelineArray[1]["times"].length>0){
       var chart = d3.timeline()
       .width(width)
       .margin({left:70, right:50, top:0, bottom:0})
@@ -267,7 +266,7 @@ window.onload = function() {
         tickSize: 10
       })
       .rotateTicks(20)
-      .beginning(uploadArray[0]["times"][0]["starting_time"])
+      .beginning(timelineArray[0]["times"][0]["starting_time"])
       .showTimeAxisTick()
       .stack()
       .hover(function (d, i, datum) {
@@ -294,10 +293,10 @@ window.onload = function() {
         highlightID=d["id"];
       });
       var svg = d3.select("#timeline").append("svg").attr("width", width)
-          .datum(uploadArray).call(chart);
+          .datum(timelineArray).call(chart);
     }
     else{
-      $("#details").text("You don't have any uploads yet");
+      $("#details").text("You don't have any uploads or classifications yet");
     }
   }
 
