@@ -50,8 +50,7 @@
 		
 			<div class="col-md-10 col-xs-12 form-col" id="dropdowns">
 			<!-- form-middle-col -->
-				Load search php file into this div
-
+				Loading search...
 			</div>
 		
 			<div class="col-md-1 col-xs-0 margin-shape">
