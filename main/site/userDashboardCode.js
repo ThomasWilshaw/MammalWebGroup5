@@ -294,8 +294,26 @@ window.onload = function() {
         var dDay=new Date(d["starting_time"]).getDate();
         var dMonth=new Date(d["starting_time"]).getMonth();
         var dYear=new Date(d["starting_time"]).getFullYear();
-        if(d.hasOwnProperty("num_photos")){
-        	div.find('#hoverDetails').text("This was " + d["id"] + ", uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos");
+
+        //Check if elemnt being hovered over represents classifications or uploads
+        if(d["id"].slice(0,3)=="upl"){
+        	var uNum=parseInt(d["id"].slice(6));
+
+        	var detText= "This was your " + uNum;
+        	if(uNum%10==1){
+        		detText+="st";
+        	}
+        	else if(uNum%10==2){
+        		detText+="nd";
+        	}
+        	else if(uNum%10==3){
+        		detText+="rd";
+        	}
+        	else{
+	        	detText+="th";
+	        }
+	        detText+=" upload, uploaded on " + dDay+"/"+ dMonth+"/"+ dYear + " and included " + d["num_photos"] + " photos";
+        	div.find('#hoverDetails').text(detText);
         }
         else{
         	div.find('#hoverDetails').text("You classified a photo on " + dDay+"/"+ dMonth+"/"+ dYear + ", this was " + d["id"]);
