@@ -200,7 +200,7 @@ function drawChartSmall(values,id,xLabel){
 
 window.onload = function() {
 	//Replace this with id of loggegd in user in actual system
-	var person_id=182;
+	var person_id=194;
 	$("#userIDDiv").html("<p>User number "+person_id+"</p>");
 	var timelineArray = [
 	{label:"uploads", times: []},
@@ -245,15 +245,20 @@ window.onload = function() {
 			       classifications++;
 			    });
 			    //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
+			    var earliest=null;
 			    if(uploads>0){
 			       timelineArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
 			       $("#details").text("You have " + uploads + " total uploads");
+			       earliest=timelineArray[0]["times"][0]["starting_time"]
 			    }
 			    if(classifications>0){
 			       timelineArray[1]["times"][classifications-1]["ending_time"]=new Date().getTime();
 			       $("#details").append("<br>You have " + classifications + " total image classifications");
+			       if(timelineArray[1]["times"][0]["starting_time"]<earliest){
+			       		earliest=timelineArray[1]["times"][0]["starting_time"]
+			       }
 			    }
-			    buildTimeline();
+			    buildTimeline(earliest);
 	       }
 	    }
 	  ,error: function(response){
@@ -265,7 +270,7 @@ window.onload = function() {
   var highlightID=null;
   var cycling=true;
 
-  function buildTimeline() {
+  function buildTimeline(start) {
     if(timelineArray[0]["times"].length>0 || timelineArray[1]["times"].length>0){
       var chart = d3.timeline()
       .width(width)
@@ -278,7 +283,7 @@ window.onload = function() {
         tickSize: 10
       })
       .rotateTicks(20)
-      .beginning(timelineArray[0]["times"][0]["starting_time"])
+      .beginning(start)
       .showTimeAxisTick()
       .stack()
       .hover(function (d, i, datum) {
