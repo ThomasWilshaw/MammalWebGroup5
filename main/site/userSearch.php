@@ -45,7 +45,6 @@
 		<div class="row">
 			<div class="col-md-1 col-xs-0 margin-shape">
 			<!-- margin-left -->
-				stuff
 			</div>
 		
 			<div class="col-md-10 col-xs-12 form-col" id="dropdowns">
