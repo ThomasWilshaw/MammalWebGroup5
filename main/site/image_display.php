@@ -292,13 +292,12 @@
 						//query can be constructed
 						
 							if($counter==0){
-								$query=$query." WHERE ".$modifiedKey." = ".$rawValue;
-								$description=$description.$key." = ".$rawValue;
+								$query=$query." WHERE ";
 							}
 							
 							else{
-								$query=$query." AND ".$modifiedKey." = ".$rawValue;
-								$description=$description.",".$key." = ".$rawValue;
+								$query=$query." AND ";
+								$description=$description.",";
 							}
 							$counter=$counter+1;
 							
