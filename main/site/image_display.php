@@ -270,10 +270,16 @@
 					if(!(is_array($value))){
 						
 						if(in_array($key,$handledGroup1Mapped)){
-							$rawValue = array_search($value,$speciesMap);
-							//raw value is the value in the animal table
-							//corresponding to the value in the options table	
-							$descriptionValue=$speciesMap[$value];
+							if($value!="-1"){
+								$rawValue = array_search($value,$speciesMap);
+								//raw value is the value in the animal table
+								//corresponding to the value in the options table	
+								$descriptionValue=$speciesMap[$value];
+							}
+							else{
+								$rawValue=$value;
+								$descriptionValue= "No data";
+							}
 						}
 						else{
 							$rawValue=$value;
@@ -328,6 +334,12 @@
 								{
 									
 									if(in_array($key,$handledGroup1Mapped)){//if it is mapped in options table
+													if($arrayItem!="-1"){
+														$descriptionValue=$speciesMap[$arrayItem];
+													}
+													else{
+														$descriptionValue=$arrayItem;
+													}
 										$descriptionValue=$speciesMap[$arrayItem];
 									}
 									else{
