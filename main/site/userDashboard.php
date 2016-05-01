@@ -116,6 +116,7 @@
 								$searchTypeName="sites";
 							}
 							$query=$query." WHERE ".$_REQUEST['data'].";";
+							$query=str_replace("\\","",$query);	
 							$sqlResults=$connection->query($query);
 							$resultsArray=array();//sql results in array form ready for sending to javascript
 							foreach($categoryList as $value){
