@@ -127,7 +127,7 @@
 			
 			echo'<div class="row">';
 				echo'<br/>';
-				echo'<div class="col-sm-4">';	
+				echo'<div class="col-sm-8">';	
 					echo'<div class="form-group">';
 						echo' <label for="timeSelection1">Between specific times:</label>';
 						echo'<div id="timeSelection1">';
