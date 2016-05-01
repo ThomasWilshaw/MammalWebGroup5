@@ -50,6 +50,7 @@
 					echo'  <label for="speciesSelect">Specific species:</label>';
 					echo'  <select multiple name="species[]" class="form-control" id="speciesSelect" form="inputs" size=5>';
 					echo'<option value="any">Any</option>';
+					echo'<option value="-1">No Data</option>';
 					foreach($speciesValues as $speciesValue)
 					{
 						$thisField=strip_tags($speciesMap[$speciesValue]);
@@ -66,6 +67,7 @@
 						echo'  <label for="genderSelect">Specific gender:</label>';
 						echo'  <select name="gender" class="form-control" id="genderSelect" form="inputs" size=5>';
 						echo'<option value="any">Any</option>';
+						echo'<option value="-1">No Data</option>';
 						foreach($speciesValues as $genderValue)
 						{
 							$thisField=strip_tags($speciesMap[$genderValue]);
@@ -81,6 +83,7 @@
 						echo'  <label for="ageSelect">Specific age category:</label>';
 						echo'  <select name="age" class="form-control" id="ageSelect" form="inputs" size=5>';
 						echo'<option value="any">Any</option>';
+						echo'<option value="-1">No Data</option>';
 						foreach($ageValues as $ageValue)
 						{
 							$thisField=strip_tags($speciesMap[$ageValue]);
