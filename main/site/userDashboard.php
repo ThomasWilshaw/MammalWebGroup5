@@ -208,7 +208,7 @@
 							echo'<br>';
 						}
 						else{//if no search data is found, tell the scientist that to see more graphs they should make a search
-							echo'<h3>No Search data found - to see custom graphs and a map based on search results, click "search" the top of the page to make a search.</h3>';
+							echo'<h3>No Search data found - to see custom graphs and a map based on search results, click "search" at the top of the page to make a search.</h3>';
 						}
 						$connection->close();
 					?>
