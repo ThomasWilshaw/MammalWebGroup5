@@ -1,6 +1,9 @@
 <?php
 	
 	include('config.php');
+	
+	set_time_limit(120);
+	//sets a 2 minute timeout 
 		
     //establish connection
     $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
