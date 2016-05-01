@@ -215,7 +215,7 @@
 					?>
 			
 				<h3>Your favourite photos</h3>
-				<div id="favouriteImageCarousel" class="carousel slide" data-ride="carousel">
+				<div id="favouriteImageCarousel" class="carousel slide">
 				  <!-- Indicators -->
 				  <ol class="carousel-indicators" id="favouriteImageCarouselIndicators">
 				  </ol>
@@ -234,6 +234,7 @@
 				    <span class="sr-only">Next</span>
 				  </a>
 				</div>
+				<button type="button" id="carouselPauseButton">Pause</button>
 
 				<h3>Your photo uploads and classifications:</h3>
 			    <div id="timeline"></div>

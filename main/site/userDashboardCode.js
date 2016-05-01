@@ -260,6 +260,7 @@ window.onload = function() {
 
   var width = 1200;
   var highlightID=null;
+  var cycling=true;
 
   function buildTimeline() {
     if(timelineArray[0]["times"].length>0 || timelineArray[1]["times"].length>0){
@@ -327,9 +328,22 @@ window.onload = function() {
             $("#favouriteImageCarouselInner").append('<div class="item "><img src="'+urls[i]+'" alt="favourite"></div>');
           }
         }
-        $("#favouriteImageCarousel").carousel();
-        $(".item").click(function(){
-          $("#favouriteImageCarousel").carousel(1);
+        $("#favouriteImageCarousel").carousel({
+        	interval:6000,
+        	pause:false
+        });
+
+        $("#carouselPauseButton").click(function(){
+        	if(!cycling){
+        		$("#favouriteImageCarousel").carousel("cycle");
+        		$("#carouselPauseButton").html("Pause");
+        		cycling=true;
+        	}
+        	else{
+        		$("#favouriteImageCarousel").carousel("pause");
+        		$("#carouselPauseButton").html("Start");
+        		cycling=false;
+        	}
         });
 
         // Enable Carousel Controls
