@@ -230,19 +230,52 @@ window.onload = function() {
 			         numClass+=1;
 			     }
 			    jQuery.each(uploadData["uploads"],function(key,value){
-				    	if(value["num_photos"]>0){
+				    if(value["num_photos"]>0){
 				    	var dStr=value["timestamp"].replace(/ /,"T");
 				    	var d=new Date(dStr);
+				    	//Javascript date ranges from 0-11 rather than 1-12 QQ
+				    	d.setMonth(d.getMonth()+1);
+
 				    	timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
 				    	uploads++;
 			    	}
 			    });
 
+			    var curDate=null;
+			    var count=0;
+
 			    jQuery.each(uploadData["classifications"],function(key,value){
 			    	var dStr=value.replace(/ /,"T");
 					var d=new Date(dStr);
-					timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
-					classifications++;
+
+					if(curDate==null){
+						//Again, -1 is because js Date month goes from 0-11 whereas values in database are 1-12
+						curDate=new Date(d.getFullYear(),d.getMonth()-1,d.getDate());
+						console.log(curDate);
+					}
+					else{
+						if(curDate.getDate()==d.getDate() && curDate.getMonth()==d.getMonth()-1 && curDate.getFullYear()==d.getFullYear()){
+							count+=1;
+						}
+						else{
+							timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "num_photos":count};
+							if(count>50){
+								timelineArray[1]["times"][classifications]["color"]="#5EFF00";
+							}
+							else if(count>25){
+								timelineArray[1]["times"][classifications]["color"]="#22E600";
+							}
+							else if(count>7){
+								timelineArray[1]["times"][classifications]["color"]="#19A600";
+							}
+							else{
+								timelineArray[1]["times"][classifications]["color"]="#0C5200";
+							}
+							classifications++;
+							count=0;
+							curDate=new Date(d.getFullYear(),d.getMonth()-1,d.getDate());
+						}
+					}
 			    });
 			    //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
 			    var earliest=null;
@@ -316,7 +349,7 @@ window.onload = function() {
         	div.find('#hoverDetails').text(detText);
         }
         else{
-        	div.find('#hoverDetails').text("You classified a photo on " + dDay+"/"+ dMonth+"/"+ dYear + ", this was " + d["id"]);
+        	div.find('#hoverDetails').text("On " + dDay+"/"+ dMonth+"/"+ dYear + ", you classified " + d["num_photos"] +" photos");
         }
         
       })
