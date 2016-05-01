@@ -200,7 +200,7 @@ function drawChartSmall(values,id,xLabel){
 
 window.onload = function() {
 	//Replace this with id of loggegd in user in actual system
-	var person_id=194;
+	var person_id=182;
 	$("#userIDDiv").html("<p>User number "+person_id+"</p>");
 	var timelineArray = [
 	{label:"uploads", times: []},
@@ -230,19 +230,19 @@ window.onload = function() {
 			         numClass+=1;
 			     }
 			    jQuery.each(uploadData["uploads"],function(key,value){
-			    	var dStr=value["timestamp"].replace(/ /,"T");
-			    	var d=new Date(dStr);
-			    	//Can add more data to this object to enable more interesting things later
-			    	timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
-			    	uploads++;
+				    	if(value["num_photos"]>0){
+				    	var dStr=value["timestamp"].replace(/ /,"T");
+				    	var d=new Date(dStr);
+				    	timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
+				    	uploads++;
+			    	}
 			    });
 
 			    jQuery.each(uploadData["classifications"],function(key,value){
 			    	var dStr=value.replace(/ /,"T");
-			       var d=new Date(dStr);
-			       //Can add more data to this object to enable more interesting things later
-			       timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
-			       classifications++;
+					var d=new Date(dStr);
+					timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "color":"#2DA"+(500+Math.round(60*(classifications/numClass)))};
+					classifications++;
 			    });
 			    //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
 			    var earliest=null;
