@@ -141,77 +141,84 @@
 		}
 		$sql=$sql.";";
 
-		//words and titles on the page shown to viewer other than the table
-		echo "<h1>Query Results:</h1><br/>";
-		echo'<div class= "row">';
-			echo '<div class="col-sm-6">';
-				echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
-				echo '<p>'.$counter.' results found. </p>';
-				echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
-			echo '</div>';
-			echo '<div class="col-sm-3">';
-				
-			echo '</div>';
-			echo '<div class="col-sm-2">';
-				echo'<a href="scientistSearch.html?userMode=s" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
-				echo'<br/>';
-				echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
-				echo'<br/>';
-				if(isset($_REQUEST["userMode"])){
-					if($_REQUEST["userMode"]=="s"){//if in scientist mode  generate dashboard link to scientist dashboard to view graphs based on filter data
-						echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_REQUEST["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
-					}
-					else{//if in user mode, generate dashboard link to user dashboard to view graphs based on filter data
-						echo'<a id="dashBoardButton" href="userDashboard.php?userMode='.$_REQUEST["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
-					}
-				}
-				echo'<br/>';
-			echo '</div>';
-		echo'</div>';
-		/*output table showing sites meeting the filter criteria */
-		echo '<table class="table table-hover">';
-		echo '<thead>';
-		echo "<tr>";
-		echo '<th>Site ID</th>';
-		echo '<th>Site name</th>';
-		echo '<th>Person ID</th>';
-		echo '<th>Grid reference</th>';
-		echo '</tr>';
-		echo '</thead>';
-		echo '<tbody>';
-		
-		//TABLE 1 - output results
-		$sqlResults=$connection->query($sql);
-		if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
-			while($row=$sqlResults->fetch_assoc()){
-					$lat=$row["latitude"];
-					$long=$row["longitude"];
-					//if there is no data on this row for lat/long
-					if(!isset($lat)){
-						echo "<tr>";
-						echo "<td>".$row["site_id"]."</td>";
-						echo "<td>".$row["site_name"]."</td>";
-						echo "<td>".$row["person_id"]."</td>";
-						echo "<td>No Data</td>";
-						echo "</tr>";						
-					}
-					else{
-					//if there is data on this row for lat/long
-						echo "<tr>";
-						echo "<td>".$row["site_id"]."</td>";
-						echo "<td>".$row["site_name"]."</td>";
-						echo "<td>".$row["person_id"]."</td>";
-						echo "<td><a href=\"javascript:;\" src=\"\" onclick=\"popUp(".$lat.",".$long.")\"> ".$row["grid_ref"]." </a></td>";
-						echo "</tr>";
-					}
-			}
-		}
-		else{
-			echo "<tr><td>No sites found</td></tr>";
-		}
-		echo '</tbody>';
-		echo "</table>";
 
+		echo'<div class = "col-sm-1">';//left margin
+		echo'</div>';
+		
+		echo'<div class = "col-sm-10">';
+			echo "<h1>Query Results:</h1><br/>";
+			echo'<div class= "row">';
+				echo '<div class="col-sm-6">';
+						//words and titles on the page shown to viewer other than the table
+					echo '<p> Site filters applied:<br/> '.$description.' <br/></p>';
+					echo '<p>'.$counter.' results found. </p>';
+					echo '<p> Table showing sites meeting the filter criteria. Use the "back" button to revise the filter. </p>';
+				echo '</div>';
+				echo '<div class="col-sm-3">';
+					
+				echo '</div>';
+				echo '<div class="col-sm-2">';
+					echo'<a href="scientistSearch.html?userMode=s" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
+					echo'<br/>';
+					echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+					echo'<br/>';
+					if(isset($_REQUEST["userMode"])){
+						if($_REQUEST["userMode"]=="s"){//if in scientist mode  generate dashboard link to scientist dashboard to view graphs based on filter data
+							echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_REQUEST["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+						}
+						else{//if in user mode, generate dashboard link to user dashboard to view graphs based on filter data
+							echo'<a id="dashBoardButton" href="userDashboard.php?userMode='.$_REQUEST["userMode"].'searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+						}
+					}
+					echo'<br/>';
+				echo '</div>';
+			echo'</div>';
+			/*output table showing sites meeting the filter criteria */
+			echo '<table class="table table-hover">';
+			echo '<thead>';
+			echo "<tr>";
+			echo '<th>Site ID</th>';
+			echo '<th>Site name</th>';
+			echo '<th>Person ID</th>';
+			echo '<th>Grid reference</th>';
+			echo '</tr>';
+			echo '</thead>';
+			echo '<tbody>';
+			
+			//TABLE 1 - output results
+			$sqlResults=$connection->query($sql);
+			if(isset($sqlResults->num_rows) && $sqlResults->num_rows>0){ 
+				while($row=$sqlResults->fetch_assoc()){
+						$lat=$row["latitude"];
+						$long=$row["longitude"];
+						//if there is no data on this row for lat/long
+						if(!isset($lat)){
+							echo "<tr>";
+							echo "<td>".$row["site_id"]."</td>";
+							echo "<td>".$row["site_name"]."</td>";
+							echo "<td>".$row["person_id"]."</td>";
+							echo "<td>No Data</td>";
+							echo "</tr>";						
+						}
+						else{
+						//if there is data on this row for lat/long
+							echo "<tr>";
+							echo "<td>".$row["site_id"]."</td>";
+							echo "<td>".$row["site_name"]."</td>";
+							echo "<td>".$row["person_id"]."</td>";
+							echo "<td><a href=\"javascript:;\" src=\"\" onclick=\"popUp(".$lat.",".$long.")\"> ".$row["grid_ref"]." </a></td>";
+							echo "</tr>";
+						}
+				}
+			}
+			else{
+				echo "<tr><td>No sites found</td></tr>";
+			}
+			echo '</tbody>';
+			echo "</table>";
+		echo '</div>';
+		echo'<div class = "col-sm-1">';//right margin
+		echo'</div>';
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		function loadSpeciesMap($connection){

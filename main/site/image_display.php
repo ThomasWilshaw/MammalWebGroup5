@@ -110,7 +110,11 @@
 		
 		$sqlResults=$connection->query($sql);
 		$counter=mysqli_num_rows($sqlResults);
-
+		
+		echo'<div class = "col-sm-1">';//left margin
+		echo'</div>';
+		
+		echo'<div class = "col-sm-10">';
 		//words and titles on the page shown to viewer other than the table
 		echo "<h1>Query Results:</h1><br/>";
 		echo'<div class= "row">';
@@ -183,6 +187,9 @@
 		}
 		echo '</tbody>';
 		echo "</table>";
+		echo '</div>';
+		echo'<div class = "col-sm-1">';//right margin
+		echo'</div>';
 
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
