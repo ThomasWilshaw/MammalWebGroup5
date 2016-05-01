@@ -236,7 +236,7 @@ window.onload = function() {
 				    	//Javascript date ranges from 0-11 rather than 1-12 QQ
 				    	d.setMonth(d.getMonth()+1);
 
-				    	timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(25+Math.round(74*(uploads/numUploads)))};
+				    	timelineArray[0]["times"][uploads]={"starting_time":d.getTime(),"id":"upload"+(uploads+1),"num_photos":value["num_photos"], "color":"#0033"+(20+Math.round(79*(uploads/numUploads)))};
 				    	uploads++;
 			    	}
 			    });
