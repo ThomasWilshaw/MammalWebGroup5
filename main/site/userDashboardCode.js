@@ -65,137 +65,138 @@ function generateGraph(values){
 //draws a smaller chart with axis markers dependant on the values
 function drawChartSmall(values,id,xLabel){
 	
-	//dimensions with margin
-	var margin = {top: 30, right: 30, bottom: 30, left: 30},
-	width = 640 - margin.left - margin.right,
-	height = 400 - margin.top - margin.bottom;
-	
-	//SETTING UP AND HANDLING DATA
-	//array to hold unique values from values
-	var uniqueValues=[];
-	var valueMap=[];//the number of occurences of each value
-	for (var index = 0; index < values.length; ++index) {
-		//check if this value is already in the value counts list
-		if(!(values[index] in valueMap))
-		{
-			valueMap[values[index]]=1;
+	if(values.length>0){
+		//dimensions with margin
+		var margin = {top: 30, right: 30, bottom: 30, left: 30},
+		width = 640 - margin.left - margin.right,
+		height = 400 - margin.top - margin.bottom;
+		
+		//SETTING UP AND HANDLING DATA
+		//array to hold unique values from values
+		var uniqueValues=[];
+		var valueMap=[];//the number of occurences of each value
+		for (var index = 0; index < values.length; ++index) {
+			//check if this value is already in the value counts list
+			if(!(values[index] in valueMap))
+			{
+				valueMap[values[index]]=1;
+			}
+			else{
+				valueMap[values[index]]=(valueMap[values[index]]+1);
+			}
+			//check if this value is already in the unique value list
+			if(!(uniqueValues.indexOf(values[index])>-1))
+			{
+				uniqueValues.push(values[index]);
+			}
 		}
-		else{
-			valueMap[values[index]]=(valueMap[values[index]]+1);
+		var dataset = [];
+		for (var index=0;index<uniqueValues.length;++index){
+			var dictObject = { key: uniqueValues[index] , value: valueMap[uniqueValues[index]]  };
+			dataset.push(dictObject);
 		}
-		//check if this value is already in the unique value list
-		if(!(uniqueValues.indexOf(values[index])>-1))
-		{
-			uniqueValues.push(values[index]);
-		}
-	}
-	var dataset = [];
-	for (var index=0;index<uniqueValues.length;++index){
-		var dictObject = { key: uniqueValues[index] , value: valueMap[uniqueValues[index]]  };
-		dataset.push(dictObject);
-	}
-	//DATA NOW READY TO BE USED
+		//DATA NOW READY TO BE USED
 
-	
-	//x scale and x domain
-	var xScale = d3.scale.ordinal()
-					.domain(d3.range(dataset.length))
-					.rangeRoundBands([0, width], 0.1); 
-	
-	//y scale and domain
-	var yScale = d3.scale.linear()
-					.domain([0, d3.max(dataset, function(d) {return d.value;})])
-					.range([0, height]);
-	
-	//creating svg object with assigned width and height
-	var svg = d3.select("#"+id)
-				.append("svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom);
-	//shortcut to accessing key part of data dictionary objects each time			
-	var key = function(d) {
-		return d.key;
-	};
-	//drawing rectangles
-	var redShades=["Red","DarkRed","OrangeRed","FireBrick"];
-	svg.selectAll("rect")
-	   .data(dataset, key)
-	   .enter()
-	   .append("rect")
-	   .attr("x", function(d, i) {
-			return xScale(i);
-	   })
-	   .attr("y", function(d) {
-			return height - yScale(d.value);
-	   })
-	   .attr("width", xScale.rangeBand())
-	   .attr("height", function(d) {
-			return yScale(d.value);
-	   })
-	   .attr("fill",function(d,i){return redShades[i%3]});//shaded in different reds
-	//adding labels for each bar showing what they are
-	svg.selectAll(".xaxis text")
-	.data(dataset, key)
-	.enter()
-	.append("text")
-	.text(function(d) {
-		return d.key;
-	})
-	.attr("text-anchor", "middle")
-	.attr("x", function(d, i) {
-		return xScale(i) + xScale.rangeBand() / 2;
-	})
-	.attr("y",  height + margin.bottom)
-	.attr("font-size", "11px")
-	.attr("fill", "black");
-	 
-	//adding a label on each bar showing its value
-	svg.selectAll(".yaxis text")
-	.data(dataset, key)
-	.enter()
-	.append("text")
-	.text(function(d) {
-		return d.value;
-	})
-	.attr("text-anchor", "middle")
-	.attr("x", function(d, i) {
-		return xScale(i) + xScale.rangeBand() / 2;
-	})
-	.attr("y", function(d) {
-		return height - yScale(d.value) - 10;
-	})
-	.attr("font-size", "11px")
-	.attr("fill", "black");
-	
-	//adding another label on each bar showing its value
-	svg.selectAll(".zaxis text")
-	.data(dataset, key)
-	.enter()
-	.append("text")
-	.text(function(d) {
-		return d.value;
-	})
-	.attr("text-anchor", "middle")
-	.attr("x", function(d, i) {
-		return xScale(i) + xScale.rangeBand() / 2;
-	})
-	.attr("y", function(d) {
-		return height - yScale(d.value) + 10;
-	})
-	.attr("font-size", "11px")
-	.attr("fill", "white");
-	
-	//adding x axis label showing what is being measured on the x axis	
-	svg.append("text")
-    .attr("text-anchor", "middle")
-    .attr("x", width/2)
-    .attr("y", height +55)
-    .text(xLabel);
+		
+		//x scale and x domain
+		var xScale = d3.scale.ordinal()
+						.domain(d3.range(dataset.length))
+						.rangeRoundBands([0, width], 0.1); 
+		
+		//y scale and domain
+		var yScale = d3.scale.linear()
+						.domain([0, d3.max(dataset, function(d) {return d.value;})])
+						.range([0, height]);
+		
+		//creating svg object with assigned width and height
+		var svg = d3.select("#"+id)
+					.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom);
+		//shortcut to accessing key part of data dictionary objects each time			
+		var key = function(d) {
+			return d.key;
+		};
+		//drawing rectangles
+		var redShades=["Red","DarkRed","OrangeRed","FireBrick"];
+		svg.selectAll("rect")
+		   .data(dataset, key)
+		   .enter()
+		   .append("rect")
+		   .attr("x", function(d, i) {
+				return xScale(i);
+		   })
+		   .attr("y", function(d) {
+				return height - yScale(d.value);
+		   })
+		   .attr("width", xScale.rangeBand())
+		   .attr("height", function(d) {
+				return yScale(d.value);
+		   })
+		   .attr("fill",function(d,i){return redShades[i%3]});//shaded in different reds
+		//adding labels for each bar showing what they are
+		svg.selectAll(".xaxis text")
+		.data(dataset, key)
+		.enter()
+		.append("text")
+		.text(function(d) {
+			return d.key;
+		})
+		.attr("text-anchor", "middle")
+		.attr("x", function(d, i) {
+			return xScale(i) + xScale.rangeBand() / 2;
+		})
+		.attr("y",  height + margin.bottom)
+		.attr("font-size", "11px")
+		.attr("fill", "black");
+		 
+		//adding a label on each bar showing its value
+		svg.selectAll(".yaxis text")
+		.data(dataset, key)
+		.enter()
+		.append("text")
+		.text(function(d) {
+			return d.value;
+		})
+		.attr("text-anchor", "middle")
+		.attr("x", function(d, i) {
+			return xScale(i) + xScale.rangeBand() / 2;
+		})
+		.attr("y", function(d) {
+			return height - yScale(d.value) - 10;
+		})
+		.attr("font-size", "11px")
+		.attr("fill", "black");
+		
+		//adding another label on each bar showing its value
+		svg.selectAll(".zaxis text")
+		.data(dataset, key)
+		.enter()
+		.append("text")
+		.text(function(d) {
+			return d.value;
+		})
+		.attr("text-anchor", "middle")
+		.attr("x", function(d, i) {
+			return xScale(i) + xScale.rangeBand() / 2;
+		})
+		.attr("y", function(d) {
+			return height - yScale(d.value) + 10;
+		})
+		.attr("font-size", "11px")
+		.attr("fill", "white");
+		
+		//adding x axis label showing what is being measured on the x axis	
+		svg.append("text")
+	    .attr("text-anchor", "middle")
+	    .attr("x", width/2)
+	    .attr("y", height +55)
+	    .text(xLabel);
+	}
+	else{
+		$("#"+id).append("<p>No reliable data for that</p>");
+	}
 }
-
-
-
-
 
 window.onload = function() {
   var person_id=182;
