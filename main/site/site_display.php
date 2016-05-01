@@ -32,6 +32,74 @@
 		$safeSQL="";//the part of the SQL query after "where", sent on its own to avoid injection
 		$mode=0;//keeps track of which tables had to be queried
 		
+		//if the user is using firefox or IE or a browser that doesn't support the datetime object
+		//this block of code will turn their time variables into variables compatable with the time code later on
+		if((isset($_REQUEST['time1raw1']))){
+			$timeVariables=["time1raw1","time1raw2","time1raw3","time1raw4","time1raw5","time1raw6","time2raw1","time2raw2","time2raw3","time2raw4","time2raw5","time2raw6"];
+			$defaultTimes=["00","00","00","01","01","1950","00","00","00","01","01","2200"];//default times if a time variable is not set
+			$tempCounter=0;
+			foreach($timeVariables as $timeVariable){//if these raw time variables have meaningful values, put these in the defaultTimes array
+				if(!(empty($_REQUEST[$timeVariable])))
+				{
+					$defaultTimes[$tempCounter]=$_REQUEST[$timeVariable];
+				}
+				$tempCounter+=1;
+			}
+			$time1="";//will be used to construct the first time variable
+			$time2="";//will be used to construct the second time variable
+			
+			$shortMonths=["04","06","09","11"];//the months without 31 days
+			//checking that neither day variable is too large for its month- if it is, make it smaller
+			if(in_array($defaultTimes[4],$shortMonths)){
+				if((intval($defaultTimes[3]))>30){
+					$defaultTimes[3]="30";
+				}
+			}
+			else{//and february
+				if($defaultTimes[4]=="02"){
+					if((intval($defaultTimes[5]))%4==0){//leap year
+						if((intval($defaultTimes[3]))>29){
+							$defaultTimes[3]="29";
+						}	
+					}
+					else{
+							if((intval($defaultTimes[3]))>28){
+							$defaultTimes[3]="28";
+						}		
+					}
+					
+				}
+			}
+			//checking that neither day variable is too large for its month- if it is, make it smaller
+			if(in_array($defaultTimes[10],$shortMonths)){
+				if((intval($defaultTimes[9])>30)){
+					$defaultTimes[9]="30";
+				}
+			}
+			else{//and february
+				if($defaultTimes[10]=="02"){
+					if((intval($defaultTimes[11]))%4==0){//leap year
+						if((intval($defaultTimes[9]))>29){
+							$defaultTimes[9]="29";
+						}	
+					}
+					else{
+							if((intval($defaultTimes[9]))>28){
+							$defaultTimes[9]="28";
+						}		
+					}
+					
+				}
+			}
+			
+			$time1=$defaultTimes[5]."-".$defaultTimes[4]."-".$defaultTimes[3]."T".$defaultTimes[0].":".$defaultTimes[1].":".$defaultTimes[2];
+			$time2=$defaultTimes[11]."-".$defaultTimes[10]."-".$defaultTimes[9]."T".$defaultTimes[6].":".$defaultTimes[7].":".$defaultTimes[8];
+			$_REQUEST['time1']=$time1;
+			$_REQUEST['time2']=$time2;
+			
+		}
+		
+		
 		/* NB the searching in site_display is a bit different to image_display.
 		site_display finds a list of unique site IDs fitting the criteria
 		and then does another query using these IDs to get information from the site table
