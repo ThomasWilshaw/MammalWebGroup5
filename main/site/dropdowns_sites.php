@@ -293,7 +293,6 @@
 							echo'<div class="col-xs-2">';
 								echo'<label for="time1raw4">day</label>';
 								echo'<select class="form-control" id="time1raw4" name="time1raw4" form="inputs" step="1">';
-									echo'<option value="00">00</option>';
 									echo'<option value="01">01</option>';
 									echo'<option value="02">02</option>';
 									echo'<option value="03">03</option>';
@@ -330,7 +329,6 @@
 							echo'<div class="col-xs-2">';
 								echo'<label for="time1raw5">Month</label>';
 								echo'<select class="form-control" id="time1raw5" name="time1raw5" form="inputs" step="1">';
-									echo'<option value="00">00</option>';
 									echo'<option value="01">01</option>';
 									echo'<option value="02">02</option>';
 									echo'<option value="03">03</option>';
@@ -343,17 +341,6 @@
 									echo'<option value="10">10</option>';
 									echo'<option value="11">11</option>';
 									echo'<option value="12">12</option>';
-									echo'<option value="13">13</option>';
-									echo'<option value="14">14</option>';
-									echo'<option value="15">15</option>';
-									echo'<option value="16">16</option>';
-									echo'<option value="17">17</option>';
-									echo'<option value="18">18</option>';
-									echo'<option value="19">19</option>';
-									echo'<option value="20">20</option>';
-									echo'<option value="21">21</option>';
-									echo'<option value="22">22</option>';
-									echo'<option value="23">23</option>';
 								echo'</select>';
 							echo'</div>';
 							echo'<div class="col-xs-2">';
