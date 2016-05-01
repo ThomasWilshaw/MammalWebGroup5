@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Php x SQL</title>
+	<title>Search results</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -283,6 +283,7 @@
 					
 					//if the variable is time1 or time2
 					if(in_array($key,$handledGroup2) AND (!empty($value))){
+						echo $value;
 						
 						$timeVariablesRecieved+=1;
 						
