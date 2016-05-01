@@ -681,7 +681,7 @@
 			echo'<br/><br/>';
 			
 			echo '<input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit"> ';	
-			
+			echo'<br/>';
 		echo '</div>';
 		echo '</form>';
 		
