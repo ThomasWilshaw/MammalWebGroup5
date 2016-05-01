@@ -71,14 +71,11 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-1 col-xs-0 margin-shape" id="test">
-			<!-- margin-left -->
+				<div id="userIDDiv"></div>
 			</div>
 		
 			<div class="col-md-10 col-xs-12 form-col">
 			<!-- form-middle-col -->
-			
-			
-			
 				<!-- an optional portion of the page that displays graphs and information about the most recent filter search-->
 					<?php
 						set_time_limit(120);
@@ -212,7 +209,7 @@
 						}
 						$connection->close();
 					?>
-			
+				
 				<h3>Your favourite photos</h3>
 				<div id="favouriteImageCarousel" class="carousel slide">
 				  <!-- Indicators -->
@@ -242,15 +239,13 @@
 			      <div id="details"><p>Loading...</p></div>
 			    </div>
 			</div>
-		
+
 			<div class="col-md-1 col-xs-0 margin-shape">
 			<!-- margin-left -->
 			</div>
 		</div>
 	</div>
 
-
-	
 	<?php
 
 	function populateCategory($connection,$category,$tableName){
