@@ -593,13 +593,23 @@
 							$counter+=1;
 							if($innerCounter==0){
 								$speciesQuery=$speciesQuery.$arrayItem;
-								$rawValue=$speciesMap[$arrayItem];
+								if($arrayItem!="-1"){
+									$rawValue=$speciesMap[$arrayItem];
+								}
+								else{
+									$rawValue="No data";
+								}
 								$speciesDescription=$speciesDescription.$rawValue;
 							}
 							
 							else{
 								$speciesQuery=$speciesQuery." OR ".$arrayItem;
-								$rawValue=$speciesMap[$arrayItem];
+								if($arrayItem!="-1"){
+									$rawValue=$speciesMap[$arrayItem];
+								}
+								else{
+									$rawValue="No data";
+								}
 								$speciesDescription=$speciesDescription.",".$rawValue;
 							}
 							$innerCounter+=1;
