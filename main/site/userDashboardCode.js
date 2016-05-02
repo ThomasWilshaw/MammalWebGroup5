@@ -223,16 +223,16 @@ window.onload = function() {
 	    timeout:99999,*/
 	    success: function (response) {
 	    	if (response != ''){
-
 			    var uploadData=jQuery.parseJSON(response);
 			    var numUploads=0;
-			     for(var i in uploadData["uploads"]){
-			         numUploads+=1;
-			     }
-			     var numClass=0;
-			     for(var i in uploadData["classifications"]){
-			         numClass+=1;
-			     }
+			    for(var i in uploadData["uploads"]){
+			        numUploads+=1;
+			    }
+			    var numClass=0;
+			    for(var i in uploadData["classifications"]){
+			        numClass+=1;
+			    }
+
 			    jQuery.each(uploadData["uploads"],function(key,value){
 				    if(value["num_photos"]>0){
 				    	var dStr=value["timestamp"].replace(/ /,"T");
@@ -248,14 +248,15 @@ window.onload = function() {
 			    var curDate=null;
 			    var count=0;
 
+			    var d;
 			    jQuery.each(uploadData["classifications"],function(key,value){
 			    	var dStr=value.replace(/ /,"T");
-					var d=new Date(dStr);
+					d=new Date(dStr);
 
 					if(curDate==null){
 						//Again, -1 is because js Date month goes from 0-11 whereas values in database are 1-12
 						curDate=new Date(d.getFullYear(),d.getMonth()-1,d.getDate());
-						console.log(curDate);
+						count=1;
 					}
 					else{
 						if(curDate.getDate()==d.getDate() && curDate.getMonth()==d.getMonth()-1 && curDate.getFullYear()==d.getFullYear()){
@@ -276,24 +277,48 @@ window.onload = function() {
 								timelineArray[1]["times"][classifications]["color"]="#0C5200";
 							}
 							classifications++;
-							count=0;
+							count=1;
 							curDate=new Date(d.getFullYear(),d.getMonth()-1,d.getDate());
 						}
 					}
 			    });
+
 			    //Necessary to have ending time, otherwise tries to make infinite timeline which goes badly. Could also do when constructing timeline with the .ending(date) method
 			    var earliest=null;
 			    if(uploads>0){
 			       timelineArray[0]["times"][uploads-1]["ending_time"]=new Date().getTime();
-			       $("#details").text("You have " + uploads + " total uploads");
+			       $("#details").text("You have " + numUploads + " total uploads");
 			       earliest=timelineArray[0]["times"][0]["starting_time"]
 			    }
-			    if(classifications>0){
+			    else{
+			    	$("#details").text("You have don\'t have any uploads yet");
+			    }
+
+			    if(numClass>0){
+			    	//Have to add last day of photos (Copy pasting this feels horrid)
+			    	timelineArray[1]["times"][classifications]={"starting_time":d.getTime(),"id":"class"+(classifications+1), "num_photos":count};
+					if(count>50){
+						timelineArray[1]["times"][classifications]["color"]="#5EFF00";
+					}
+					else if(count>25){
+						timelineArray[1]["times"][classifications]["color"]="#22E600";
+					}
+					else if(count>7){
+						timelineArray[1]["times"][classifications]["color"]="#19A600";
+					}
+					else{
+						timelineArray[1]["times"][classifications]["color"]="#0C5200";
+					}
+					classifications++;
 			       timelineArray[1]["times"][classifications-1]["ending_time"]=new Date().getTime();
-			       $("#details").append("<br>You have " + classifications + " total image classifications");
-			       if(timelineArray[1]["times"][0]["starting_time"]<earliest){
-			       		earliest=timelineArray[1]["times"][0]["starting_time"]
+			       $("#details").append("<br>You have " + numClass + " total image classifications");
+			       var firstClassTime=timelineArray[1]["times"][0]["starting_time"];
+			       if(firstClassTime<earliest || earliest==null){
+			       		earliest=firstClassTime;
 			       }
+			    }
+			    else{
+			    	$("#details").append("<br>You don\'t have any classifications");
 			    }
 			    buildTimeline(earliest);
 	       }
