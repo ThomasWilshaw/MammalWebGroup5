@@ -42,7 +42,15 @@
 			
 			<div class="col-md-3 col-xs-12 form-col">
 			<!-- form-right-col -->
-				<a href="userHome.html">User</a>
+			<select onchange="document.getElementById('userLink').setAttribute('href','userDashboard.php?user='+this.value)">
+			  <option value="182">182</option>
+			  <option value="185">185</option>
+			  <option value="188">188</option>
+			  <option value="191">191</option>
+			  <option value="194">194</option>
+			</select>
+			<br>
+				<a id="userLink" href="userDashboard.php?user=182">User</a>
 			</div>
 		
 			<div class="col-md-3 col-xs-0 margin-shape">

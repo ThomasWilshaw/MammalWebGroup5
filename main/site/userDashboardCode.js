@@ -201,6 +201,10 @@ function drawChartSmall(values,id,xLabel){
 window.onload = function() {
 	//Replace this with id of loggegd in user in actual system
 	var person_id=182;
+	var urlParams=location.search;
+	if(urlParams!=''){
+		person_id=urlParams.slice(6);
+	}
 	$("#userIDDiv").html("<p>User number "+person_id+"</p>");
 	var timelineArray = [
 	{label:"uploads", times: []},
