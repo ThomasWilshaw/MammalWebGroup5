@@ -25,6 +25,9 @@
       shape-rendering: crispEdges;
     }
 
+    rect.background{
+    	fill:white;
+    }
     </style>
 </head>
 <body>
@@ -276,7 +279,6 @@
 					<h3>Chart showing all consensus/complete classifications and where they were captured</h3>
 					<p>Click on a bar to see a break down of the sites where they were captured</p>
 					<div id="siteChart">
-						<p>Loading...</p>
 					</div>
 						<?php
 
