@@ -456,6 +456,7 @@ window.onload = function() {
       else{
         $("#favouriteImageCarousel").removeClass("carousel slide");
         $("#favouriteImageCarousel").html("<p>You don't have any favourited photos yet- click the thumbs up on a photo whilst spotting to save it for later.</p>");
+        $("#carouselPauseButton").hide();
       }
     }
   });  
