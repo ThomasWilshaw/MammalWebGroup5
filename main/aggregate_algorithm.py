@@ -1,6 +1,5 @@
 import pymysql
 import math
-import sqlite3
 
 def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
     c=connection.cursor()
@@ -133,99 +132,101 @@ def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
         else:
             flag=flags['incomplete']
 
-    #Check if aggregate already exists, if not insert, otherwise update
-    sql="SELECT photo_id FROM aggregate WHERE photo_id="+str(photo_ID)
+    return (photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
 
-    #                                                       ----------------------------EXECUTING THIS IS REALLY SLOW WHEN AGGREGATE IS FULL---------------------
-    c.execute(sql)
+#-----------Check aggregates against goldstandard set-----------
+def checkAgainstGoldStandard(connection):
+    with connection.cursor() as c:
+        #Get options matching 'like' struc, we want to ignore these as they are not proper classifications
+        sql="SELECT option_id FROM options WHERE struc='like'"
+        c.execute(sql)
+        ignoreResult=c.fetchall()
+        ignore=[]
+        for row in ignoreResult:
+            ignore.append(row['option_id'])
 
-    currentAggregate=c.fetchone()
-    if currentAggregate==None:
-        return ["INSERT",(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)]
-    else:
-        return ["UPDATE",(numClass,species,evenness,blanks,support,flag,age,gender,photo_ID)]
+        #Join aggregate table with classifications from gold standard
+        sql= "SELECT * from aggregate ag, animal a WHERE a.photo_id=ag.photo_id AND a.person_id=311"
+        c.execute(sql)
+        result=c.fetchall()
+        speciesmatches=0
+        gendermatches=0
+        agematches=0
+        total=0
+        completetotal=0
+        completematches=0
+        #If classification is not useless (a 'like' classification), check if aggregate matches gold standard classification
+        for row in result:
+            if row['a.species'] not in ignore:
+                total+=1
+                if row['flag']==167 or row['flag']==166:
+                    completetotal+=1
+                if row['a.species']==row['species']:
+                    speciesmatches+=1
+                    if row['flag']==167 or row['flag']==166:
+                        completematches+=1
+                if row['a.gender']==row['gender']:
+                    gendermatches+=1
+                if row['a.age']==row['age']:
+                    agematches+=1
 
+        print("Agreement of aggregate species with gold standard = " +str((speciesmatches/total)*100)+"%")
+        print("Agreement of aggregate gender with gold standard = " +str((gendermatches/total)*100)+"%")
+        print("Agreement of aggregate age with gold standard = " +str((agematches/total)*100)+"%")
+        print("Agreement of aggregate species with gold standard where aggregates are complete/consensus = " +str((completematches/completetotal)*100)+"%")
+#----------------------------------------------------------------
+
+def aggregateAll(connection):
+    with connection.cursor() as cursor:
+        #Get number of photos to classify
+        sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
+        cursor.execute(sql)
+        maxID=cursor.fetchone()['photo_id']
+
+        #Pre search for blank options
+        blankOptions=[]
+        sql="SELECT option_id FROM options where struc='noanimal'"
+        cursor.execute(sql)
+        blankResults=cursor.fetchall()    
+        for row in blankResults:
+            blankOptions.append(row['option_id'])
+
+        #Pre search for flag options
+        sql="SELECT * FROM options WHERE struc='flag'"
+        cursor.execute(sql)
+        flagResult=cursor.fetchall()
+        flags=dict()
+
+        insertParams=[]
+        for row in flagResult:
+            flags[row['option_name']]=row['option_id']
+        for id in range(maxID):
+            if id%500==0:
+                print(id)
+            insertParams.append(aggregate_classifications(id,connection,blankOptions,flags))
+
+        cursor.execute("TRUNCATE TABLE aggregate")
+        stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        #Executing this doesn't care how many need to be inserted as it concatenates them all into one statement
+        cursor.executemany(stmt,insertParams)
+        connection.commit()
+#---------------------------------------------------------------
+
+def aggregateOne(connection,photo_id):
+    with connection.cursor() as cursor:
+        insertParams=[]
+        insertParams.append(aggregate_classifications(photo_id,connection))
+
+        cursor.execute("DELETE FROM aggregate WHERE photo_id="+str(photo_id))
+        stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        cursor.executemany(stmt,insertParams)
+        connection.commit()
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalweb2',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 
-#---------------RUN IMPLEMENTATION ON ALL PHOTOS---------------
+aggregateAll(connection)
+aggregateOne(connection,2)
+aggregateOne(connection,2222)
+checkAgainstGoldStandard(connection)
 
-with connection.cursor() as cursor:
-    #Get number of photos to classify
-    sql="SELECT photo_id FROM `animal` ORDER BY photo_id DESC;"
-    cursor.execute(sql)
-    maxID=cursor.fetchone()['photo_id']
-
-    #Pre search for blank options
-    blankOptions=[]
-    sql="SELECT option_id FROM options where struc='noanimal'"
-    cursor.execute(sql)
-    blankResults=cursor.fetchall()    
-    for row in blankResults:
-        blankOptions.append(row['option_id'])
-
-    #Pre search for flag options
-    sql="SELECT * FROM options WHERE struc='flag'"
-    cursor.execute(sql)
-    flagResult=cursor.fetchall()
-    flags=dict()
-
-    insertParams=[]
-    updateParams=[]
-    for row in flagResult:
-        flags[row['option_name']]=row['option_id']
-    for id in range(maxID):
-        if id%500==0:
-            print(id)
-        agg=aggregate_classifications(id,connection,blankOptions,flags)
-        if(agg[0]=="INSERT"):
-            insertParams.append(agg[1])
-        else:
-            updateParams.append(agg[1])
-
-    stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor.executemany(stmt,insertParams)
-    connection.commit()
-#---------------------------------------------------------------
-
-#-----------Check aggregates against goldstandard set-----------
-with connection.cursor() as c:
-    #Get options matching 'like' struc, we want to ignore these as they are not proper classifications
-    sql="SELECT option_id FROM options WHERE struc='like'"
-    c.execute(sql)
-    ignoreResult=c.fetchall()
-    ignore=[]
-    for row in ignoreResult:
-        ignore.append(row['option_id'])
-
-    #Join aggregate table with classifications from gold standard
-    sql= "SELECT * from aggregate ag, animal a WHERE a.photo_id=ag.photo_id AND a.person_id=311"
-    c.execute(sql)
-    result=c.fetchall()
-    speciesmatches=0
-    gendermatches=0
-    agematches=0
-    total=0
-    completetotal=0
-    completematches=0
-    #If classification is not useless (a 'like' classification), check if aggregate matches gold standard classification
-    for row in result:
-        if row['a.species'] not in ignore:
-            total+=1
-            if row['flag']==167 or row['flag']==166:
-                completetotal+=1
-            if row['a.species']==row['species']:
-                speciesmatches+=1
-                if row['flag']==167 or row['flag']==166:
-                    completematches+=1
-            if row['a.gender']==row['gender']:
-                gendermatches+=1
-            if row['a.age']==row['age']:
-                agematches+=1
-
-    print("Agreement of aggregate species with gold standard = " +str((speciesmatches/total)*100)+"%")
-    print("Agreement of aggregate gender with gold standard = " +str((gendermatches/total)*100)+"%")
-    print("Agreement of aggregate age with gold standard = " +str((agematches/total)*100)+"%")
-    print("Agreement of aggregate species with gold standard where aggregates are complete/consensus = " +str((completematches/completetotal)*100)+"%")
-#----------------------------------------------------------------
 connection.close()
