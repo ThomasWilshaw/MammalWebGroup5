@@ -274,9 +274,8 @@
 						$siteKey=$key;
 					}
 					if(!(is_array($value))){
-						
 						if(in_array($key,$handledGroup1Mapped)){
-							if($value!="-1"){
+							if(($value!="-1")and ($value!="any")){
 								$rawValue = array_search($value,$speciesMap);
 								//raw value is the value in the animal table
 								//corresponding to the value in the options table	
