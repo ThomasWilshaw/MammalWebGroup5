@@ -199,12 +199,21 @@ function drawChartSmall(values,id,xLabel){
 }
 
 window.onload = function() {
+	
 	//Replace this with id of loggegd in user in actual system
 	var person_id=182;
-	var urlParams=location.search;
-	if(urlParams!=''){
-		person_id=urlParams.slice(6);
+	//finding the person id if there is one in the url parameters
+	var urlParams=location.search.slice(1);
+	var paramsArray=urlParams.split("&");
+	$.each(paramsArray, function( index, value ) {
+    var tempArray=value.split("=");
+	if(tempArray[0]=="user"){
+		person_id=tempArray[1];
 	}
+    });
+
+
+	
 	$("#userIDDiv").html("<p>User number "+person_id+"</p>");
 	var timelineArray = [
 	{label:"uploads", times: []},
