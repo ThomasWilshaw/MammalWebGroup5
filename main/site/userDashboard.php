@@ -55,9 +55,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="userHome.html">Home</a></li>
+        <li><a href="userHome.html?" id="homeLink">Home</a></li>
         <li class="active"><a href="#">Dashboard<span class="sr-only">(current)</span></a></li>
-        <li><a href="userSearch.php">Search</a></li>
+        <li><a href="userSearch.php" id="searchLink">Search</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html">Logout</a></li>
