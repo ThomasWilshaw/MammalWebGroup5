@@ -1,6 +1,9 @@
 import pymysql
 import math
 
+#Calculates aggregate classification and metrics for a given photo_id as laid out in swanson et al
+#Input: photo_id is a photo_id, conneciton is a pymysql connection object, preBlank and preFlag are optional paramaters for if the blank and flag dictionaries are precomputed
+#Outputs a tuple with all the  
 def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
     c=connection.cursor()
     #Get blank option ids which can be ignored for a lot of things, if not already passed into function
@@ -176,6 +179,7 @@ def checkAgainstGoldStandard(connection):
         print("Agreement of aggregate species with gold standard where aggregates are complete/consensus = " +str((completematches/completetotal)*100)+"%")
 #----------------------------------------------------------------
 
+#-----------RUNS ALGORITHM IMPLEMENTATION ON ALL PHOTOS-----------
 def aggregateAll(connection):
     with connection.cursor() as cursor:
         #Get number of photos to classify
@@ -212,6 +216,7 @@ def aggregateAll(connection):
         connection.commit()
 #---------------------------------------------------------------
 
+#--------RUN ALGORITHM IMPLEMENTATION ON PHOTO WITH photo_id--------
 def aggregateOne(connection,photo_id):
     with connection.cursor() as cursor:
         insertParams=[]
@@ -221,12 +226,46 @@ def aggregateOne(connection,photo_id):
         stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         cursor.executemany(stmt,insertParams)
         connection.commit()
+#---------------------------------------------------------------
+
+#---------RUN ALGORITHM ON PHOTOS WITH p1<=photo_id<=p2---------
+def aggregateRange(connection,p1,p2):
+    with connection.cursor() as cursor:
+
+        #Pre search for blank options
+        blankOptions=[]
+        sql="SELECT option_id FROM options where struc='noanimal'"
+        cursor.execute(sql)
+        blankResults=cursor.fetchall()    
+        for row in blankResults:
+            blankOptions.append(row['option_id'])
+
+        #Pre search for flag options
+        sql="SELECT * FROM options WHERE struc='flag'"
+        cursor.execute(sql)
+        flagResult=cursor.fetchall()
+        flags=dict()
+
+        insertParams=[]
+        for row in flagResult:
+            flags[row['option_name']]=row['option_id']
+        for id in range(p1,p2+1):
+            insertParams.append(aggregate_classifications(id,connection,blankOptions,flags))
+
+        ids=[x for x in range(insertParams[0][0],insertParams[-1][0]+1)]
+        stmt="DELETE FROM aggregate WHERE photo_id=%s"
+        cursor.executemany(stmt,ids)
+        stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        #Executing this doesn't care how many need to be inserted as it concatenates them all into one statement
+        cursor.executemany(stmt,insertParams)
+        connection.commit()
+#---------------------------------------------------------------
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalweb2',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 
 aggregateAll(connection)
 aggregateOne(connection,2)
-aggregateOne(connection,2222)
+aggregateRange(connection,500,520)
 checkAgainstGoldStandard(connection)
 
 connection.close()
