@@ -2,16 +2,16 @@
 <html>
 <head>
 	<title>
-		MammalWeb Search
+		MammalWeb User
 	</title>
 
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="MW.css">
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="MW.js"></script>
 </head>
 <body>
-<?php 
+<?php
 	//passing user variable
 	if(isset($_REQUEST['user'])){
 		$userID=$_REQUEST['user'];
@@ -19,8 +19,8 @@
 	else{
 		$userID=182;//default for testing
 	}
-
 ?>
+    
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -37,11 +37,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
 		<?php
-        echo'<li><a href="userHome.php?user='.$userID.'">Home</a></li>';
         echo'<li><a href="userDashboard.php?user='.$userID.'">Dashboard</a></li>';
+        echo'<li><a href="userSearch.php?user='.$userID.'">Search</a></li>';
 		?>
-        <li class="active"><a href="#">Search<span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html">Logout</a></li>
@@ -58,32 +58,21 @@
 			<!-- margin-left -->
 			</div>
 		
-			<div class="col-md-10 col-xs-12 form-col" id="dropdowns">
+			<div class="col-md-10 col-xs-12 form-col">
 			<!-- form-middle-col -->
-				Loading search...
+
+			
 			</div>
+			
 		
 			<div class="col-md-1 col-xs-0 margin-shape">
-			<!-- margin-right-->
+			<!-- margin-left -->
+
 			</div>
 		</div>
 	</div>
 
-<!--Footer-->
-	
-	<div class="container-fluid">
-		<div class="row">
-			<div class = "col-md-12" id="footer">
-			</div>
-		</div>
-	</div>
 
-	<script>//load image search dropdowns into relevant div
-	window.onload = function(){
-		$("#dropdowns").load("dropdowns_images.php?userMode=u");
-	}
-	</script>
-	
+
 </body>
-
 </html>
