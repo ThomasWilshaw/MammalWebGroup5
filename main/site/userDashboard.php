@@ -80,8 +80,12 @@
 					<?php
 						set_time_limit(120);
 						//sets a 2 minute timeout 
-		
-						include('config.php');
+						
+						define('DBHOST', 'localhost');
+						define('DBNAME', 'mammalweb2');
+						define('DBUSER', 'root');
+						define('DBPASS', '');
+
 						$query="";
 						//establish connection
 						$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections

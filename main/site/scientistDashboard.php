@@ -32,6 +32,7 @@
 </head>
 <body>
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 	<script src="scientistDashboardCode.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
@@ -78,7 +79,11 @@
 						set_time_limit(120);
 						//sets a 2 minute timeout 
 						
-						include('config.php');
+						define('DBHOST', 'localhost');
+						define('DBNAME', 'mammalweb2');
+						define('DBUSER', 'root');
+						define('DBPASS', '');
+
 						$query="";
 						//establish connection
 						$connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connections
@@ -216,6 +221,7 @@
 					<h3>Select animal to see what time of day photos of them are captured:</h3>
 					<div class="container">
 					    <div class="row">
+					    	<div class="col-sm-4"></div>
 							<div class="col-sm-4">
 							    <form id="inputs" role="form">
 									<select name="species[]" class="form-control" id="speciesSelectTime" form="inputs" size=6>
@@ -239,6 +245,7 @@
 							  		<button type="button" id="clearTimeButton">Clear</button>
 							  	</form>
 							</div>
+							<div class="col-sm-4"></div>
 						</div>
 					</div>
 
@@ -248,6 +255,7 @@
 					<h3>Select animal to see what month photos of them are captured:</h3>
 					<div class="container">
 					    <div class="row">
+					    	<div class="col-sm-4"></div>
 							<div class="col-sm-4">
 							    <form id="inputs" role="form">
 									<select name="species[]" class="form-control" id="speciesSelectMonth" form="inputs" size=6>
@@ -270,6 +278,7 @@
 							  		<button type="button" id="clearMonthButton">Clear</button>
 							  	</form>
 							</div>
+					    	<div class="col-sm-4"></div>
 						</div>
 					</div>
 
