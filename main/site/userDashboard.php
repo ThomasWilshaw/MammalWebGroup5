@@ -38,6 +38,15 @@
 	  </style>
 </head>
 <body>
+<?php
+	//passing user variable
+	if(isset($_REQUEST['user'])){
+		$userID=$_REQUEST['user'];
+	}
+	else{
+		$userID=182;//default for testing
+	}
+?>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -55,9 +64,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="userHome.html?" id="homeLink">Home</a></li>
+	  	<?php
+        echo' <li><a href="userHome.php?user='.$userID.'" id="homeLink">Home</a></li>';
+		?>
         <li class="active"><a href="#">Dashboard<span class="sr-only">(current)</span></a></li>
-        <li><a href="userSearch.php" id="searchLink">Search</a></li>
+		<?php
+        echo' <li><a href="userSearch.php?user='.$userID.'" id="searchLink">Search</a></li>';
+		?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html">Logout</a></li>
