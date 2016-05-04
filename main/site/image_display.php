@@ -159,7 +159,7 @@
 						echo'<a id="dashBoardButton" href="scientistDashboard.php?userMode='.$_GET["userMode"].'&searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
 					}
 					else{//if in user mode, generate dashboard link to user dashboard to view graphs based on filter data
-						echo'<a id="dashBoardButton" href="userDashboard.php?userMode='.$_GET["userMode"].'&searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
+						echo'<a id="dashBoardButton" href="userDashboard.php?user='.$varUserID.'&userMode='.$_GET["userMode"].'&searchType=1&mode='.$mode.'&data='.$safeSQL.'" class="btn btn-success btn-lg btn-block" role="button">View graphs</a>';
 					}
 				}
 				
