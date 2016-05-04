@@ -5,6 +5,7 @@
 <head>
 	<title>PHP DROPDOWN MENU POPULATION FROM TABLES</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="MW.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 </head>

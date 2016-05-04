@@ -2,10 +2,6 @@
 	margin-bottom: 0px;
 }
 
-/*.margin-shape{
-	background-color: grey;
-	height: 900px;*/
-
 
 .form-col{
 	background-color: white;
@@ -101,7 +97,9 @@
 }
 
 button {
-  background-color: #6BBE92;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+  border-radius: 6px;
   width: 302px;
   border: 0;
   padding: 10px 0;
