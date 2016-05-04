@@ -24,19 +24,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	set_time_limit(120);
 	//sets a 2 minute timeout 
+	
+
 		
     //establish connection
     $connection=new mysqli(DBHOST,DBUSER,DBPASS,DBNAME);//establishes the sql connection
 	
+	makeSecureForSQL($connection);//see below
+	
 	//The results of this sql query will be output to a csv file
     if(isset($_GET["data"])){
-	    $sql=$_GET["data"];
-	    echo $sql;
-    }
+			$sqlData=$_GET["data"];
+			echo $sqlData;
+	   
+		if(!isset($_REQUEST['mode'])){
+			$_REQUEST['mode']="1";
+		}
+		$mode=$_REQUEST['mode'];
+		if(($mode=="1") or ($mode=="2")){
+			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id WHERE ";
+		}
+		else{
+			$query="SELECT * FROM site ";
+		}
+		$sql=$query.$sqlData;
+	 }
     else{
-    	$sql="SELECT photo_id FROM `animal`;";
+    	$sql="SELECT photo_id FROM `animal` WHERE ";
     }
-	
+	echo $sql;
 	$results=$connection->query($sql);
 	$fields =  mysqli_fetch_fields($results);
 	
@@ -81,5 +97,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	header("Content-disposition: attachment; filename=export.csv");
 	print "$header\n$data";
 	
+	
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*this function will be used to make sure every variable set in the $_REQUEST array doesn't contain
+	injected SQL. It doesn't need to operate on the keys of the array, only the values, as only specific
+	keys will be used in the arrayToQuery function to generate the SQL query.
+	The $connection parameter is included because the mysqli real_escape_string() function takes this
+	as a parameter to see which characters are acceptable*/
+	function makeSecureForSQL($myConnection){
+		//parses through everything in $_REQUEST
+		foreach($_GET as $key=>$value)
+		{
+			if(is_array($value)){
+				foreach($value as $valueKey=>$valueValue)
+				{
+					//escapes any character that may enable an sql injection attack
+					$value[$valueKey]=$myConnection->real_escape_string($valueValue);
+				}
+			}
+			else{
+				//escapes any character that may enable an sql injection attack
+				$_GET[$key]=$myConnection->real_escape_string($value);
+			}
+		}
+	}
+		
 	$connection->close();
 ?>
