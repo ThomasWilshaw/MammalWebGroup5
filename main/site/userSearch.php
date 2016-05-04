@@ -38,8 +38,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
 		<?php
-        echo'<li><a href="userHome.php?user='.$userID.'">Home</a></li>';
-        echo'<li><a href="userDashboard.php?user='.$userID.'">Dashboard</a></li>';
+        echo'<li><a href="userHome.php?user='.$userID.'&userMode=u">Home</a></li>';
+        echo'<li><a href="userDashboard.php?user='.$userID.'&userMode=u">Dashboard</a></li>';
 		?>
         <li class="active"><a href="#">Search<span class="sr-only">(current)</span></a></li>
       </ul>

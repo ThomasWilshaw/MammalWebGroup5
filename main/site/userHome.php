@@ -39,8 +39,8 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
 		<?php
-        echo'<li><a href="userDashboard.php?user='.$userID.'">Dashboard</a></li>';
-        echo'<li><a href="userSearch.php?user='.$userID.'">Search</a></li>';
+        echo'<li><a href="userDashboard.php?user='.$userID.'&userMode=u">Dashboard</a></li>';
+        echo'<li><a href="userSearch.php?user='.$userID.'&userMode=u">Search</a></li>';
 		?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
