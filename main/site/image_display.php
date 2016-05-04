@@ -167,10 +167,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				}
 				
 				echo'<br/>';
-
 				if(isset($_GET["userMode"])){
 					if($_GET["userMode"]=="s"){
-						echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+						echo'<a href="exportCSV.php?data='.$safeSQL.'&mode='.$mode.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
 						echo'<br/>';
 					}
 				}				

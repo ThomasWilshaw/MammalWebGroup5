@@ -20,7 +20,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <head>
-	<title>Php x SQL</title>
+	<title>search results</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -180,7 +180,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				echo '<div class="col-sm-2">';
 					echo'<a href="scientistSearch.html?userMode=s" class="btn btn-info btn-lg btn-block" role="button">Back to filter selection</a>';
 					echo'<br/>';
-					echo'<a href="exportCSV.php?data='.$sql.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
+					echo'<a href="exportCSV.php?mode='.$mode.'&data='.$safeSQL.'" class="btn btn-primary btn-lg btn-block" role="button">Download results</a>';
 					echo'<br/>';
 					if(isset($_REQUEST["userMode"])){
 						if($_REQUEST["userMode"]=="s"){//if in scientist mode  generate dashboard link to scientist dashboard to view graphs based on filter data
