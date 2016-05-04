@@ -43,6 +43,7 @@ function drawMap(locations) {
 		//check if there is already a marker for this point
 		if(!(drawnPoints.indexOf([coordinatesArray[index][0],coordinatesArray[index][1]])>-1))
 		{
+			console.log(coordinatesArray[index][1]);
 			var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(coordinatesArray[index][0],coordinatesArray[index][1]),
 			map: map,

@@ -2,6 +2,26 @@
 
     <a href="selectUserChart.php">Back</a>
 <?php
+/*
+Allow access to simple statistics and download of the Mammal Web database (http://www.mammalweb.org/)
+Copyright (C) 2016  Freddie Keen, Quentin Lam, Will Taylor, Tom White, 
+Thomas Wilshaw
+contact: cs-seg5@durham.ac.uk
+
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 // pass on the data from selectUserChart.php to userChartData.php using curl it will then edit the personClassified.json file to have data for our userid, once we receive the "DONE" response, the d3 code will then generate a chart of correctly classified photos for this particular user.
     $personid = $_POST["person_id"][0];
 
