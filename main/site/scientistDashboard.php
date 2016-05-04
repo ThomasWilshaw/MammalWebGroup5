@@ -79,10 +79,7 @@
 						set_time_limit(120);
 						//sets a 2 minute timeout 
 						
-						define('DBHOST', 'localhost');
-						define('DBNAME', 'mammalweb2');
-						define('DBUSER', 'root');
-						define('DBPASS', '');
+						include('config.php'); 
 
 						$query="";
 						//establish connection
