@@ -79,8 +79,9 @@
 	</div>
 
 	<script>//load image search dropdowns into relevant div
+	var userID="<?php echo $userID; ?>";
 	window.onload = function(){
-		$("#dropdowns").load("dropdowns_images.php?userMode=u");
+		$("#dropdowns").load("dropdowns_images.php?"+userID+"userMode=u");
 	}
 	</script>
 	
