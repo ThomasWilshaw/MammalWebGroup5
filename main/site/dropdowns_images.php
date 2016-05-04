@@ -39,8 +39,17 @@
 		if(isset($_GET["userMode"])){
 			$mode=$_GET["userMode"];
 		}
+		if(isset($_GET["user"])){
+			$varUserID=$_GET["user"];
+		}
+		else{
+			$varUserID=182;
+		}
 		echo '<form id="inputs" role="form" action="image_display.php" method="get">';
 		echo '<input type="hidden" name="userMode" value="'.$mode.'" />';//to send user mode onwards, either s (scientist) or u (user)
+		if($mode=="u"){
+			echo '<input type="hidden" name="user" value="'.$varUserID.'" />';//to send user ID onwards
+		}
 		echo '<div class="container">';
 			
 			$speciesValues=populateCategory($connection,"species","animal");
