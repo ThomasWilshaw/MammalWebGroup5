@@ -1,9 +1,9 @@
 import pymysql
 import math
+import sqlite3
 
 def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
     c=connection.cursor()
-
     #Get blank option ids which can be ignored for a lot of things, if not already passed into function
     blankOptions=[]
     if preBlank:
@@ -16,7 +16,7 @@ def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
         for row in blankResults:
             blankOptions.append(row['option_id'])
 
-    sql="SELECT * FROM animal WHERE photo_id="+str(photo_ID)
+    sql="SELECT species,age,gender FROM animal WHERE photo_id="+str(photo_ID)
     c.execute(sql)
     result=c.fetchall()
     
@@ -47,7 +47,6 @@ def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
             genderTally[rowG]=genderTally[rowG]+1
         else:
             genderTally[rowG]=1
-
     if numClass>0:
         #Gender and age handled vey basically, just select the mode
         if len(ageTally)>0:
@@ -135,18 +134,17 @@ def aggregate_classifications(photo_ID,connection,preBlank=None,preFlag=None):
             flag=flags['incomplete']
 
     #Check if aggregate already exists, if not insert, otherwise update
-    sql="SELECT * FROM aggregate WHERE photo_id="+str(photo_ID)
+    sql="SELECT photo_id FROM aggregate WHERE photo_id="+str(photo_ID)
+
+    #                                                       ----------------------------EXECUTING THIS IS REALLY SLOW WHEN AGGREGATE IS FULL---------------------
     c.execute(sql)
 
     currentAggregate=c.fetchone()
-    
     if currentAggregate==None:
-        sql="INSERT INTO aggregate VALUES ('{}','{}','{}','{}','{}','{}','{}', '{}', '{}');".format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
+        return ["INSERT",(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)]
     else:
-        sql=("UPDATE aggregate SET photo_id='{}',num_class='{}',species='{}',evenness='{}',blanks='{}',support='{}',flag='{}',age='{}',gender='{}' WHERE photo_id="+str(photo_ID)).format(photo_ID,numClass,species,evenness,blanks,support,flag,age,gender)
+        return ["UPDATE",(numClass,species,evenness,blanks,support,flag,age,gender,photo_ID)]
 
-    c.execute(sql)
-    connection.commit()
 
 connection = pymysql.connect(host='localhost',user='root',password='toot',db='mammalweb2',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 
@@ -171,12 +169,23 @@ with connection.cursor() as cursor:
     cursor.execute(sql)
     flagResult=cursor.fetchall()
     flags=dict()
+
+    insertParams=[]
+    updateParams=[]
     for row in flagResult:
         flags[row['option_name']]=row['option_id']
-for id in range(maxID):
-    if id%100==0:
-        print(id)
-    aggregate_classifications(id,connection,blankOptions,flags)
+    for id in range(maxID):
+        if id%500==0:
+            print(id)
+        agg=aggregate_classifications(id,connection,blankOptions,flags)
+        if(agg[0]=="INSERT"):
+            insertParams.append(agg[1])
+        else:
+            updateParams.append(agg[1])
+
+    stmt="INSERT INTO aggregate VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    cursor.executemany(stmt,insertParams)
+    connection.commit()
 #---------------------------------------------------------------
 
 #-----------Check aggregates against goldstandard set-----------
