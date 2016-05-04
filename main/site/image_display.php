@@ -291,6 +291,7 @@
 							$rawValue=$value;
 							$descriptionValue=$value;
 						}
+						
 						if(empty($rawValue)){
 							$rawValue=$value;
 						}
@@ -300,6 +301,7 @@
 							$rawValue="";
 						}
 						//values such as "any" that shouldn't influence the query
+						
 
 						
 						if((!($rawValue=="")) AND (!($rawValue=="any")))
@@ -336,7 +338,7 @@
 								if($arrayItem=="any"){
 									$arrayItem="";
 								}
-								if(!empty($arrayItem))
+								if(isset($arrayItem))
 								{
 									
 									if(in_array($key,$handledGroup1Mapped)){//if it is mapped in options table
