@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			$query="SELECT * FROM aggregate INNER JOIN photo ON aggregate.photo_id=photo.photo_id INNER JOIN site ON photo.site_id=site.site_id WHERE ";
 		}
 		else{
-			$query="SELECT * FROM site WHERE";
+			$query="SELECT * FROM site WHERE ";
 		}
 		$sql=$query.$sqlData;
 	 }
